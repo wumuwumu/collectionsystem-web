@@ -143,3 +143,20 @@ export function getBetweenHistoryPage(data) {
         data
     })
 }
+
+export function getBetweenAllHistory(data) {
+    return fetch({
+        url: 'device/history/betweenAll',
+        method: 'post',
+        data
+    })
+}
+
+export function getOfflineInfoPage(data) {
+    return fetch({
+            url: '/device/offlineLog/deviceIdPage',
+            method: 'post',
+            params: data
+        }
+    )
+}

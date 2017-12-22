@@ -213,6 +213,28 @@ const device = {
                 })
             })
         },
+
+        //获取两个时间点中间的历史和掉线信息
+        GetBetweemAllHistory({commit}, data){
+            return new Promise((resolve, reject) => {
+                request.getBetweenAllHistory(data).then(response => {
+                    resolve(response);
+                }).catch(error => {
+                    reject(error);
+                })
+            })
+        },
+
+        //获取掉线信息
+        GetOfflineInfoPage({commit}, data){
+            return new Promise((resolve, reject) => {
+                request.getOfflineInfoPage(data).then(response => {
+                    resolve(response);
+                }).catch(error => {
+                    reject(error);
+                })
+            })
+        },
     }
 };
 

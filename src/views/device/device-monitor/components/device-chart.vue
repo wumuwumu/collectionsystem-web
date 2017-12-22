@@ -147,7 +147,6 @@
                     }
                     this.option.xAxis.data= x_axi;
                     this.option.series[0].data = y_axi;
-                    console.log("444444")
                     if (!this.chart) {
                         this.init()
                     } else {

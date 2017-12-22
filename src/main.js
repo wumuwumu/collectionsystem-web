@@ -8,6 +8,20 @@ import '@/locale';
 import 'iview/dist/styles/iview.css';
 import VueI18n from 'vue-i18n';
 import util from '@/libs/util';
+import highChartsTheme from "./styles/highcharts-sand-signika.js";
+
+import VueHighcharts from 'vue-highcharts';
+import Highcharts from 'highcharts';
+import loadStock from 'highcharts/modules/stock';
+loadStock(Highcharts);
+Highcharts.setOptions({
+    global: {
+        timezoneOffset: -8 * 60,
+
+    }
+});
+Vue.use(VueHighcharts, {Highcharts});
+Highcharts.setOptions(highChartsTheme);
 
 Vue.use(VueI18n);
 Vue.use(iView);

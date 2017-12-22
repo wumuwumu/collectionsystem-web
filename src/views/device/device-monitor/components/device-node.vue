@@ -53,76 +53,10 @@
         },
         computed: {
             DataName: function () {
-                switch (this.DeviceInfo.collectionType) {
-                    case 2  :
-                        return '温度'
-                            ;
-                        break;
-                    case 3  :
-                        return '湿度'
-                            ;
-                        break;
-                    case 4  :
-                        return '气压'
-                            ;
-                        break;
-                    case 5  :
-                        return '风速'
-                            ;
-                        break;
-                    case 6  :
-                        return '光照度'
-                            ;
-                        break;
-                    case 7  :
-                        return '电流'
-                            ;
-                        break;
-                    case 8 :
-                        return '电压'
-                            ;
-                        break;
-                    default :
-                        return '数据'
-                            ;
-                        break;
-                }
+                return this.DeviceInfo.collectionType;
             },
             IconData: function () {
-                switch (this.DeviceInfo.collectionType) {
-                    case 2  :
-                        return temperature
-                            ;
-                        break;
-                    case 3  :
-                        return dampness
-                            ;
-                        break;
-                    case 4  :
-                        return pressure
-                            ;
-                        break;
-                    case 5  :
-                        return wind
-                            ;
-                        break;
-                    case 6  :
-                        return illuminance
-                            ;
-                        break;
-                    case 7  :
-                        return electricity
-                            ;
-                        break;
-                    case 8 :
-                        return voltage
-                            ;
-                        break;
-                    default :
-                        return sensor
-                            ;
-                        break;
-                }
+                return require('@/images/' + this.DeviceInfo.collectionType + '.png')
             },
             Online: function () {
                 switch (this.DeviceInfo.online) {
@@ -140,31 +74,31 @@
             },
             DeviceData: function () {
                 switch (this.DeviceInfo.collectionType) {
-                    case 2  :
+                    case temperature :
                         return this.DeviceInfo.lastestData + ' ℃'
                             ;
                         break;
-                    case 3  :
+                    case dampness  :
                         return this.DeviceInfo.lastestData + ' RH'
                             ;
                         break;
-                    case 4  :
+                    case pressure:
                         return this.DeviceInfo.lastestData + ' MPa'
                             ;
                         break;
-                    case 5  :
+                    case wind  :
                         return this.DeviceInfo.lastestData + ' m/s'
                             ;
                         break;
-                    case 6  :
+                    case illuminance :
                         return this.DeviceInfo.lastestData + ' LX'
                             ;
                         break;
-                    case 7  :
+                    case electricity  :
                         return this.DeviceInfo.lastestData + ' A'
                             ;
                         break;
-                    case 8 :
+                    case voltage :
                         return this.DeviceInfo.lastestData + ' V'
                             ;
                         break;

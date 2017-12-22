@@ -179,7 +179,7 @@ export const appRouter = [
             },
             {
                 path:'historyofflinelog',title:"离线记录",name:"hostoryofflinelog",component:reslove =>{
-                    require(['@/views/device/device-history/device-offline-log.vue']);
+                require(['@/views/device/device-history/device-offline-log.vue'], reslove);
             }
             }
         ]

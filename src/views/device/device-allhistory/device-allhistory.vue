@@ -46,6 +46,7 @@
 <script>
     import canEditTable from '../../tables/components/canEditTable.vue';
     import { Modal } from 'iview';
+    import DateUtil from '../../../utils/DateUtil';
 
     export default {
         name: 'DeviceAllHistory',
@@ -88,7 +89,7 @@
                                     props: {
                                         type: 'android-time',
                                     }
-                                }, this.formatDate(params.row.deviceDate));
+                            }, DateUtil.formatDate(params.row.deviceDate));
 
                         }
                     }
@@ -111,16 +112,6 @@
             }
         },
         methods: {
-            formatDate (time) {
-                let date = new Date(time);
-                let year = date.getFullYear();
-                let month = date.getMonth() + 1;
-                let day = date.getDate();
-                let hour = date.getHours();
-                let minute = date.getMinutes();
-                let second = date.getSeconds();
-                return year + '/' + month + '/' + day + '  ' + hour + ':' + minute + ':' + second;
-            },
             getData () {
                 //从服务器获取区域数据
                 this.$store.dispatch('GetUserArea').then((result) => {

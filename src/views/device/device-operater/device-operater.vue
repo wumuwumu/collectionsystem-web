@@ -165,109 +165,15 @@
                         ellipsis: 'true',
                         key: 'collectionType',
                         render: (h, params) => {
-                            const type = parseInt(params.row.collectionType);
-                            console.log("类型：" + type);
-                            switch (type) {
-                                case 1:
-                                    return h('div', [
-                                        h('Tag', {
-                                            props: {
+                            return h('div', [
+                                h('Tag', {
+                                    props: {
 //                                          type: 'dot',
-                                                color: "blue"
-                                            }
-                                        }, "原值"),
-                                    ]);
-                                    break
-                                case 2:
-                                    return h('div', [
-                                        h('Tag', {
-                                            props: {
-//                                          type: 'dot',
-                                                color: "green"
-                                            }
-                                        }, "温度"),
-                                    ]);
-                                    break;
-                                case 3:
-                                    return h('div', [
-                                        h('Tag', {
-                                            props: {
-//                                          type: 'dot',
-                                                color: "yellow"
-                                            }
-                                        }, "湿度"),
-                                    ]);
-                                    break;
-                                case 4:
-                                    return h('div', [
-                                        h('Tag', {
-                                            props: {
-//                                          type: 'dot',
-                                                color: "white"
-                                            }
-                                        }, "气压"),
-                                    ]);
-                                    break;
-                                case 5:
-                                    return h('div', [
-                                        h('Tag', {
-                                            props: {
-//                                          type: 'dot',
-                                                color: "lavender"
-                                            }
-                                        }, "风速"),
-                                    ]);
-                                    break;
-                                case 6:
-                                    return h('div', [
-                                        h('Tag', {
-                                            props: {
-//                                          type: 'dot',
-                                                color: ""
-                                            }
-                                        }, "光照度"),
-                                    ]);
-                                    break;
-                                case 7:
-                                    return h('div', [
-                                        h('Tag', {
-                                            props: {
-//                                          type: 'dot',
-                                                color: "#99CCFF"
-                                            }
-                                        }, "风速"),
-                                    ]);
-                                    break;
-                                case 8:
-                                    return h('div', [
-                                        h('Tag', {
-                                            props: {
-//                                          type: 'dot',
-                                                color: "#333399"
-                                            }
-                                        }, "电流"),
-                                    ]);
-                                    break;
-                                case 9:
-                                    return h('div', [
-                                        h('Tag', {
-                                            props: {
-//                                          type: 'dot',
-                                                color: "#FFCC99"
-                                            }
-                                        }, "电压"),
-                                    ]);
-                                    break;
-                                default:
-                                    return h('div', [
-                                        h('Tag', {
-                                            props: {
-//                                          type: 'dot',
-                                                color: "red"
-                                            }
-                                        }, "未知"),
-                                    ]);
-                            }
+                                        color: "red"
+                                    }
+                                }, params.row.collectionType),
+                            ]);
+
 
                         }
                     },

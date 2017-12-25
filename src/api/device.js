@@ -51,6 +51,14 @@ export function getAreaDevice(data) {
     });
 }
 
+export function getAreaDouDevice(data) {
+    return fetch({
+        url: '/device/devicelist/area/douList',
+        method: 'get',
+        params: data
+    });
+}
+
 export function getDeviceHistory(data) {
     console.log("getDeviceHistory" + data.deviceId);
     return fetch({

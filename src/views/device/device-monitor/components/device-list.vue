@@ -68,7 +68,10 @@
         },
         methods: {
             getData(){
-                this.$store.dispatch('GetAreaDevice', this.areaId).then((result) => {
+                let data = {
+                    areaId: this.areaId
+                };
+                this.$store.dispatch('GetAreaDouDevice', data).then((result) => {
 //                    this.AreaData = result.data;
                 }).catch((err) => {
                     console.log("获取区域设备出现错误");

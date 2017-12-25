@@ -1,0 +1,12 @@
+li {
+
+    /*color:blue;*/
+    font-size: xx-large;
+
+}
+
+li:hover {
+
+    color: red;
+
+}

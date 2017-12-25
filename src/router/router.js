@@ -92,26 +92,20 @@ export const otherRouter = {
             path: 'message', title: '消息中心', name: 'message_index', component: resolve => {
             require(['@/views/message/message.vue'], resolve);
         }
+        },
+        {
+            path: 'device-admin/device-type-control/add',
+            title: '采集类型添加',
+            name: 'collectionTypeAdd',
+            component: resolve => {
+                require(['@/views/admin-control/device/components/device-type-add.vue'], resolve);
+            }
         }
     ]
 };
 
 // 作为Main组件的子页面展示并且在左侧菜单显示的路由写在appRouter里
 export const appRouter = [
-    // {
-    //     path: '/access',
-    //     icon: 'key',
-    //     name: 'access',
-    //     title: '权限管理',
-    //     component: Main,
-    //     children: [
-    //         {
-    //             path: 'index', title: '权限管理', name: 'access_index', component: resolve => {
-    //             require(['@/views/access/access.vue'], resolve);
-    //         }
-    //         }
-    //     ]
-    // },
     {
         path: '/device-user',
         icon: 'lock-combination',
@@ -214,6 +208,56 @@ export const appRouter = [
             {
                 path: 'dayreport',title :"年报表",name:"yearreport",component:reslove =>{
                 require(['@/views/device/device-everyreport/year-report.vue'],reslove);
+            }
+            },
+        ]
+    },
+    {
+        path: "/user-admin",
+        title: '系统管理',
+        icon: 'earth',
+        name: 'user-admin',
+        component: Main,
+        children: [
+            {
+                path: 'user-control', title: "用户管理", name: "usercontrol", component: reslove => {
+                require(['@/views/admin-control/user/user-control.vue'], reslove);
+            }
+            },
+            {
+                path: 'menu-control', title: "菜单管理", name: "menucontrol", component: reslove => {
+                require(['@/views/admin-control/user/menu-control.vue'], reslove);
+            }
+            },
+            {
+                path: 'role-control', title: "角色管理", name: "rolecontrol", component: reslove => {
+                require(['@/views/admin-control/user/role-control.vue'], reslove);
+            }
+            },
+
+
+        ]
+    },
+    {
+        path: '/device-admin',
+        title: '设备管理',
+        icon: "earth",
+        name: 'device-admin',
+        component: Main,
+        children: [
+            {
+                path: 'device-type-control', title: '采集类型管理', name: 'devicetypecontrol', component: reslove => {
+                require(['@/views/admin-control/device/device-type-control.vue'], reslove);
+            }
+            },
+            {
+                path: 'device-monitor-control', title: '管理员设备监控', name: 'devicemonitorcontrol', component: reslove => {
+                require(['@/views/admin-control/device/device-monitor-control.vue'], reslove);
+            }
+            },
+            {
+                path: 'device-operate-control', title: '管理员设备管理', name: 'deviceoperatecontrol', component: reslove => {
+                require(['@/views/admin-control/device/device-operate-control.vue'], reslove);
             }
             },
         ]

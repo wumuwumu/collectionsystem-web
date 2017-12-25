@@ -78,6 +78,18 @@ const device = {
         GetAreaDevice({commit}, areaId) {
             return new Promise((resolve, reject) => {
                 request.getAreaDevice(areaId).then(response => {
+                    // commit("SET_AREADEVICE", response);
+                    resolve(response);
+                }).catch(error => {
+                    reject(error);
+                });
+            });
+        },
+
+        //获取区域设备和类型
+        GetAreaDouDevice({commit}, data) {
+            return new Promise((resolve, reject) => {
+                request.getAreaDouDevice(data).then(response => {
                     commit("SET_AREADEVICE", response);
                     resolve(response);
                 }).catch(error => {

@@ -16,5 +16,6 @@ const getters = {
   siderbar_routers:state => state.permission.siderbar_routers,
     areaDevice: state => state.device.areaDevice,
     operatingDeviceType: state => state.deviceAdmin.operatingDeviceType,
+    operatingUser: state => state.userAdmin.operatingUser
 };
 export default getters

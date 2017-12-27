@@ -132,19 +132,25 @@ const app = {
             state.pageOpenedList.splice(get.index, 1, openedPage);
             localStorage.pageOpenedList = JSON.stringify(state.pageOpenedList);
         },
+
+        //关闭所有的tab标签
         clearAllTags (state) {
             state.pageOpenedList.splice(1);
             state.cachePage.length = 0;
             localStorage.pageOpenedList = JSON.stringify(state.pageOpenedList);
         },
+
+        //关闭其他的tab标签
         clearOtherTags (state, vm) {
             let currentName = vm.$route.name;
             let currentIndex = 0;
+            //获取当前的索引
             state.pageOpenedList.forEach((item, index) => {
                 if (item.name === currentName) {
                     currentIndex = index;
                 }
             });
+
             if (currentIndex === 0) {
                 state.pageOpenedList.splice(1);
             } else {
@@ -157,6 +163,28 @@ const app = {
             state.cachePage = newCachepage;
             localStorage.pageOpenedList = JSON.stringify(state.pageOpenedList);
         },
+
+        //关闭制定名字的tab标签
+        closeOneTag(state, vm){
+            let currentName = vm.$route.name;
+            let currentIndex = 0;
+            //获取当前的索引
+            state.pageOpenedList.forEach((item, index) => {
+                if (item.name === currentName) {
+                    currentIndex = index;
+                }
+            });
+            if (currentIndex === 0) {
+            } else {
+                state.pageOpenedList.splice(currentIndex, 1);
+            }
+            let newCachepage = state.cachePage.filter(item => {
+                return item !== currentName;
+            });
+            state.cachePage = newCachepage;
+            localStorage.pageOpenedList = JSON.stringify(state.pageOpenedList);
+        },
+
         setOpenedList (state) {
             state.pageOpenedList = localStorage.pageOpenedList ? JSON.parse(localStorage.pageOpenedList) : [otherRouter.children[0]];
         },

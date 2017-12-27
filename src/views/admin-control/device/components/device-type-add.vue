@@ -133,6 +133,7 @@
             },
             updatePage(){
                 this.spinShow = false;
+                this.$store.commit('closeOneTag', this);
                 this.$router.push({path: '/device-admin/device-type-control'});
             }
 

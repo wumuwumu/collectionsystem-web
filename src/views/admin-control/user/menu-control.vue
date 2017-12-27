@@ -119,7 +119,7 @@
             },
             clickTree(selectValue){
                 this.AddOrUpdate = true;
-                this.TreeClear = true;
+//                this.TreeClear = true;
                 this.FormItem = {
                     name: selectValue[0].title,
                     perms: selectValue[0].perms,
@@ -254,7 +254,7 @@
             }
         },
 
-        mounted: function () {
+        created: function () {
             this.updatePage();
         },
         watch: {}

@@ -100,6 +100,14 @@ export const otherRouter = {
             component: resolve => {
                 require(['@/views/admin-control/device/components/device-type-add.vue'], resolve);
             }
+        },
+        {
+            path: 'user-admin/user-control/add',
+            title: '用户添加',
+            name: 'userAdd',
+            component: resolve => {
+                require(['@/views/admin-control/user/components/user-add.vue'], resolve);
+            }
         }
     ]
 };

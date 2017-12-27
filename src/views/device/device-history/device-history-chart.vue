@@ -170,7 +170,6 @@
         methods: {
             getTreeDate () {
                 this.$store.dispatch('GetDeviceTree').then((result) => {
-                    console.log(result);
                     this.TreeData = result.data;
                 }).catch((err) => {
                     this.$Message.error("获取设备树出现错误");
@@ -178,13 +177,11 @@
             },
             selectChange(){
                 let current = this.$refs.deviceTree.getSelectedNodes()[0];
-                if (current.children != null) {
+                if (current.children != undefined || current.children != null) {
                     this.CurrentDevice = {};
                     return;
                 }
                 this.CurrentDevice = current.id;
-                console.log(this.CurrentDevice);
-                console.log(typeof Date.UTC(2007, 7, 21));
             },
             selectDate(){
                 if (this.validateDevice() && this.validateDate()) {
@@ -194,7 +191,6 @@
                         endTime: this.SelectDate[1]
                     };
                     this.$store.dispatch('GetBetweemAllHistory', data).then((result) => {
-                        console.log(result);
                         let OfflineInfo = result.data.offline;
                         for (let i = 0, len = OfflineInfo.length; i < len; i++) {
                             if (OfflineInfo[i].endTime != null) {
@@ -214,12 +210,9 @@
                             ];
                             ShowData.push(item);
                         }
-                        console.log(ShowData);
                         this.ChartOptions.series[0].data = ShowData;
-                        console.log(this.ChartOptions);
 
                     }).catch((err) => {
-                        console.log(err.message);
                         this.$Message.error("获取历史出现错误");
                     });
                 }

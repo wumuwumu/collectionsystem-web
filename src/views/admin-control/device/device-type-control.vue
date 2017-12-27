@@ -117,7 +117,7 @@
                     }
                     this.getDeviceType();
                 }).catch((err) => {
-                    this.$Message.error("获取设备类型出现错误");
+                    this.$Message.error("删除设备类型出现错误");
                 });
             },
             deleteDeviceTypePre(row){

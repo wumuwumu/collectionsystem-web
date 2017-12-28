@@ -2,6 +2,7 @@
  * Created by wumu on 12/5/17.
  */
 import fetch from '../utils/fetch';
+import {baseUrl} from '../utils/fetch';
 
 export function unlock(password) {
     const data = {
@@ -167,4 +168,53 @@ export function getOfflineInfoPage(data) {
             params: data
         }
     )
+}
+
+export function getDeviceDayReport(data) {
+    return fetch({
+        url: '/device/history/dayreport',
+        method: 'post',
+        data
+    })
+}
+
+// export function getDeviceDayExcel(data) {
+//     return  new Promise((resolve, reject) => {
+//         console.log(data);
+//         // Get file name from url.
+//         var url = baseUrl+"/device/history/excel/dayexcel";
+//         var xhr = new XMLHttpRequest();
+//         xhr.responseType = 'blob';
+//         xhr.onload = function() {
+//             resolve(xhr);
+//         };
+//         xhr.onerror = reject;
+//
+//
+//         xhr.open('post', url);
+//
+//         xhr.setRequestHeader('Content-type','application/json; charset=utf-8');
+//         console.log(data);
+//         xhr.send(JSON.stringify(data));
+//     }).then(function(xhr) {
+//         console.log("第一部");
+//         var a = document.createElement('a');
+//         a.href = window.URL.createObjectURL(xhr.response); // xhr.response is a blob
+//         console.log("第二部");
+//         a.download = "qwqwqw"; // Set the file name.
+//         a.style.display = 'none';
+//         console.log("第三部");
+//         document.body.appendChild(a);
+//         a.click();
+//         return xhr;
+//     });
+// }
+
+export function getDeviceDayExcel(data) {
+    return fetch({
+        url: '/device/history/excel/dayexcel',
+        method: 'post',
+        responseType: 'blob',
+        data
+    })
 }

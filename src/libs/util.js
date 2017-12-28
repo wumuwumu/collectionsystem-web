@@ -40,6 +40,7 @@ util.oneOf = function (ele, targetArr) {
     }
 };
 
+//根据菜单的权限是否显示
 util.showThisRoute = function (itAccess, currentAccess) {
     if (typeof itAccess === 'object' && Array.isArray(itAccess)) {
         return util.oneOf(currentAccess, itAccess);
@@ -47,6 +48,25 @@ util.showThisRoute = function (itAccess, currentAccess) {
         return itAccess === currentAccess;
     }
 };
+
+util.hasAccess = function (current, hasAccess) {
+    if (current == undefined || current == null) {
+        return true;
+    }
+    console.log("判断权限开始");
+    console.log(hasAccess);
+    console.log(current);
+    for (let access of hasAccess) {
+        console.log("判断中");
+        if (current == access.roleSign) {
+
+            console.log("判断结束")
+            return true;
+        }
+    }
+    console.log("没有相关权限");
+    return false;
+}
 
 util.getRouterObjByName = function (routers, name) {
     if (!name || !routers || !routers.length) {

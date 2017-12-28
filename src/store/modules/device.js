@@ -3,6 +3,7 @@
  */
 import Cookies from 'js-cookie';
 import * as request from '../../api/device'
+import baseUrl from '../../utils/fetch';
 
 const device = {
     state: {
@@ -247,6 +248,29 @@ const device = {
                 })
             })
         },
+
+        //获取日报表
+        GetDeviceDayReport({commit}, data){
+            return new Promise((resolve, reject) => {
+                request.getDeviceDayReport(data).then(response => {
+                    resolve(response);
+                }).catch(error => {
+                    reject(error);
+                })
+            })
+        },
+
+        //获取设备的日报表excel
+        GetDeviceDayExcel({commit}, data){
+            // return request.getDeviceDayExcel(data);
+            return new Promise((resolve, reject) => {
+                request.getDeviceDayExcel(data).then(response => {
+                    resolve(response);
+                }).catch(error => {
+                    reject(error);
+                })
+            })
+        }
     }
 };
 

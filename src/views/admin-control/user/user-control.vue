@@ -13,7 +13,8 @@
         <router-link :to="{ path: '/user-admin/user-control/add'}">
             <Button type="primary" icon="plus" style="margin: 10px">添加</Button>
         </router-link>
-        <Table style="margin: 10px" :columns="UserColumn" :data="UserData"></Table>
+        <Table style="margin: 10px" :columns="UserColumn" :data="UserData">
+        </Table>
     </div>
 </template>
 

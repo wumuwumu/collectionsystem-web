@@ -303,8 +303,8 @@
                    data.push(selectData[i].id);
                }
                 this.$Modal.confirm({
-                    title: '删除区域',
-                    content: '<p>确定删除区域'+this.currentArea.areaName+'</p>',
+                    title: '删除设备',
+                    content: '<p>确定删除设备' + '</p>',
                     onOk: () => {
                         this.$store.dispatch('BatchDeleteDevice',data).then((result) => {
                             if(result.code == 1){

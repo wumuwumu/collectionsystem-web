@@ -182,6 +182,17 @@
                     console.log("获取消息失败出现错误");
                     this.$Message.error(err);
                 });
+            },
+            getRole(){
+                this.$store.dispatch('GetCurrentUserRole',).then((result) => {
+                    if (result.code == 1) {
+                        console.log("刷新菜单");
+                        this.$store.commit('updateMenulist');
+                    }
+                }).catch((err) => {
+                    console.log("删除区域出现错误");
+                    this.$Message.error(err);
+                });
             }
         },
         watch: {
@@ -204,6 +215,7 @@
         created () {
             // 显示打开的页面的列表
             this.$store.commit('setOpenedList');
+            this.getRole();
         }
     };
 </script>

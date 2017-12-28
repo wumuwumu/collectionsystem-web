@@ -65,7 +65,7 @@ export const locking = {
 export const otherRouter = {
     path: '/',
     name: 'otherRouter',
-    redirect: '/home',
+    redirect: '/device-user/device_monitor',
     component: Main,
     children: [
         {
@@ -122,19 +122,13 @@ export const appRouter = [
         component: Main,
         children: [
             {
-                path: 'device_monitor', icon: 'compose', title: '设备监控', name: 'device_monitor', component: resolve => {
+                path: 'device_monitor',
+                icon: 'arrow-swap',
+                title: '设备监控',
+                name: 'device_monitor',
+                component: resolve => {
                 require(['@/views/device/device-monitor/device-monitor.vue'], resolve);
             }
-            }
-            ,
-            {
-                path: 'device_history',
-                icon: 'pound',
-                name: 'device-allhistory',
-                title: '设备历史记录',
-                component: resolve => {
-                    require(['@/views/device/device-allhistory/device-allhistory.vue'], resolve);
-                }
             },
             {
                 path: 'device_operater',
@@ -150,17 +144,17 @@ export const appRouter = [
     {
         path: '/',
         title: '用户管理',
-        icon: 'earth',
-        name: 'wmessage_index',
+        icon: 'android-person',
+        name: 'user-control',
         component: Main,
         children:[
             {
-                path: 'message', title: '消息中心', name: 'message_index', component: resolve => {
+                path: 'message', title: '消息中心', name: 'message_index', icon: 'android-textsms', component: resolve => {
                 require(['@/views/message/message.vue'], resolve);
             }
             },
             {
-                path: 'ownspace', title: '个人中心', name: 'ownspace_index', component: resolve => {
+                path: 'ownspace', title: '个人中心', name: 'ownspace_index', icon: 'person', component: resolve => {
                 require(['@/views/own-space/own-space.vue'], resolve);
             }
             },
@@ -170,17 +164,30 @@ export const appRouter = [
     {
         path:"/device-history",
         title:'设备历史',
-        icon:'earth',
+        icon: 'archive',
         name:'device_history',
         component:Main,
         children:[
             {
-                path: 'historychart',title:"历史曲线",name:"historychart",component:reslove =>{
+                path: 'device_history',
+                icon: 'ios-list',
+                name: 'device-allhistory',
+                title: '设备历史记录',
+                component: resolve => {
+                    require(['@/views/device/device-allhistory/device-allhistory.vue'], resolve);
+                }
+            },
+            {
+                path: 'historychart', title: "历史曲线", name: "historychart", icon: 'ios-pulse', component: reslove => {
                     require(['@/views/device/device-history/device-history-chart.vue'],reslove);
             }
             },
             {
-                path:'historyofflinelog',title:"离线记录",name:"hostoryofflinelog",component:reslove =>{
+                path: 'historyofflinelog',
+                title: "离线记录",
+                name: "hostoryofflinelog",
+                icon: 'alert',
+                component: reslove => {
                 require(['@/views/device/device-history/device-offline-log.vue'], reslove);
             }
             }
@@ -189,32 +196,32 @@ export const appRouter = [
     {
         path:"/device-ervery-report",
         title:'设备报表',
-        icon:'earth',
+        icon: 'ios-book',
         name:'device_everyreport',
         component:Main,
         children:[
             {
-                path: 'dayreport',title :"日报表",name:"dayreport",component:reslove =>{
+                path: 'dayreport', title: "日报表", name: "dayreport", icon: 'ios-paper', component: reslove => {
                     require(['@/views/device/device-everyreport/day-report.vue'],reslove);
             }
             },
             {
-                path: 'weekreport',title :"周报表",name:"weekreport",component:reslove =>{
+                path: 'weekreport', title: "周报表", name: "weekreport", icon: 'ios-paper', component: reslove => {
                 require(['@/views/device/device-everyreport/week-report.vue'],reslove);
             }
             },
             {
-                path: 'dayreport',title :"月报表",name:"monthreport",component:reslove =>{
+                path: 'dayreport', title: "月报表", name: "monthreport", icon: 'ios-paper', component: reslove => {
                 require(['@/views/device/device-everyreport/month-report.vue'],reslove);
             }
             },
             {
-                path: 'dayreport',title :"季报表",name:"seasonreport",component:reslove =>{
+                path: 'dayreport', title: "季报表", name: "seasonreport", icon: 'ios-paper', component: reslove => {
                 require(['@/views/device/device-everyreport/season-report.vue'],reslove);
             }
             },
             {
-                path: 'dayreport',title :"年报表",name:"yearreport",component:reslove =>{
+                path: 'dayreport', title: "年报表", name: "yearreport", icon: 'ios-paper', component: reslove => {
                 require(['@/views/device/device-everyreport/year-report.vue'],reslove);
             }
             },
@@ -223,22 +230,27 @@ export const appRouter = [
     {
         path: "/user-admin",
         title: '系统管理',
-        icon: 'earth',
+        icon: 'wrench',
         name: 'user-admin',
+        access: 'admin',
         component: Main,
         children: [
             {
-                path: 'user-control', title: "用户管理", name: "usercontrol", component: reslove => {
+                path: 'user-control', title: "用户管理", name: "usercontrol", icon: 'ios-paper', component: reslove => {
                 require(['@/views/admin-control/user/user-control.vue'], reslove);
             }
             },
             {
-                path: 'menu-control', title: "菜单管理", name: "menucontrol", component: reslove => {
+                path: 'menu-control', title: "菜单管理", name: "menucontrol", icon: 'pricetag', component: reslove => {
                 require(['@/views/admin-control/user/menu-control.vue'], reslove);
             }
             },
             {
-                path: 'role-control', title: "角色管理", name: "rolecontrol", component: reslove => {
+                path: 'role-control',
+                title: "角色管理",
+                name: "rolecontrol",
+                icon: 'android-person',
+                component: reslove => {
                 require(['@/views/admin-control/user/role-control.vue'], reslove);
             }
             },
@@ -250,21 +262,34 @@ export const appRouter = [
         path: '/device-admin',
         title: '设备管理',
         icon: "earth",
+        access: 'admin',
         name: 'device-admin',
         component: Main,
         children: [
             {
-                path: 'device-type-control', title: '采集类型管理', name: 'devicetypecontrol', component: reslove => {
+                path: 'device-type-control',
+                title: '采集类型管理',
+                name: 'devicetypecontrol',
+                icon: 'paper-airplane',
+                component: reslove => {
                 require(['@/views/admin-control/device/device-type-control.vue'], reslove);
             }
             },
             {
-                path: 'device-monitor-control', title: '管理员设备监控', name: 'devicemonitorcontrol', component: reslove => {
+                path: 'device-monitor-control',
+                title: '管理员设备监控',
+                name: 'devicemonitorcontrol',
+                icon: 'podium',
+                component: reslove => {
                 require(['@/views/admin-control/device/device-monitor-control.vue'], reslove);
             }
             },
             {
-                path: 'device-operate-control', title: '管理员设备管理', name: 'deviceoperatecontrol', component: reslove => {
+                path: 'device-operate-control',
+                title: '管理员设备管理',
+                name: 'deviceoperatecontrol',
+                icon: 'ios-keypad',
+                component: reslove => {
                 require(['@/views/admin-control/device/device-operate-control.vue'], reslove);
             }
             },

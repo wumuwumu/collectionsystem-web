@@ -12,16 +12,16 @@ const app = {
         menuTheme: 'dark', // 主题
         themeColor: '',
         pageOpenedList: [{
-            title: '首页',
-            path: '',
-            name: 'home_index'
+            title: '设备监控',
+            path: '/device-user/device_monitor',
+            name: 'device_monitor'
         }],
         currentPageName: '',
         currentPath: [
             {
-                title: '首页',
-                path: '',
-                name: 'home_index'
+                title: '设备监控',
+                path: '/device-user/device_monitor',
+                name: 'device_monitor'
             }
         ],  // 面包屑数组
         menuList: [],
@@ -38,11 +38,14 @@ const app = {
             state.tagsList.push(...list);
         },
         updateMenulist (state) {
-            let accessCode = parseInt(Cookies.get('access'));
+            let accessCode = JSON.parse(Cookies.get('access'));
+            console.log("开始了");
+            console.log(accessCode);
             let menuList = [];
             appRouter.forEach((item, index) => {
+                //判断权限有没有定义
                 if (item.access !== undefined) {
-                    if (Util.showThisRoute(item.access, accessCode)) {
+                    if (Util.hasAccess(item.access, accessCode)) {
                         if (item.children.length === 1) {
                             menuList.push(item);
                         } else {
@@ -50,7 +53,7 @@ const app = {
                             let childrenArr = [];
                             childrenArr = item.children.filter(child => {
                                 if (child.access !== undefined) {
-                                    if (child.access === accessCode) {
+                                    if (Util.hasAccess(child.access, accessCode)) {
                                         return child;
                                     }
                                 } else {
@@ -164,7 +167,7 @@ const app = {
             localStorage.pageOpenedList = JSON.stringify(state.pageOpenedList);
         },
 
-        //关闭制定名字的tab标签
+        //关闭指定名字的tab标签
         closeOneTag(state, vm){
             let currentName = vm.$route.name;
             let currentIndex = 0;
@@ -186,7 +189,9 @@ const app = {
         },
 
         setOpenedList (state) {
-            state.pageOpenedList = localStorage.pageOpenedList ? JSON.parse(localStorage.pageOpenedList) : [otherRouter.children[0]];
+            // state.pageOpenedList = localStorage.pageOpenedList ? JSON.parse(localStorage.pageOpenedList) : [otherRouter.children[0]];
+            state.pageOpenedList = localStorage.pageOpenedList ? JSON.parse(localStorage.pageOpenedList) : [];
+
         },
         setCurrentPath (state, pathArr) {
             state.currentPath = pathArr;

@@ -3,6 +3,14 @@
  */
 import fetch from '../utils/fetch';
 
+export function getCurrentUserRole() {
+    return fetch({
+        url: '/authorize/currentuser/role/list',
+        method: 'post'
+    })
+}
+
+
 export function loginByUsername(username, password) {
     const data = {
         "username": username,

@@ -129,7 +129,7 @@
                 });
             },
             cancelEdit(){
-                this.$router.push({path: '/device-admin/device-type-control'});
+                this.updatePage();
             },
             updatePage(){
                 this.spinShow = false;

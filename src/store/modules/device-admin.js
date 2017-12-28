@@ -55,6 +55,17 @@ export default {
                     reject(error);
                 })
             });
+        },
+
+        //获取所有的区域树
+        GetAllAreaTree({commit}){
+            return new Promise((resolve, reject) => {
+                request.getAllAreaTree().then(response => {
+                    resolve(response);
+                }).catch(error => {
+                    reject(error);
+                })
+            })
         }
     }
 }

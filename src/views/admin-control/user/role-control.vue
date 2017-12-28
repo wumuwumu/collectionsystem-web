@@ -97,6 +97,7 @@
             },
             addRolePre(){
                 this.FormItem = {};
+                this.AddOrUpdate = false;
             },
             updateRole(){
                 let data = {

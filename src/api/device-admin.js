@@ -33,3 +33,12 @@ export function deleteDeviceType(id) {
         method: 'delete'
     })
 }
+
+
+export function getAllAreaTree() {
+    return fetch({
+        url: '/area/allTree',
+        method: 'post'
+    })
+}
+

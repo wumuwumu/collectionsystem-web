@@ -60,6 +60,17 @@ const user = {
         },
     },
     actions:{
+        //获取用户的角色
+        GetCurrentUserRole({commit}){
+            return new Promise((resolve, reject) => {
+                request.getCurrentUserRole().then(response => {
+                    Cookies.set('access', response.data);
+                    resolve(response);
+                }).catch(error => {
+                    reject(error);
+                })
+            });
+        },
         // 登录
         LoginByUsername({ commit }, userInfo) {
             const username = userInfo.username.trim();
@@ -103,7 +114,8 @@ const user = {
                     // commit('SET_TOKEN', '');
                     commit('SET_ROLES', []);
                     Cookies.remove('token');
-                    Cookies.remove("user");
+                    Cookies.remove('user');
+                    Cookies.remove('access');
                     // let themeLink = document.querySelector('link[name="theme"]');
                     // themeLink.setAttribute('href', '');
                     // // 清空打开的页面等数据，但是保存主题数据
@@ -120,7 +132,8 @@ const user = {
                 }).catch(error => {
                     reject(error);
                     Cookies.remove('token');
-                    Cookies.remove("user");
+                    Cookies.remove('user');
+                    Cookies.remove('access');
                 });
             });
         },

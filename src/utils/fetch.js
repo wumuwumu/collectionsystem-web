@@ -4,7 +4,7 @@ import vue from 'vue'
 import Cookies from 'js-cookie'
 
 
-let baseUrl = "http://127.0.0.1:9790";
+let baseUrl = "http://127.0.0.1:9791";
 
 
 // 创建axios实例

@@ -97,6 +97,7 @@ util.handleTitle = function (vm, item) {
 util.setCurrentPath = function (vm, name) {
     let title = '';
     let isOtherRouter = false;
+    //判断是否是otherRouter路由配置
     vm.$store.state.app.routers.forEach(item => {
         if (item.children.length === 1) {
             if (item.children[0].name === name) {
@@ -118,27 +119,28 @@ util.setCurrentPath = function (vm, name) {
     });
     let currentPathArr = [];
     if (name === 'home_index') {
-        currentPathArr = [
-            {
-                title: util.handleTitle(vm, util.getRouterObjByName(vm.$store.state.app.routers, 'home_index')),
-                path: '',
-                name: 'home_index'
-            }
-        ];
+        // currentPathArr = [
+        //     {
+        //         title: util.handleTitle(vm, util.getRouterObjByName(vm.$store.state.app.routers, 'home_index')),
+        //         path: '',
+        //         name: 'home_index'
+        //     }
+        // ];
     } else if ((name.indexOf('_index') >= 0 || isOtherRouter) && name !== 'home_index') {
-        currentPathArr = [
-            {
-                title: util.handleTitle(vm, util.getRouterObjByName(vm.$store.state.app.routers, 'home_index')),
-                path: '/home_old',
-                name: 'home_index'
-            },
-            {
-                title: title,
-                path: '',
-                name: name
-            }
-        ];
+        // currentPathArr = [
+        //     {
+        //         title: util.handleTitle(vm, util.getRouterObjByName(vm.$store.state.app.routers, 'home_index')),
+        //         path: '/home',
+        //         name: 'home_index'
+        //     },
+        //     {
+        //         title: title,
+        //         path: '',
+        //         name: name
+        //     }
+        // ];
     } else {
+        //获取名字相同的路由的数组的第一个
         let currentPathObj = vm.$store.state.app.routers.filter(item => {
             if (item.children.length <= 1) {
                 return item.children[0].name === name;
@@ -155,6 +157,7 @@ util.setCurrentPath = function (vm, name) {
                 return false;
             }
         })[0];
+        //当获取到的路径为home时
         if (currentPathObj.children.length <= 1 && currentPathObj.name === 'home') {
             currentPathArr = [
                 {
@@ -163,11 +166,12 @@ util.setCurrentPath = function (vm, name) {
                     name: 'home_index'
                 }
             ];
+            //当获取home的子路径
         } else if (currentPathObj.children.length <= 1 && currentPathObj.name !== 'home') {
             currentPathArr = [
                 {
                     title: '首页',
-                    path: '/home_old',
+                    path: '/home',
                     name: 'home_index'
                 },
                 {
@@ -183,7 +187,7 @@ util.setCurrentPath = function (vm, name) {
             currentPathArr = [
                 {
                     title: '首页',
-                    path: '/home_old',
+                    path: '/home',
                     name: 'home_index'
                 },
                 {

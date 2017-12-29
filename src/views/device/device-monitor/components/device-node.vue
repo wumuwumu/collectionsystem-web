@@ -3,7 +3,7 @@
 </style>
 
 <template>
-    <Col :sm="24" :md="12" :lg="6" :padding="3" style="margin-bottom: 16px">
+    <Col :sm="24" :md="12" :lg="8" :padding="4" style="margin-bottom: 16px;min-width: 100px">
     <Card shadow style="background-color: #e9ebeb">
 
         <div class="infor-card-con">
@@ -12,7 +12,8 @@
             <!--</Row>-->
             <Col class="infor-card-icon-con" span="8">
             <Row class="height-100" type="flex" align="middle" justify="center">
-                <img style="text-align: center" height="70px" width="70px" :src="IconData"/>
+                <!--<img style="text-align: center" height="70px" width="70px" :src="IconData"/>-->
+                <Sicon :type="DeviceInfo.showIcon" size="80" :color="DeviceInfo.showIconcolor"></Sicon>
             </Row>
             </Col>
 
@@ -22,8 +23,9 @@
             </Row>
             <Row type="flex" align="middle">
                 <Col class="device-info-col">
-                <Row>{{DataName}}：<span style="font-size: large">{{DeviceData}}</span></Row>
-                <Row>时间：<span style="font-size: medium" class="infor-intro-text">{{DeviceDate}}</span></Row>
+                <Row>{{DataName}}：<span
+                        style="font-size: large">{{DeviceInfo.lastestData}}{{DeviceInfo.showUnit}}</span></Row>
+                <Row>时间：<span style="" class="infor-intro-text">{{DeviceDate}}</span></Row>
                 </Col>
             </Row>
             </Col>
@@ -32,20 +34,17 @@
     </Col>
 </template>
 <script>
-    import temperature from '@/images/temperature.png';
-    import dampness from '@/images/dampness.png';
-    import pressure from '@/images/pressure.png';
-    import wind from '@/images/wind.png';
-    import illuminance from '@/images/illuminance.png';
-    import electricity from '@/images/electricity.png';
-    import voltage from '@/images/voltage.png';
-    import sensor from '@/images/sensor.png';
+
+    import Sicon from '../../../admin-control/device/components/sicon.vue'
 
     export default{
         name: 'DeviceNode',
         props: {
             DeviceInfo: {
             }
+        },
+        components: {
+            Sicon
         },
         data(){
             return {
@@ -54,9 +53,6 @@
         computed: {
             DataName: function () {
                 return this.DeviceInfo.collectionType;
-            },
-            IconData: function () {
-                return require('@/images/' + this.DeviceInfo.collectionType + '.png')
             },
             Online: function () {
                 switch (this.DeviceInfo.online) {
@@ -72,42 +68,42 @@
                 console.log("处理子类")
                 return this.dateForm(this.DeviceInfo.lastestTime);
             },
-            DeviceData: function () {
-                switch (this.DeviceInfo.collectionType) {
-                    case temperature :
-                        return this.DeviceInfo.lastestData + ' ℃'
-                            ;
-                        break;
-                    case dampness  :
-                        return this.DeviceInfo.lastestData + ' RH'
-                            ;
-                        break;
-                    case pressure:
-                        return this.DeviceInfo.lastestData + ' MPa'
-                            ;
-                        break;
-                    case wind  :
-                        return this.DeviceInfo.lastestData + ' m/s'
-                            ;
-                        break;
-                    case illuminance :
-                        return this.DeviceInfo.lastestData + ' LX'
-                            ;
-                        break;
-                    case electricity  :
-                        return this.DeviceInfo.lastestData + ' A'
-                            ;
-                        break;
-                    case voltage :
-                        return this.DeviceInfo.lastestData + ' V'
-                            ;
-                        break;
-                    default :
-                        return this.DeviceInfo.lastestData
-                            ;
-                        break;
-                }
-            },
+//            DeviceData: function () {
+//                switch (this.DeviceInfo.collectionType) {
+//                    case temperature :
+//                        return this.DeviceInfo.lastestData + ' ℃'
+//                            ;
+//                        break;
+//                    case dampness  :
+//                        return this.DeviceInfo.lastestData + ' RH'
+//                            ;
+//                        break;
+//                    case pressure:
+//                        return this.DeviceInfo.lastestData + ' MPa'
+//                            ;
+//                        break;
+//                    case wind  :
+//                        return this.DeviceInfo.lastestData + ' m/s'
+//                            ;
+//                        break;
+//                    case illuminance :
+//                        return this.DeviceInfo.lastestData + ' LX'
+//                            ;
+//                        break;
+//                    case electricity  :
+//                        return this.DeviceInfo.lastestData + ' A'
+//                            ;
+//                        break;
+//                    case voltage :
+//                        return this.DeviceInfo.lastestData + ' V'
+//                            ;
+//                        break;
+//                    default :
+//                        return this.DeviceInfo.lastestData
+//                            ;
+//                        break;
+//                }
+//            },
         },
         methods: {
             dateForm(value) {

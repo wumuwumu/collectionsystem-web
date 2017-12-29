@@ -14,6 +14,8 @@
             <div>
                 <Table :columns="OfflineColumns" :data="OfflineData"></Table>
             </div>
+            <Page :total="PageTotal" show-sizer show-total @on-change="pageChange" @on-page-size-change="sizeChange"
+                  style="margin-top:20px;text-align:center;align:right"></Page>
             </Col>
         </Row>
     </div>
@@ -85,6 +87,7 @@
                 CurrentDevice: 0,
                 page: 1,
                 row: 10,
+                PageTotal: 0,
             }
         },
         methods: {
@@ -95,9 +98,14 @@
                     this.$Message.error("获取设备树出现错误");
                 });
             },
-            getOfflineInfo(data){
+            getOfflineInfo(){
+                let data = {
+                    page: this.page,
+                    row: this.row,
+                    deviceId: this.CurrentDevice
+                };
                 this.$store.dispatch('GetOfflineInfoPage', data).then((result) => {
-                    console.log(result.data);
+                    this.PageTotal = result.data.length;
                     this.OfflineData = result.data;
                 }).catch((err) => {
                     this.$Message.error("获取离线信息出现错误");
@@ -110,12 +118,15 @@
                     return;
                 }
                 this.CurrentDevice = current.id;
-                let data = {
-                    page: this.page,
-                    row: this.row,
-                    deviceId: current.id
-                }
-                this.getOfflineInfo(data);
+                this.getOfflineInfo();
+            },
+            pageChange(page){
+                this.page = page;
+                this.getOfflineInfo();
+            },
+            sizeChange(size){
+                this.row = size;
+                this.getOfflineInfo();
             },
             formatTime(allTime){
                 let second = Math.floor(allTime / 1000 % 60);

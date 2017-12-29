@@ -6,6 +6,9 @@
             <Button style="margin: 10px" type="info">添加</Button>
         </router-link>
         <Table style="margin: 10px" :columns="TypeColumn" :data="TypeData" border></Table>
+        <Page :total="PageTotal" show-sizer show-total @on-change="pageChange" @on-page-size-change="sizeChange"
+              style="margin-top:20px;margin-left:10px;text-align:center;align:right"></Page>
+
     </div>
 </template>
 <script>
@@ -87,6 +90,7 @@
                 ],
                 page: 1,
                 row: 10,
+                PageTotal: 0,
                 DeleteConfirm: {
                     collectionName: null
                 },
@@ -101,6 +105,7 @@
                 };
                 this.$store.dispatch('GetDeviceTypePage', data).then((result) => {
                     this.TypeData = result.data;
+                    this.PageTotal = result.data.length;
                 }).catch((err) => {
                     this.$Message.error("获取设备类型出现错误");
                 });
@@ -129,6 +134,14 @@
                         this.deleteDeviceType();
                     },
                 });
+            },
+            pageChange(page){
+                this.page = page;
+                this.getDeviceType();
+            },
+            sizeChange(size){
+                this.row = size;
+                this.getDeviceType();
             }
         },
         mounted: function () {

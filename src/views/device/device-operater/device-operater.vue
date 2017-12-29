@@ -90,6 +90,9 @@
                 <Table ref="DeviceSelection"  :columns="DeviceListColums" height="auto"  :data="DeviceListData"
                         highlight-row
                 ></Table>
+                    <Page :total="PageTotal" show-sizer show-total @on-change="pageChange"
+                          @on-page-size-change="sizeChange"
+                          style="margin-top:20px;text-align:center;align:right"></Page>
                 </div>
             </Card>
             </Col>
@@ -191,12 +194,21 @@
                 DeviceTypeModel:null,
                 DeviceTypeList:[],
                 LinkNode:false,
+                page: 1,
+                row: 10,
+                PageTotal: 0,
             };
         },
         methods: {
-            getDeviceData(areaId){
-                this.$store.dispatch('GetAreaDevice',areaId).then((result) => {
+            getDeviceData(id){
+                let data = {
+                    page: this.page,
+                    row: this.row,
+                    areaId: id
+                }
+                this.$store.dispatch('GetAreaDevicePage', data).then((result) => {
                     this.DeviceListData = result.data;
+                    this.PageTotal = result.data.length;
                 }).catch((err) => {
                     console.log("获取区域设备出现错误");
                     this.$Message.error(err);
@@ -205,9 +217,7 @@
             getData () {
                 //从服务器获取区域数据
                 this.$store.dispatch('GetUserArea').then((result) => {
-                    console.log(result);
-                    this.editInlineData = result;
-                    console.log("zhi:"+this.editInlineData);
+                    this.editInlineData = result.data;
                 }).catch((err) => {
                     console.log("获取区域出现错误");
                     this.$Message.error(err);
@@ -355,6 +365,14 @@
                     this.$Message.error(err);
                 });
             },
+            pageChange(page){
+                this.page = page;
+                this.getDeviceData(this.AreaId);
+            },
+            sizeChange(size){
+                this.row = size;
+                this.getDeviceData(this.AreaId);
+            }
 
         },
         created () {

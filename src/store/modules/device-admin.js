@@ -66,6 +66,39 @@ export default {
                     reject(error);
                 })
             })
+        },
+
+        //分页获取用户集中器
+        GetUserConPage({commit}, data){
+            return new Promise((resolve, reject) => {
+                request.getUserConPage(data).then(response => {
+                    resolve(response);
+                }).catch(error => {
+                    reject(error);
+                })
+            })
+        },
+
+        //删除用户的集中器
+        DeleteUserCon({commit}, id){
+            return new Promise((resolve, reject) => {
+                request.deleteUserCon(id).then(response => {
+                    resolve(response);
+                }).catch(error => {
+                    reject(error);
+                })
+            })
+        },
+
+        //添加用户集中器
+        AddUserCon({commit}, data){
+            return new Promise((resolve, reject) => {
+                request.addUserCon(data).then(response => {
+                    resolve(response);
+                }).catch(error => {
+                    reject(error);
+                })
+            })
         }
     }
 }

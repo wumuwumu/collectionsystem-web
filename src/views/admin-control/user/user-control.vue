@@ -6,7 +6,7 @@
                 @on-ok="authorUser">
             <div>
                 <CheckboxGroup v-model="RoleAllGroup" @on-change="RoleAllGroupChange">
-                    <Checkbox v-for="item in AllRole" :label="item.id">{{item.roleName}}</Checkbox>
+                    <Checkbox v-for="item in AllRole" :label="item.id" :key="item.id">{{item.roleName}}</Checkbox>
                 </CheckboxGroup>
             </div>
         </Modal>
@@ -15,6 +15,8 @@
         </router-link>
         <Table style="margin: 10px" :columns="UserColumn" :data="UserData">
         </Table>
+        <Page :total="PageTotal" show-sizer show-total @on-change="pageChange" @on-page-size-change="sizeChange"
+              style="margin:10px;text-align:center;align:right"></Page>
     </div>
 </template>
 
@@ -30,7 +32,7 @@
                 UserColumn: [
                     {
                         type: 'expand',
-                        width: 40,
+                        width: 60,
                         render: (h, params) => {
                             return h(UserExpand, {
                                 props: {
@@ -120,6 +122,7 @@
                 UserData: [],
                 page: 1,
                 row: 10,
+                PageTotal: 0,
                 AuthorModel: false,
                 RoleAllGroup: [],
                 AllRole: [],
@@ -133,8 +136,9 @@
                     page: this.page,
                     row: this.row
                 };
-                this.$store.dispatch('GetUserList', data).then((result) => {
+                this.$store.dispatch('GetUserListPage', data).then((result) => {
                     this.UserData = result.data;
+                    this.PageTotal = result.data.length;
                 }).catch((err) => {
                     this.$Message.error("获取用户列表出现错误");
                 });
@@ -204,6 +208,14 @@
                 console.log(roles);
                 console.log(this.RoleAllGroup);
                 this.SelectRole = roles;
+            },
+            pageChange(page){
+                this.page = page;
+                this.getUserListDate();
+            },
+            sizeChange(size){
+                this.row = size;
+                this.getUserListDate();
             }
 
         },

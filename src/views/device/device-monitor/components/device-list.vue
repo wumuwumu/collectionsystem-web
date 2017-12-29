@@ -72,6 +72,7 @@
                     areaId: this.areaId
                 };
                 this.$store.dispatch('GetAreaDouDevice', data).then((result) => {
+                    console.log(result.data);
 //                    this.AreaData = result.data;
                 }).catch((err) => {
                     console.log("获取区域设备出现错误");

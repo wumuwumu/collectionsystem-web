@@ -42,3 +42,25 @@ export function getAllAreaTree() {
     })
 }
 
+export function getUserConPage(data) {
+    return fetch({
+        url: '/device/admin/con/user/read' + '?userId=' + data.userId,
+        method: 'post',
+        data
+    })
+}
+
+export function deleteUserCon(id) {
+    return fetch({
+        url: '/device/admin/con/' + id,
+        method: 'delete'
+    })
+}
+
+export function addUserCon(data) {
+    return fetch({
+        url: '/device/admin/con/add',
+        method: 'post',
+        data
+    })
+}

@@ -52,6 +52,14 @@ export function getAreaDevice(data) {
     });
 }
 
+export function getAreaDevicePage(data) {
+    return fetch({
+        url: '/device/devicelist/area/page' + "?areaId=" + data.areaId,
+        method: 'post',
+        data
+    });
+}
+
 export function getAreaDouDevice(data) {
     return fetch({
         url: '/device/devicelist/area/douList',
@@ -213,6 +221,23 @@ export function getDeviceDayReport(data) {
 export function getDeviceDayExcel(data) {
     return fetch({
         url: '/device/history/excel/dayexcel',
+        method: 'post',
+        responseType: 'blob',
+        data
+    })
+}
+
+export function getDeviceMonthReport(data) {
+    return fetch({
+        url: '/device/history/monthreport',
+        method: 'post',
+        data
+    })
+}
+
+export function getDeviceMonthExcel(data) {
+    return fetch({
+        url: '/device/history/excel/monthexcel',
         method: 'post',
         responseType: 'blob',
         data

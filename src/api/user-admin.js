@@ -3,13 +3,20 @@
  */
 import fetch from '../utils/fetch';
 
-export function getUserList(data) {
+export function getUserListPage(data) {
     return fetch({
         url: 'user/page',
         method: "post",
         data
     })
 }
+export function getUserList() {
+    return fetch({
+        url: 'user/list',
+        method: "post",
+    })
+}
+
 
 export function getMenuTree() {
     return fetch({

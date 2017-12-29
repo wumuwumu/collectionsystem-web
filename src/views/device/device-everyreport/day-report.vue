@@ -16,6 +16,7 @@
                     <DatePicker type="daterange" placement="right-start" placeholder="Select date"
                                 :options="DataPickerOption"
                                 @on-ok="selectDate"
+                                :value="SelectedDate"
                                 @on-change="dateChange"
                                 confirm
                                 style="width: 200px"></DatePicker>
@@ -41,6 +42,7 @@
                             </Row>
                         </div>
                     </Table>
+
                 </Row>
             </Card>
             </Col>
@@ -104,7 +106,7 @@
                         }
                     ]
                 },
-                SelectedDate: {},
+                SelectedDate: [],
                 DeviceReportColumn: [
                     {
                         title: '设备名称',
@@ -130,6 +132,7 @@
                 ReportData: [],
                 page: 1,
                 row: 100,
+                PageTotal: 0,
                 DeviceReportMax: 0,
                 DeviceReportMin: 0,
                 DeviceReportAvg: 0
@@ -138,6 +141,17 @@
         methods: {
             getTreeDate () {
                 this.$store.dispatch('GetDeviceTree').then((result) => {
+                    if (this.CurrentDevice == 0) {
+                        for (let device of result.data) {
+                            if (device.children == undefined || device.children == null || device.children.length == 0) {
+
+                            } else {
+                                this.CurrentDevice = device.children[0].id;
+                                this.selectDate();
+                                break;
+                            }
+                        }
+                    }
                     this.TreeData = result.data;
                 }).catch((err) => {
                     this.$Message.error("获取设备树出现错误");
@@ -150,10 +164,11 @@
                     return;
                 }
                 this.CurrentDevice = current.id;
+                this.selectDate();
             },
             dateChange(value){
                 console.log(value);
-                this.SelectedDate = value;
+//                this.SelectedDate = value;
             },
             selectDate(){
                 if (this.validateDevice() && this.validateDate()) {
@@ -202,7 +217,7 @@
                     this.$store.dispatch('GetDeviceDayExcel', data).then((result) => {
                         const content = result;
                         const elink = document.createElement('a');// 创建a标签
-                        elink.download = 'device' + this.CurrentDevice + '-' + Date.parse(new Date()) + '.xls'; // 文件名
+                        elink.download = 'device-day' + this.CurrentDevice + '-' + Date.parse(new Date()) + '.xls'; // 文件名
                         elink.style.display = 'none';
                         const blob = new Blob([content]);
                         elink.href = URL.createObjectURL(blob);
@@ -214,6 +229,13 @@
                     });
                 }
             },
+        },
+        created(){
+            let date = new Date();
+            date.setDate(date.getDate() - 30);
+            this.SelectedDate.push(date);
+            this.SelectedDate.push(new Date());
+            console.log(this.SelectedDate);
         },
         mounted: function () {
             this.getTreeDate();

@@ -37,8 +37,7 @@ const device = {
         GetUserArea({commit}) {
             return new Promise((resolve, reject) => {
                 request.getALlArea().then(response => {
-                    console.log(response.data);
-                    resolve(response.data);
+                    resolve(response);
                 }).catch(error => {
                     reject(error);
                 });
@@ -79,7 +78,17 @@ const device = {
         GetAreaDevice({commit}, areaId) {
             return new Promise((resolve, reject) => {
                 request.getAreaDevice(areaId).then(response => {
-                    // commit("SET_AREADEVICE", response);
+                    resolve(response);
+                }).catch(error => {
+                    reject(error);
+                });
+            });
+        },
+
+        //分页获取区域设备
+        GetAreaDevicePage({commit}, data) {
+            return new Promise((resolve, reject) => {
+                request.getAreaDevicePage(data).then(response => {
                     resolve(response);
                 }).catch(error => {
                     reject(error);
@@ -265,6 +274,28 @@ const device = {
             // return request.getDeviceDayExcel(data);
             return new Promise((resolve, reject) => {
                 request.getDeviceDayExcel(data).then(response => {
+                    resolve(response);
+                }).catch(error => {
+                    reject(error);
+                })
+            })
+        },
+
+        //获取月报表
+        GetDeviceMonthReport({commit}, data){
+            return new Promise((resolve, reject) => {
+                request.getDeviceMonthReport(data).then(response => {
+                    resolve(response);
+                }).catch(error => {
+                    reject(error);
+                })
+            })
+        },
+
+        //获取设备月报表excel
+        GetDeviceMonthExcel({commit}, data){
+            return new Promise((resolve, reject) => {
+                request.getDeviceMonthExcel(data).then(response => {
                     resolve(response);
                 }).catch(error => {
                     reject(error);

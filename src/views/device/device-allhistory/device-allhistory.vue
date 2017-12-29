@@ -115,8 +115,7 @@
             getData () {
                 //从服务器获取区域数据
                 this.$store.dispatch('GetUserArea').then((result) => {
-                    console.log("设备列表"+result);
-                    this.editInlineData = result;
+                    this.editInlineData = result.data;
                 }).catch((err) => {
                     console.log("获取区域出现错误");
                     this.$Message.error(err);

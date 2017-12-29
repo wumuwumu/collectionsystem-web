@@ -106,12 +106,15 @@
 //                this.editInlineData = tableData.editInlineData;
                 //从服务器获取区域数据
                 this.$store.dispatch('GetUserArea').then((result) => {
-                    console.log(result);
-                    this.editInlineData = result;
-                    console.log("zhi:"+this.editInlineData);
+                    console.log("这里出现了bug");
+                    console.log(result.data);
+                    if (this.currentArea == null && result.data.length > 0) {
+                        this.currentArea = result.data[0];
+                        this.AreaId = result.data[0].id;
+                    }
+                    this.editInlineData = result.data;
                 }).catch((err) => {
-                    console.log("获取区域出现错误");
-                    this.$Message.error(err);
+                    this.$Message.error("获取区域出现错误");
                 });
 
             },

@@ -13,6 +13,17 @@ const userAdmin = {
         }
     },
     actions: {
+        //分页获取用户的列表
+        GetUserListPage({commit}, data) {
+            return new Promise((resolve, reject) => {
+                request.getUserListPage(data).then(response => {
+                    resolve(response);
+                }).catch(error => {
+                    reject(error);
+                });
+            });
+        },
+
         //获取用户的列表
         GetUserList({commit}, data) {
             return new Promise((resolve, reject) => {

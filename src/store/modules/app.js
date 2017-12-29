@@ -31,7 +31,7 @@ const app = {
         ],
         tagsList: [...otherRouter.children],
         // messageCount: 0,
-        dontCache: ['text-editor', 'artical-publish']  // 在这里定义你不想要缓存的页面的name属性值(参见路由配置router.js)
+        dontCache: []  // 在这里定义你不想要缓存的页面的name属性值(参见路由配置router.js)
     },
     mutations: {
         setTagsList (state, list) {
@@ -138,8 +138,11 @@ const app = {
 
         //关闭所有的tab标签
         clearAllTags (state) {
+            console.log(state.pageOpenedList);
             state.pageOpenedList.splice(1);
             state.cachePage.length = 0;
+            console.log("关掉所有的tab");
+            console.log(state.pageOpenedList);
             localStorage.pageOpenedList = JSON.stringify(state.pageOpenedList);
         },
 
@@ -201,10 +204,6 @@ const app = {
         },
         setAvator (state, path) {
             localStorage.avatorImgPath = path;
-        },
-        switchLang (state, lang) {
-            state.lang = lang;
-            Vue.config.lang = lang;
         },
         clearOpenedSubmenu (state) {
             state.openedSubmenuArr.length = 0;

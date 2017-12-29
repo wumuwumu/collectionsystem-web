@@ -60,7 +60,7 @@
             </div>
         </div>
         <div class="single-page-con" :style="{left: shrink?'60px':'200px'}">
-            <div class="single-page">
+            <div class="single-page" style="min-width: 200px">
                 <keep-alive :include="cachePage">
                     <router-view></router-view>
                 </keep-alive>
@@ -199,6 +199,7 @@
             '$route' (to) {
                 this.$store.commit('setCurrentPageName', to.name);
                 let pathArr = util.setCurrentPath(this, to.name);
+                //打开菜单的路径
                 if (pathArr.length > 2) {
                     this.$store.commit('addOpenSubmenu', pathArr[1].name);
                 }

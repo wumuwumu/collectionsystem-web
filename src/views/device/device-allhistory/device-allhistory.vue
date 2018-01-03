@@ -53,7 +53,7 @@
         components: {
             canEditTable,
         },
-        data () {
+        data: function () {
             return {
                 editInlineData: [],
                 editInlineColumns: [{
@@ -102,7 +102,7 @@
                 size:10,
                 PageTotal:0,
                 deviceId:0,
-                DeviceSelectModel:{},
+                DeviceSelectModel: 0,
                 deviceList:[]
             };
         },
@@ -133,6 +133,7 @@
             },
             selectArea(currentRow , oldCurrentRow){
                 this.AreaId=currentRow.id;
+                this.deviceId = 0;
                 this.currentArea = currentRow;
                 this.getAreaDevice();
                 console.log("选中的区域id"+currentRow.id);
@@ -150,15 +151,18 @@
                 this.updataDeviceHostory();
             },
             changeSelect(currentvalue){
+                this.deviceHistoryData = [];
                 this.deviceId = currentvalue;
                 this.updataDeviceHostory();
-                console.log(currentvalue);
             },
             updataDeviceHostory(){
+                if (this.deviceId == 0) {
+                    return;
+                }
                 var data = {
                     page:this.page,
                     row:this.size,
-                    day:30,
+                    day: 90,
                     deviceId:this.deviceId
                 }
                 this.$store.dispatch('GetDeviceAllHistory',data).then((result) => {

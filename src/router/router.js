@@ -279,7 +279,7 @@ export const appRouter = [
             },
             {
                 path: 'device-monitor-control',
-                title: '管理员设备监控',
+                title: '设备监控',
                 name: 'devicemonitorcontrol',
                 icon: 'podium',
                 component: reslove => {
@@ -288,7 +288,7 @@ export const appRouter = [
             },
             {
                 path: 'device-operate-control',
-                title: '管理员设备管理',
+                title: '设备管理',
                 name: 'deviceoperatecontrol',
                 icon: 'ios-keypad',
                 component: reslove => {

@@ -4,8 +4,7 @@ import vue from 'vue'
 import Cookies from 'js-cookie'
 
 
-let baseUrl = "http://127.0.0.1:9791";
-
+const baseUrl = "http://127.0.0.1:9791";
 
 // 创建axios实例
 const service = axios.create({
@@ -17,16 +16,14 @@ const service = axios.create({
 service.interceptors.request.use(config => {
     // Do something before request is sent
     var tokenValue = Cookies.get("token");
-    console.log("操作前的token" + tokenValue);
+    // console.log("操作前的token" + tokenValue);
     if (tokenValue) {
         config.headers['jwtauthorization'] = tokenValue // 让每个请求携带token--['X-Token']为自定义key 请根据实际情况自行修改
     }
-    console.log("添加token");
     return config
 }, error => {
     // Do something with request error
-    console.log('请求拦截出现问题');
-    console.log(error) // for debug
+    // console.log('请求拦截出现问题');
     Promise.reject(error)
 })
 
@@ -59,13 +56,20 @@ service.interceptors.response.use(
         //   }
         //   return Promise.reject(error)
         // } else {
-        console.log("每次请求返回码：" + response.data.code);
+        if (response.data.code == 401) {
+            store.dispatch('FedLogOut').then(() => {
+                location.reload()// 为了重新实例化vue-router对象 避免bug
+            })
+        }
         return response.data;
-        // }
     },
     error => {
         console.log('请求错误：' + error.message)// for debug
-        // return Promise.reject(error)
+        if (error.response.status == 401) {
+            store.dispatch('FedLogOut').then(() => {
+                location.reload()// 为了重新实例化vue-router对象 避免bug
+            })
+        }
     }
 )
 

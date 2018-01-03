@@ -72,7 +72,7 @@
                         title: '上线时间',
                         key: 'endTime',
                         render: (h, params) => {
-                            return h('span', DateUtil.formatDate(params.row.endTime));
+                            return h('span', this.operateEndTime(params.row.endTime));
                         }
                     },
                     {
@@ -98,6 +98,12 @@
                     this.$Message.error("获取设备树出现错误");
                 });
             },
+            operateEndTime(value){
+                if (value < 10000) {
+                    return '';
+                }
+                return DateUtil.formatDate(value);
+            },
             getOfflineInfo(){
                 let data = {
                     page: this.page,
@@ -105,7 +111,7 @@
                     deviceId: this.CurrentDevice
                 };
                 this.$store.dispatch('GetOfflineInfoPage', data).then((result) => {
-                    this.PageTotal = result.data.length;
+                    this.PageTotal = result.total;
                     this.OfflineData = result.data;
                 }).catch((err) => {
                     this.$Message.error("获取离线信息出现错误");
@@ -113,12 +119,15 @@
             },
             selectChange(){
                 let current = this.$refs.deviceTree.getSelectedNodes()[0];
-                if (current.children != null) {
-                    this.CurrentDevice = 0;
+                if (current == undefined) {
                     return;
                 }
-                this.CurrentDevice = current.id;
-                this.getOfflineInfo();
+                if (current.children == undefined || current.children == null) {
+                    this.CurrentDevice = current.id;
+                    this.getOfflineInfo();
+                    return;
+                }
+                this.CurrentDevice = 0;
             },
             pageChange(page){
                 this.page = page;

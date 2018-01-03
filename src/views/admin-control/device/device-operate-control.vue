@@ -1,5 +1,27 @@
 <template>
     <div>
+        <Modal
+                v-model="AddAreaModel"
+                title="添加区域"
+                @on-ok="addArea">
+            <tr>
+                <td>区域名称:</td>
+                <td>
+                    <input type="text" class="margin-left-10" placeholder="区域名称" v-model="AddAreaName">
+                </td>
+            </tr>
+        </Modal>
+        <Modal
+                v-model="UpdateAreaModel"
+                title="删除区域"
+                @on-ok="updateArea">
+            <tr>
+                <td>区域名称:</td>
+                <td>
+                    <input type="text" class="margin-left-10" placeholder="区域名称" v-model="UpdateAreaName">
+                </td>
+            </tr>
+        </Modal>
         <!--添加设备的对话框-->
         <Modal
                 v-model="AddDeviceModel"
@@ -36,6 +58,12 @@
         </Modal>
         <Row>
             <Col :xs="24" :sm="6" :md="4" :lg="4">
+            <div style="margin-bottom: 10px">
+                <Button type="info" size="small" @click="AddAreaModel = true">添加区域</Button>
+                <Button type="success" size="small" @click="updatePreArea()">更新区域</Button>
+                <Button type="error" size="small" @click="deleteArea()">删除区域</Button>
+                <Button size="small" @click="refreshArea()">刷新区域</Button>
+            </div>
             <Card>
                 <p slot="title">
                     <Icon type="android-remove"></Icon>
@@ -120,18 +148,16 @@
                         title: '类型',
                         ellipsis: 'true',
                         key: 'collectionType',
-                        render: (h, params) => {
-                            return h('div', [
-                                h('Tag', {
-                                    props: {
-//                                          type: 'dot',
-                                        color: "red"
-                                    }
-                                }, params.row.collectionType),
-                            ]);
-
-
-                        }
+//                        render: (h, params) => {
+//                            return h('div', [
+//                                h('Tag', {
+//                                    props: {
+//                                    }
+//                                }, params.row.collectionType),
+//                            ]);
+//
+//
+//                        }
                     },
 
                 ],//cloumn
@@ -140,11 +166,16 @@
                 formDevice: {},
                 DeviceTypeList: [],
                 LinkNode: false,
+                AddAreaModel: false,
+                CurrentUser: null,
+                UpdateAreaName: '',
+                UpdateAreaModel: false,
+                AddAreaName: ''
             }
         },
         methods: {
             getDeviceData(areaId){
-                this.$store.dispatch('GetAreaDevice', areaId).then((result) => {
+                this.$store.dispatch('GetAreaAdminDevice', areaId).then((result) => {
                     this.DeviceListData = result.data;
                 }).catch((err) => {
                     this.$Message.error("获取区域设备出现错误");
@@ -156,9 +187,12 @@
                 }
                 if (current[0].children != undefined || current[0].children != null) {
                     this.CurrentArea = null;
+                    this.CurrentUser = current[0];
                     return;
                 }
+                this.CurrentUser = null;
                 this.CurrentArea = current[0];
+                console.log(this.CurrentArea);
                 this.getDeviceData(this.CurrentArea.id);
             },
             getAreaTreeData(){
@@ -180,20 +214,19 @@
                         this.$Message.error("获取设备类型失败");
                     }
                 }).catch((err) => {
-                    console.log("添加设备类型出现错误");
-                    this.$Message.error(err);
+                    this.$Message.error("添加设备类型出现错误");
                 });
                 this.AddDeviceModel = true;
             },
             deleteDevice(){
-                var selectData = this.$refs.DeviceSelection.getSelection();
+                let selectData = this.$refs.DeviceSelection.getSelection();
                 if (selectData.length < 1) {
                     this.$Message.info("请选择设备");
                     return;
                 }
 
-                var data = [];
-                for (var i = 0; i < selectData.length; i++) {
+                let data = [];
+                for (let i = 0; i < selectData.length; i++) {
                     data.push(selectData[i].id);
                 }
                 this.$Modal.confirm({
@@ -202,7 +235,7 @@
                     onOk: () => {
                         this.$store.dispatch('BatchDeleteDevice', data).then((result) => {
                             if (result.code == 1) {
-                                this.getDeviceData(this.AreaId);
+                                this.getDeviceData(this.CurrentArea.id);
                                 this.$Message.info("删除成功");
                             } else {
                                 this.$Message.error("删除失败");
@@ -220,8 +253,8 @@
                     return;
                 }
                 this.LinkNode ? Object.assign(this.formDevice, {parentType: 0}) : Object.assign(this.formDevice, {parentType: 1});
-                Object.assign(this.formDevice, {area: this.CurrentArea.id, online: 0});
-                this.$store.dispatch('AddDevice', this.formDevice).then((result) => {
+                Object.assign(this.formDevice, {area: this.CurrentArea.id, userId: this.CurrentArea.userId, online: 0});
+                this.$store.dispatch('AddAdminDevice', this.formDevice).then((result) => {
                     if (result.code == 1) {
                         this.getDeviceData(this.CurrentArea.id);
                         this.formDevice = {};
@@ -233,7 +266,84 @@
                     console.log("添加设备出现错误");
                     this.$Message.error(err);
                 });
-            }
+            },
+            addArea(){
+                if (this.CurrentUser == null) {
+
+                    this.$Message.warning("请选择用户");
+                    return;
+                }
+                if (this.AddAreaName != null && this.AddAreaName != "") {
+                    let data = {
+                        areaName: this.AddAreaName,
+                        userId: this.CurrentUser.id
+                    };
+                    this.$store.dispatch('AddAdminArea', data).then((result) => {
+                        if (result.code == 1) {
+                            this.getAreaTreeData();
+                        } else {
+                            this.$Message.error("添加失败");
+                        }
+                    }).catch((err) => {
+                        this.$Message.error("添加区域出现错误");
+                    });
+                    this.AddAreaName = "";
+                }
+            },
+            deleteArea(){
+                if (this.validateArea(this.CurrentArea)) {
+                    this.$Modal.confirm({
+                        title: '删除区域',
+                        content: '<p>确定删除区域' + this.CurrentArea.title + '</p>',
+                        onOk: () => {
+                            this.$store.dispatch('DeleteArea', this.CurrentArea.id).then((result) => {
+                                if (result.code == 1) {
+                                    this.getAreaTreeData();
+                                } else {
+                                    this.$Message.error("删除失败");
+                                }
+                            }).catch((err) => {
+                                this.$Message.error("删除区域出现错误");
+                            });
+                        },
+                    });
+                }
+            },
+            validateArea(area){
+                if (area == null) {
+                    this.$Message.error("请选择区域");
+                    return false;
+                }
+                return true;
+            },
+            updatePreArea(){
+                if (this.validateArea(this.CurrentArea)) {
+                    this.UpdateAreaName = this.CurrentArea.title;
+                    this.UpdateAreaModel = true;
+                }
+            },
+            updateArea(){
+                if (this.UpdateAreaName != null && this.UpdateAreaName != "") {
+                    let area = {
+                        areaName: this.UpdateAreaName,
+                        id: this.CurrentArea.id
+                    };
+                    this.$store.dispatch('UpdateArea', area).then((result) => {
+                        if (result.code == 1) {
+                            this.getAreaTreeData();
+                        } else {
+                            this.$Message.error("删除失败");
+                        }
+                    }).catch((err) => {
+                        console.log("删除区域出现错误");
+                        this.$Message.error(err);
+                    });
+                    this.UpdateAreaName = "";
+                }
+            },
+            refreshArea(){
+                this.getAreaTreeData();
+            },
 
         },
         mounted(){

@@ -64,3 +64,27 @@ export function addUserCon(data) {
         data
     })
 }
+
+export function listUserAdminArea(id) {
+    return fetch({
+        url: '/area/admin/list?userId=' + id,
+        method: 'get'
+    })
+}
+
+
+export function addAdminArea(data) {
+    return fetch({
+        url: '/admin/area/add',
+        method: 'post',
+        data
+    })
+}
+
+export function addAdminDeviceList(data) {
+    return fetch({
+        url: '/admin/deviceList/add',
+        method: 'post',
+        data
+    })
+}

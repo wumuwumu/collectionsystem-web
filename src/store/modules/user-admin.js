@@ -198,6 +198,17 @@ const userAdmin = {
                     reject(error);
                 });
             });
+        },
+
+        //管理员修改密码
+        ChangeAdminPassword({commit}, data){
+            return new Promise((resolve, reject) => {
+                request.changeAdminPassword(data).then(response => {
+                    resolve(response);
+                }).catch(error => {
+                    reject(error);
+                });
+            });
         }
     }
 }

@@ -136,12 +136,14 @@
                     });
                 } else if (name === 'loginout') {
                     // 退出登录
-                    this.$store.dispatch('LogOut').then(() => {
-                        this.$store.commit('clearOpenedSubmenu');
-                        this.$router.push({
-                            name: 'login'
-                        });
-
+                    this.$store.dispatch('LogOut').then((result) => {
+                        if (result.code == 1) {
+                            this.$store.commit('clearOpenedSubmenu');
+                            this.$store.commit('clearAllTags');
+                            this.$router.push({
+                                name: 'login'
+                            });
+                        }
                     }).catch((err) => {
 //                        console.log("请重新登录");
                         this.$Message.error("请重新登录");

@@ -52,6 +52,14 @@ export function getAreaDevice(data) {
     });
 }
 
+
+export function getAreaAdminDevice(data) {
+    return fetch({
+        url: '/device/devicelist/area/adminlist' + "?areaId=" + data,
+        method: 'get',
+    });
+}
+
 export function getAreaDevicePage(data) {
     return fetch({
         url: '/device/devicelist/area/page' + "?areaId=" + data.areaId,

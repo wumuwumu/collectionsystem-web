@@ -1,6 +1,18 @@
 <template>
     <div>
         <Modal
+                v-model="PasswordModel"
+                title="配置用户角色"
+                @on-ok="changePassword">
+            <div>
+                <Form :model="PassItem" :label-width="80">
+                    <FormItem label="新密码：">
+                        <Input v-model="PassItem.password" placeholder="password"></Input>
+                    </FormItem>
+                </Form>
+            </div>
+        </Modal>
+        <Modal
                 v-model="AuthorModel"
                 title="配置用户角色"
                 @on-ok="authorUser">
@@ -68,7 +80,7 @@
                     {
                         title: '操作',
                         key: 'action',
-                        width: 220,
+                        width: 350,
                         align: 'center',
                         render: (h, params) => {
                             return h('div', [
@@ -106,7 +118,7 @@
                                         size: 'small'
                                     },
                                     style: {
-                                        marginRight: '15px'
+                                        marginRight: '5px'
                                     },
                                     on: {
                                         click: () => {
@@ -114,6 +126,20 @@
                                         }
                                     }
                                 }, '授权'),
+                                h('Button', {
+                                    props: {
+                                        type: 'primary',
+                                        size: 'small'
+                                    },
+                                    style: {
+                                        marginRight: '5px'
+                                    },
+                                    on: {
+                                        click: () => {
+                                            this.updatePassword(params.row);
+                                        }
+                                    }
+                                }, '修改密码'),
                             ]);
                         }
                     }
@@ -128,6 +154,8 @@
                 AllRole: [],
                 SelectRole: [],
                 CurrentUserId: 0,
+                PasswordModel: false,
+                PassItem: {},
             }
         },
         methods: {
@@ -216,6 +244,30 @@
             sizeChange(size){
                 this.row = size;
                 this.getUserListDate();
+            },
+            updatePassword(row){
+                this.CurrentUserId = row.id;
+                this.PasswordModel = true;
+            },
+            changePassword(){
+                if (this.PassItem.password.length < 6) {
+                    this.$Message.warning("密码长度不能小于6");
+                    return;
+                }
+                let data = {
+                    id: this.CurrentUserId,
+                    password: this.PassItem.password
+                };
+                this.$store.dispatch('ChangeAdminPassword', data).then((result) => {
+                    if (result.code != 1) {
+                        this.$Message.error('修改密码失败');
+                        return;
+                    }
+                    this.PassItem.password = '';
+                    this.$Message.info('修改密码成功');
+                }).catch((err) => {
+                    this.$Message.error("修改密码出现错误");
+                });
             }
 
         },

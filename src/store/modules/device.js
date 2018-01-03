@@ -85,6 +85,17 @@ const device = {
             });
         },
 
+        //管理获取区域设备
+        GetAreaAdminDevice({commit}, areaId) {
+            return new Promise((resolve, reject) => {
+                request.getAreaAdminDevice(areaId).then(response => {
+                    resolve(response);
+                }).catch(error => {
+                    reject(error);
+                });
+            });
+        },
+
         //分页获取区域设备
         GetAreaDevicePage({commit}, data) {
             return new Promise((resolve, reject) => {

@@ -127,7 +127,7 @@ const user = {
                     // if (theme) {
                     //     localStorage.theme = theme;
                     // }
-                    resolve();
+                    resolve(response);
                     console.log("退出操作完成");
                 }).catch(error => {
                     reject(error);
@@ -135,6 +135,17 @@ const user = {
                     Cookies.remove('user');
                     Cookies.remove('access');
                 });
+            });
+        },
+
+        // 前端 登出
+        FedLogOut({commit}) {
+            return new Promise(resolve => {
+                commit('SET_TOKEN', '');
+                Cookies.remove('token');
+                Cookies.remove('user');
+                Cookies.remove('access');
+                resolve();
             });
         },
 

@@ -99,6 +99,39 @@ export default {
                     reject(error);
                 })
             })
+        },
+
+        //管理员列出区域
+        ListUserAdminArea({commit}, data){
+            return new Promise((resolve, reject) => {
+                request.listUserAdminArea(data).then(response => {
+                    resolve(response);
+                }).catch(error => {
+                    reject(error);
+                })
+            })
+        },
+
+        //管理员添加区域
+        AddAdminArea({commit}, data){
+            return new Promise((resolve, reject) => {
+                request.addAdminArea(data).then(response => {
+                    resolve(response);
+                }).catch(error => {
+                    reject(error);
+                })
+            })
+        },
+
+        //管理员添加设备
+        AddAdminDevice({commit}, data){
+            return new Promise((resolve, reject) => {
+                request.addAdminDeviceList(data).then(response => {
+                    resolve(response);
+                }).catch(error => {
+                    reject(error);
+                })
+            })
         }
     }
 }

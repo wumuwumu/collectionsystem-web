@@ -138,7 +138,6 @@ const app = {
 
         //关闭所有的tab标签
         clearAllTags (state) {
-            console.log(state.pageOpenedList);
             state.pageOpenedList.splice(1);
             state.cachePage.length = 0;
             console.log("关掉所有的tab");

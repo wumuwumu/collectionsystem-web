@@ -132,3 +132,11 @@ export function updateRoleMenu(data) {
         data
     })
 }
+
+export function changeAdminPassword(data) {
+    return fetch({
+        url: '/user/changePasswd',
+        method: 'post',
+        data
+    })
+}

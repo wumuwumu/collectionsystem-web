@@ -131,13 +131,11 @@
                     },
                     {
                         title: '集中器编号',
-//                    ellipsis:'true',
                         key: 'concentrator',
 
                     },
                     {
                         title: '节点ip',
-//                    ellipsis:'true',
                         key: 'node',
                         filters: [
                             {
@@ -160,25 +158,21 @@
                     },
                     {
                         title: '回路位置',
-//                    ellipsis:'true',
                         key: 'circuit',
                     },
                     {
                         title: '类型',
-                        ellipsis: 'true',
                         key: 'collectionType',
-                        render: (h, params) => {
-                            return h('div', [
-                                h('Tag', {
-                                    props: {
-//                                          type: 'dot',
-                                        color: "red"
-                                    }
-                                }, params.row.collectionType),
-                            ]);
-
-
-                        }
+//                        render: (h, params) => {
+//                            return h('div', [
+//                                h('Tag', {
+//                                    props: {
+//                                    }
+//                                }, params.row.collectionType),
+//                            ]);
+//
+//
+//                        }
                     },
 
                 ],//cloumn

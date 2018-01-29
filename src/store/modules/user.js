@@ -99,6 +99,7 @@ const user = {
                     commit('SET_ROLES', JSON.stringify(data.roleList));
                     console.log(JSON.stringify(data.roleList));
                     commit('SET_UID', data.id);
+                    commit('SET_NAME', data.username)
                     commit('SET_INTRODUCTION', data.company);
                     resolve(response);
                 }).catch(error => {
@@ -111,22 +112,22 @@ const user = {
             return new Promise((resolve, reject) => {
                 request.logout().then((response) => {
                     console.log("退出后的操作");
-                    // commit('SET_TOKEN', '');
                     commit('SET_ROLES', []);
                     Cookies.remove('token');
                     Cookies.remove('user');
                     Cookies.remove('access');
-                    // let themeLink = document.querySelector('link[name="theme"]');
-                    // themeLink.setAttribute('href', '');
-                    // // 清空打开的页面等数据，但是保存主题数据
-                    // let theme = '';
-                    // if (localStorage.theme) {
-                    //     theme = localStorage.theme;
-                    // }
-                    // localStorage.clear();
-                    // if (theme) {
-                    //     localStorage.theme = theme;
-                    // }
+                    localStorage.clear()
+                    let themeLink = document.querySelector('link[name="theme"]')
+                    themeLink.setAttribute('href', '')
+                    // 清空打开的页面等数据，但是保存主题数据
+                    let theme = ''
+                    if (localStorage.theme) {
+                        theme = localStorage.theme
+                    }
+                    localStorage.clear()
+                    if (theme) {
+                        localStorage.theme = theme
+                    }
                     resolve(response);
                     console.log("退出操作完成");
                 }).catch(error => {
@@ -145,6 +146,7 @@ const user = {
                 Cookies.remove('token');
                 Cookies.remove('user');
                 Cookies.remove('access');
+                localStorage.clear()
                 resolve();
             });
         },

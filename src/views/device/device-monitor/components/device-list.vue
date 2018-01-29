@@ -10,7 +10,7 @@
 
         </Card>
         <Row :gutter="16" style="margin-top: 10px">
-            <DeviceNode :DeviceInfo="item" v-for="item in AreaData" :key="item.id"></DeviceNode>
+            <DeviceNode :DeviceInfo="item" v-for="item in AreaData" :key="item.id" @refrshData="getData()"></DeviceNode>
         </Row>
     </div>
 </template>
@@ -112,8 +112,9 @@
                }
             },
         },
-        watch: {
-
+        watch: {},
+        mounted(){
+            this.timerRefresh();
         },
         beforeDestory:function () {
 

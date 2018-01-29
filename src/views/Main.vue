@@ -14,8 +14,8 @@
                 <div slot="top" class="logo-con">
                     <!--<img v-show="!shrink" src="../images/logo.jpg" key="max-logo"/>-->
                     <!--<img v-show="shrink" src="../images/logo-min.jpg" key="min-logo"/>-->
-                    <span v-show="!shrink" style="font-size: xx-large;color:#CCCCCC;font-weight:bold">赛通科技</span>
-                    <span v-show="shrink" style="font-size: x-large;color:white;">sc</span>
+                    <span v-show="!shrink" style="font-size: xx-large;color:#CC9900;font-weight:bold">赛通科技</span>
+                    <span v-show="shrink" style="font-size: x-large;color:white;">SCI</span>
                 </div>
             </shrinkable-menu>
         </div>
@@ -61,9 +61,13 @@
         </div>
         <div class="single-page-con" :style="{left: shrink?'60px':'200px'}">
             <div class="single-page" style="min-width: 200px">
-                <keep-alive :include="cachePage">
-                    <router-view></router-view>
+                <!--<keep-alive :include="cachePage">-->
+                <!--<router-view></router-view>-->
+                <!--</keep-alive>-->
+                <keep-alive>
+                    <router-view v-if="$route.meta.keepAlive"></router-view>
                 </keep-alive>
+                <router-view v-if="!$route.meta.keepAlive"></router-view>
             </div>
         </div>
     </div>
@@ -92,7 +96,6 @@
         data () {
             return {
                 shrink: false,
-                userName: '',
                 isFullScreen: false,
                 openedSubmenuArr: this.$store.state.app.openedSubmenuArr
             };
@@ -121,6 +124,9 @@
             },
             mesCount () {
                 return this.$store.state.device.deviceOnlineLogNotRead.length;
+            },
+            userName(){
+                return this.$store.state.user.name;
             }
         },
         methods: {
@@ -146,7 +152,7 @@
                         }
                     }).catch((err) => {
 //                        console.log("请重新登录");
-                        this.$Message.error("请重新登录");
+//                        this.$Message.error("请重新登录");
                         this.$router.push({
                             name: 'login'
                         });
@@ -195,6 +201,13 @@
                     console.log("删除区域出现错误");
                     this.$Message.error(err);
                 });
+            },
+            getUserInfo(){
+                this.$store.dispatch("GetInfo").then((result) => {
+                }).catch((error => {
+                    console.log("获取用户信息失败");
+                    this.$Message.error(error);
+                }));
             }
         },
         watch: {
@@ -219,6 +232,7 @@
             // 显示打开的页面的列表
             this.$store.commit('setOpenedList');
             this.getRole();
+            this.getUserInfo();
         }
     };
 </script>

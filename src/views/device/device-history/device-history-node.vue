@@ -1,57 +1,37 @@
 <template>
-    <div>
+    <Card>
         <Row>
-            <Col :sm="24" :md="6" :lg="5">
-            <Card>
-                <p slot="title">
-                    <Icon type="android-remove"></Icon>
-                    设备列表
-                </p>
-                <Tree ref="deviceTree" :data="TreeData" @on-select-change="selectChange"></Tree>
-            </Card>
-            </Col>
-            <Col :sm="24" :md="18" :lg="19" class="padding-left-10">
-            <Card>
-                <Row>
-                    <DatePicker type="daterange" placement="right-start" placeholder="Select date"
-                                :options="DataPickerOption"
-                                @on-ok="selectDate"
-                                @on-change="dateChange"
-                                :v-model="SelectDate"
-                                confirm
-                                style="width: 200px"></DatePicker>
+            <DatePicker type="daterange" placement="right-start" placeholder="Select date"
+                        :options="DataPickerOption"
+                        @on-ok="selectDate"
+                        @on-change="dateChange"
+                        :value="SelectDate"
+                        confirm
+                        style="width: 200px"></DatePicker>
 
-                    <RadioGroup v-model="ShowType" type="button" @on-change="showTypeChange">
-                        <Radio label=1 >曲线图</Radio>
-                        <Radio label=2 >面积图</Radio>
-                        <Radio label=3 >点阵图</Radio>
-                        <Radio label=4 >柱状图</Radio>
-                    </RadioGroup>
+            <RadioGroup v-model="ShowType" type="button" @on-change="showTypeChange">
+                <Radio label=1 >曲线图</Radio>
+                <Radio label=2 >面积图</Radio>
+                <Radio label=3 >点阵图</Radio>
+                <Radio label=4 >柱状图</Radio>
+            </RadioGroup>
 
-                </Row>
-                <Row class="margin-top-20">
-                    <highstock :options="ChartOptions"></highstock>
-                </Row>
-            </Card>
-            </Col>
         </Row>
-    </div>
+        <Row class="margin-top-20">
+            <highstock :options="ChartOptions"></highstock>
+        </Row>
+    </Card>
 </template>
 
-
 <script>
-    import HightTestData from "./data";
-    export default {
-        name: 'DeviceHistoryChart',
-        components: {},
+    export default{
+        name: 'device-history-node',
+        props: {
+            CurrentDevice: 0
+        },
         data: function () {
             return {
-                TreeData: [],
-                CurrentDevice: 1,
                 DataPickerOption: {
-                    global: {
-                        useUTC: false
-                    },
                     shortcuts: [
                         {
                             text: '一天内',
@@ -102,12 +82,13 @@
                 },
                 SelectDate: [],
                 ShowType: 1,
+                DeviceInfo: {},
                 ChartOptions: {
                     credits: {
                         enabled: false
                     },
                     chart: {
-                        zoomType: 'x'
+                        zoomType: 'xY'
                     },
 //                    tooltip: {
 //                        split: false,
@@ -138,7 +119,8 @@
                             type: 'all',
                             text: 'all'
                         }],
-                        selected: 3
+                        selected: 1,
+//                        allButtonsEnabled: true
                     },
                     xAxis: {
                         breaks: [],
@@ -155,11 +137,11 @@
                     series: [{
                         type: 'line',
                         name: '数据',
-                        gapSize: 10,
-                        marker: {
-                            enabled: false,
-                            radius: 0,
-                        },
+//                        gapSize: 10,
+//                        marker: {
+//                            enabled: false,
+//                            radius: 0,
+//                        },
                         data: []
 //                        pointStart: Date.UTC(2004, 3, 1),
 //                        pointInterval: 3600 * 1000,
@@ -171,23 +153,9 @@
             }
         },
         methods: {
-            getTreeDate () {
-                this.$store.dispatch('GetDeviceTree').then((result) => {
-                    this.TreeData = result.data;
-                }).catch((err) => {
-                    this.$Message.error("获取设备树出现错误");
-                });
-            },
-            selectChange(){
-                let current = this.$refs.deviceTree.getSelectedNodes()[0];
-                if (current.children != undefined || current.children != null) {
-                    this.CurrentDevice = {};
-                    return;
-                }
-                this.CurrentDevice = current.id;
-            },
             selectDate(){
                 if (this.validateDevice() && this.validateDate()) {
+                    console.log(this.SelectDate);
                     let data = {
                         deviceId: this.CurrentDevice,
                         beginTime: this.SelectDate[0],
@@ -195,16 +163,16 @@
                     };
                     this.$store.dispatch('GetBetweenAllHistory', data).then((result) => {
                         let OfflineInfo = result.data.offline;
-                        for (let i = 0, len = OfflineInfo.length; i < len; i++) {
-                            if (OfflineInfo[i].endTime != null) {
-                                let info = {
-                                    from: OfflineInfo[i].beginTime,
-                                    to: OfflineInfo[i].endTime,
-                                    repeat: 0
-                                }
-                                this.ChartOptions.xAxis.breaks.push(info);
-                            }
-                        }
+//                        for (let i = 0, len = OfflineInfo.length; i < len; i++) {
+//                            if (OfflineInfo[i].endTime != null) {
+//                                let info = {
+//                                    from: OfflineInfo[i].beginTime,
+//                                    to: OfflineInfo[i].endTime,
+//                                    repeat: 0
+//                                };
+//                                this.ChartOptions.xAxis.breaks.push(info);
+//                            }
+//                        }
                         let AllHistory = result.data.history;
                         let ShowData = [];
                         for (let j = 0, len = AllHistory.length; j < len; j++) {
@@ -219,6 +187,18 @@
                         this.$Message.error("获取历史出现错误");
                     });
                 }
+            },
+            getDeviceInfo(){
+                this.$store.dispatch('GetDeviceInfo', this.CurrentDevice).then((result) => {
+                    if (result.code == 1) {
+                        this.DeviceInfo = result.data;
+                        this.ChartOptions.title.text = this.DeviceInfo.name + '的历史记录';
+                    } else {
+                        this.$Message.error("获取设备信息失败");
+                    }
+                }).catch((err) => {
+                    this.$Message.error("获取设备信息出现错误");
+                });
             },
             dateChange(value){
                 this.SelectDate = value;
@@ -266,8 +246,13 @@
                 }
             }
         },
-        mounted: function () {
-            this.getTreeDate();
+        created(){
+            let date = new Date();
+//            设置默认是1天
+            this.SelectDate.push(date.setDate(date.getDate() - 1));
+            this.SelectDate.push(new Date());
+            this.selectDate();
+            this.getDeviceInfo();
         }
     }
 </script>

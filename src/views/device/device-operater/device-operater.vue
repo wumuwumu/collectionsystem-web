@@ -30,7 +30,7 @@
         <Modal
                 v-model="AddDeviceModel"
                 title="添加设备"
-                @on-ok="addDevice">
+                @on-ok="operateDevice">
             <Form ref="formInline" :model="formDevice"  >
                 <FormItem label="设备名:">
                     <Input type="text" v-model="formDevice.name" placeholder="name">
@@ -40,11 +40,11 @@
                     <Input type="text" v-model="formDevice.concentrator" placeholder="concentrator">
                     </Input>
                 </FormItem>
-                <FormItem label="连接在节点上:">
-                    <checkbox v-model="LinkNode"/>
+                <FormItem label="连接在集中器上:">
+                    <checkbox v-model="ConcentratorLink"/>
                 </FormItem>
                 <FormItem label="节点ip:">
-                    <Input :disabled ="!LinkNode" type="text" v-model="formDevice.node" placeholder="node">
+                    <Input :disabled="ConcentratorLink" type="text" v-model="formDevice.node" placeholder="node">
                     </Input>
                 </FormItem>
                 <FormItem label="回路位置:">
@@ -82,6 +82,7 @@
             <Card  style="width:100%;height:100%;">
                 <i-button type="info" size="small" @click="addDevicePre()">添加设备</i-button>
                 <i-button type="error" size="small" @click="deleteDevice()">删除设备</i-button>
+                <Button type="primary" size="small" @click="updateDevicePre()">更新设备</Button>
                 <p slot="title" >
                     <Icon type="android-remove"></Icon>
                     设备列表
@@ -187,7 +188,8 @@
                 AddDeviceModel:false,
                 DeviceTypeModel:null,
                 DeviceTypeList:[],
-                LinkNode:false,
+                AddOrUpdate: false,   //false 是添加
+                ConcentratorLink: false,
                 page: 1,
                 row: 10,
                 PageTotal: 0,
@@ -202,7 +204,7 @@
                 }
                 this.$store.dispatch('GetAreaDevicePage', data).then((result) => {
                     this.DeviceListData = result.data;
-                    this.PageTotal = result.data.length;
+                    this.PageTotal = result.total;
                 }).catch((err) => {
                     console.log("获取区域设备出现错误");
                     this.$Message.error(err);
@@ -296,14 +298,14 @@
                 this.getData();
             },
             deleteDevice(){
-               var selectData =  this.$refs.DeviceSelection.getSelection();
+                let selectData = this.$refs.DeviceSelection.getSelection();
                if(selectData.length <1){
                    this.$Message.info("请选择设备");
                    return;
                }
 
-               var data = [];
-               for(var i =0;i< selectData.length;i++){
+                let data = [];
+                for (let i = 0; i < selectData.length; i++) {
                    data.push(selectData[i].id);
                }
                 this.$Modal.confirm({
@@ -326,17 +328,63 @@
 
 
             },
-            addDevicePre(){
-                this.$store.dispatch('GetDeviceType').then((result) => {
-                    if(result.code == 1){
-                        this.DeviceTypeList = result.data;
-                    }else {
-                        this.$Message.error("获取设备类型失败");
+            operateDevice(){
+                if (this.AddOrUpdate == false) {
+                    this.addDevice();
+                } else {
+                    this.updateDevice();
+                }
+            },
+            updateDevicePre(){
+                let selectData = this.$refs.DeviceSelection.getSelection();
+                if (selectData.length != 1) {
+                    this.$Message.info("请选择一个设备");
+                    return;
+                }
+                this.formDevice = selectData[0];
+                this.getDeviceType();
+                this.AddDeviceModel = true;
+                this.AddOrUpdate = true;
+                if (this.formDevice.parentType == 1) {
+                    this.ConcentratorLink = true;
+                } else {
+                    this.ConcentratorLink = false;
+                }
+
+            },
+            updateDevice(){
+                this.ConcentratorLink ? this.formDevice.parentType = 1 : this.formDevice.parentType = 0;
+                console.log(this.formDevice);
+                this.$store.dispatch('UpdateDevice', this.formDevice).then((result) => {
+                    if (result.code == 1) {
+                        this.getDeviceData(this.AreaId);
+                        this.formDevice = {};
+                        this.$Message.info("更新成功");
+                    } else {
+                        this.$Message.error("更新失败");
                     }
                 }).catch((err) => {
-                    console.log("添加设备类型出现错误");
-                    this.$Message.error(err);
+                    this.$Message.error("更新设备出现错误");
                 });
+            },
+            getDeviceType(){
+                if (this.DeviceTypeList.length == 0) {
+                    this.$store.dispatch('GetDeviceType').then((result) => {
+                        if (result.code == 1) {
+                            this.DeviceTypeList = result.data;
+                        } else {
+                            this.$Message.error("获取设备类型失败");
+                        }
+                    }).catch((err) => {
+                        console.log("添加设备类型出现错误");
+                        this.$Message.error(err);
+                    });
+                }
+
+            },
+            addDevicePre(){
+                this.getDeviceType();
+                this.AddOrUpdate = false;
                 this.AddDeviceModel = true;
             },
             addDevice(){
@@ -344,7 +392,7 @@
                     this.$Message.warning("请选择区域");
                     return;
                 }
-                this.LinkNode? Object.assign(this.formDevice,{parentType:0}):Object.assign(this.formDevice,{parentType:1});
+                this.ConcentratorLink ? Object.assign(this.formDevice, {parentType: 1}) : Object.assign(this.formDevice, {parentType: 0});
                  Object.assign(this.formDevice,{area:this.AreaId,online:0});
                 this.$store.dispatch('AddDevice',this.formDevice).then((result) => {
                     if(result.code == 1){

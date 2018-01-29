@@ -1,175 +1,183 @@
 /**
  * Created by wumu on 12/5/17.
  */
-import fetch from '../utils/fetch';
-import {baseUrl} from '../utils/fetch';
+import fetch from '../utils/fetch'
+import { baseUrl } from '../utils/fetch'
 
-export function unlock(password) {
+export function unlock (password) {
     const data = {
-        "password": password
-    };
+        'password': password
+    }
     return fetch({
         url: '/jwt/unlock',
         method: 'post',
         data
-    });
+    })
 }
 
-export function getALlArea() {
+export function getALlArea () {
     return fetch({
         url: '/area/user/list',
         method: 'get'
-    });
+    })
 }
 
-export function deleteArea(id) {
+export function deleteArea (id) {
     return fetch({
         url: '/area/' + id,
         method: 'delete'
-    });
+    })
 }
 
-export function updataArea(data) {
+export function updataArea (data) {
     return fetch({
         url: '/area/update',
         method: 'put',
         data
-    });
+    })
 }
 
-export function addArea(area) {
+export function addArea (area) {
     return fetch({
         url: '/area/add',
         method: 'post',
         data: area
-    });
+    })
 }
 
-export function getAreaDevice(data) {
+export function getAreaDevice (data) {
     return fetch({
-        url: '/device/devicelist/area/list' + "?areaId=" + data,
+        url: '/device/devicelist/area/list' + '?areaId=' + data,
         method: 'get',
-    });
+    })
 }
 
-
-export function getAreaAdminDevice(data) {
+export function getAreaAdminDevice (data) {
     return fetch({
-        url: '/device/devicelist/area/adminlist' + "?areaId=" + data,
+        url: '/device/devicelist/area/adminlist' + '?areaId=' + data,
         method: 'get',
-    });
+    })
 }
 
-export function getAreaDevicePage(data) {
+export function getAreaDevicePage (data) {
     return fetch({
-        url: '/device/devicelist/area/page' + "?areaId=" + data.areaId,
+        url: '/device/devicelist/area/page' + '?areaId=' + data.areaId,
         method: 'post',
         data
-    });
+    })
 }
 
-export function getAreaDouDevice(data) {
+export function getAreaDouDevice (data) {
     return fetch({
         url: '/device/devicelist/area/douList',
         method: 'get',
         params: data
-    });
+    })
 }
 
-export function getDeviceHistory(data) {
-    console.log("getDeviceHistory" + data.deviceId);
+export function getDeviceHistory (data) {
+    console.log('getDeviceHistory' + data.deviceId)
     return fetch({
         url: '/device/history/simplelist',
         method: 'post',
         params: data
-    });
-}
-
-export function getDeviceType() {
-    return fetch({
-        url:'device/deviceType/list',
-        method:'post'
     })
 }
 
-export function addDevice(device) {
+export function getDeviceType () {
     return fetch({
-        url:'device/devicelist/add',
-        method:'post',
-        data:device
+        url: 'device/deviceType/list',
+        method: 'post'
     })
 }
 
-export function batchDeleteData(data) {
+export function addDevice (device) {
     return fetch({
-        url:'device/devicelist/batchDelete',
-        method:'post',
+        url: 'device/devicelist/add',
+        method: 'post',
+        data: device
+    })
+}
+
+export function batchDeleteData (data) {
+    return fetch({
+        url: 'device/devicelist/batchDelete',
+        method: 'post',
         data
     })
 }
-export function getDeviceOnlineLog() {
+
+export function updateDevice (data) {
     return fetch({
-        url:"/device/onlinelog/user",
-        method :'get'
+        url: 'device/devicelist/update',
+        method: 'put',
+        data
     })
 }
 
-export function readMessage(id) {
+export function getDeviceOnlineLog () {
     return fetch({
-        url:'device/onlinelog/read',
-        method:'post',
-        params:id
+        url: '/device/onlinelog/user',
+        method: 'get'
     })
 }
 
-export  function deleteMessage(id) {
+export function readMessage (id) {
     return fetch({
-        url:'device/onlinelog/delete',
-        method:'post',
-        params:id
+        url: 'device/onlinelog/read',
+        method: 'post',
+        params: id
+    })
+}
+
+export function deleteMessage (id) {
+    return fetch({
+        url: 'device/onlinelog/delete',
+        method: 'post',
+        params: id
     })
 }
 //获取历史数据，包括相关信息
-export function getDeviceAllHistory(data) {
+export function getDeviceAllHistory (data) {
     return fetch({
-        url:'/device/history/page',
-        method:'post',
+        url: '/device/history/page',
+        method: 'post',
         data
     })
 }
 
-export function downloadCsvHistory(data) {
+export function downloadCsvHistory (data) {
     return fetch({
-        url:'/device/onlinelog/CSV',
-        method:'get',
-        params:data
+        url: '/device/onlinelog/CSV',
+        method: 'get',
+        params: data
     })
 }
 
-export function getDeviceTree() {
+export function getDeviceTree () {
     return fetch({
-        url:"device/devicelist/user/tree",
-        method:'post'
+        url: 'device/devicelist/user/tree',
+        method: 'post'
     })
 }
 
-export function getBetweenHistory(data) {
+export function getBetweenHistory (data) {
     return fetch({
-        url:"device/history/between",
-        method:'post',
+        url: 'device/history/between',
+        method: 'post',
         data
     })
 }
 
-export function getBetweenHistoryPage(data) {
+export function getBetweenHistoryPage (data) {
     return fetch({
-        url:"device/history/pagebetween",
-        method:'post',
+        url: 'device/history/pagebetween',
+        method: 'post',
         data
     })
 }
 
-export function getBetweenAllHistory(data) {
+export function getBetweenAllHistory (data) {
     return fetch({
         url: 'device/history/betweenAll',
         method: 'post',
@@ -177,7 +185,7 @@ export function getBetweenAllHistory(data) {
     })
 }
 
-export function getOfflineInfoPage(data) {
+export function getOfflineInfoPage (data) {
     return fetch({
             url: '/device/offlineLog/deviceIdPage',
             method: 'post',
@@ -186,7 +194,7 @@ export function getOfflineInfoPage(data) {
     )
 }
 
-export function getDeviceDayReport(data) {
+export function getDeviceDayReport (data) {
     return fetch({
         url: '/device/history/dayreport',
         method: 'post',
@@ -226,7 +234,7 @@ export function getDeviceDayReport(data) {
 //     });
 // }
 
-export function getDeviceDayExcel(data) {
+export function getDeviceDayExcel (data) {
     return fetch({
         url: '/device/history/excel/dayexcel',
         method: 'post',
@@ -235,7 +243,7 @@ export function getDeviceDayExcel(data) {
     })
 }
 
-export function getDeviceMonthReport(data) {
+export function getDeviceMonthReport (data) {
     return fetch({
         url: '/device/history/monthreport',
         method: 'post',
@@ -243,11 +251,26 @@ export function getDeviceMonthReport(data) {
     })
 }
 
-export function getDeviceMonthExcel(data) {
+export function getDeviceMonthExcel (data) {
     return fetch({
         url: '/device/history/excel/monthexcel',
         method: 'post',
         responseType: 'blob',
         data
+    })
+}
+
+export function controlDeviceMqtt (data) {
+    return fetch({
+        url: '/mqtt/switch',
+        method: 'post',
+        data
+    })
+}
+
+export function getDeviceInfo (id) {
+    return fetch({
+        url: '/device/devicelist/read/' + id,
+        method: 'get'
     })
 }

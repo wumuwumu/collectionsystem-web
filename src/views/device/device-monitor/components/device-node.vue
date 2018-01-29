@@ -4,7 +4,7 @@
 
 <template>
     <Col :sm="24" :md="12" :lg="8" :padding="4" style="margin-bottom: 16px;min-width: 100px">
-    <Card shadow style="background-color: #e9ebeb">
+    <Card shadow style="background-color: #e9ebeb" v-show="!SwitchView">
 
         <div class="infor-card-con">
             <!--<Row class="device-name" :style="{backgroundColor: color}">-->
@@ -28,8 +28,32 @@
                 <Row>时间：<span style="" class="infor-intro-text">{{DeviceDate}}</span></Row>
                 </Col>
             </Row>
+            <Row style="margin: 10px">
+                <Button type="info" size="small" @click="openHistory">历史记录</Button>
+            </Row>
             </Col>
         </div>
+    </Card>
+    <Card v-show="SwitchView" shadow style="background-color: #e9ebeb">
+        <Row>
+            <Col class="infor-card-icon-con" span="8">
+            <Sicon :type="DeviceInfo.showIcon" size="80" :color="DeviceInfo.showIconcolor"></Sicon>
+            </Col>
+
+            <Col span="16" class="height-100">
+            <Row class="device-name-header" style="background-color: #a8a238">
+                <span class="device-name-content">{{DeviceInfo.name}}</span>
+            </Row>
+            <Row style="font-size: larger;margin-top: 10px">
+                <span>状态：</span>
+                <span style="margin-left: 10px">{{SwitchStatus}}</span>
+            </Row>
+            <Row style="margin-top: 10px;text-align: center">
+                <Button type="primary" @click="openDevice">打开</Button>
+                <Button type="error" style="margin-left: 10px" @click="closeDevice">关闭</Button>
+            </Row>
+            </Col>
+        </Row>
     </Card>
     </Col>
 </template>
@@ -51,6 +75,13 @@
             }
         },
         computed: {
+            SwitchView: function () {
+                if (this.DeviceInfo.collectionType == 'switch') {
+                    return true
+                } else {
+                    return false;
+                }
+            },
             DataName: function () {
                 return this.DeviceInfo.collectionType;
             },
@@ -65,45 +96,15 @@
                 }
             },
             DeviceDate: function () {
-                console.log("处理子类")
                 return this.dateForm(this.DeviceInfo.lastestTime);
             },
-//            DeviceData: function () {
-//                switch (this.DeviceInfo.collectionType) {
-//                    case temperature :
-//                        return this.DeviceInfo.lastestData + ' ℃'
-//                            ;
-//                        break;
-//                    case dampness  :
-//                        return this.DeviceInfo.lastestData + ' RH'
-//                            ;
-//                        break;
-//                    case pressure:
-//                        return this.DeviceInfo.lastestData + ' MPa'
-//                            ;
-//                        break;
-//                    case wind  :
-//                        return this.DeviceInfo.lastestData + ' m/s'
-//                            ;
-//                        break;
-//                    case illuminance :
-//                        return this.DeviceInfo.lastestData + ' LX'
-//                            ;
-//                        break;
-//                    case electricity  :
-//                        return this.DeviceInfo.lastestData + ' A'
-//                            ;
-//                        break;
-//                    case voltage :
-//                        return this.DeviceInfo.lastestData + ' V'
-//                            ;
-//                        break;
-//                    default :
-//                        return this.DeviceInfo.lastestData
-//                            ;
-//                        break;
-//                }
-//            },
+            SwitchStatus: function () {
+                if (this.DeviceInfo.lastestData > 0) {
+                    return '开';
+                }
+                return '关';
+            }
+
         },
         methods: {
             dateForm(value) {
@@ -128,7 +129,38 @@
                     return fmt;
                 };
                 return new Date(value).format("yyyy-MM-dd hh:mm:ss");
+            },
+            openHistory: function () {
+                this.$router.push({
+                    path: '/device-user/device_monitor/current-history',
+                    query: {id: this.DeviceInfo.id}
+                });
+            },
+            openDevice() {
+                this.controlDevice(1);
+            },
+            closeDevice(){
+                this.controlDevice(0);
+            },
+            controlDevice(sw){
+                let data = {
+                    concentrator: this.DeviceInfo.concentrator,
+                    node: this.DeviceInfo.node,
+                    circuit: this.DeviceInfo.circuit,
+                    sw: sw
+                };
+                this.$store.dispatch('ControlDeviceMqtt', data).then((result) => {
+                    if (result.code == 1) {
+                        this.$Message.info("发送成功");
+                        this.$emit("refrshData");
+                    } else {
+                        this.$Message.error("发送失败");
+                    }
+                }).catch((err) => {
+                    this.$Message.error("发送出现错误");
+                });
             }
-        }
+        },
+
     }
 </script>

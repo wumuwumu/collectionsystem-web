@@ -93,13 +93,9 @@
                         this.$store.dispatch('LoginByUsername', this.loginForm).then((result) => {
                             console.log(result);
                             if (result.code == 1) {
-                                this.$Message.success('登录成功');
+//                                this.$Message.success('登录成功');
                                 this.loading = false;
-//                                if (this.loginForm.username === 'admin') {
-//                                    Cookies.set('access', 0);
-//                                } else {
-//                                    Cookies.set('access', 1);
-//                                }
+                                Cookies.set('account', this.loginForm.username);
                                 this.$store.commit('setAvator', 'https://ss1.bdstatic.com/70cFvXSh_Q1YnxGkpoWK1HF6hhy/it/u=3448484253,3685836170&fm=27&gp=0.jpg');
                                 this.$router.push({path: '/'});
                             }else {

@@ -26,14 +26,14 @@ export function loginByUsername(username, password) {
 
 export function logout() {
     return fetch({
-        url: '/jwt/invalid',
-        method: 'post'
+        url: '/jwt/logout',
+        method: 'get'
     });
 }
 
 export function getInfo() {
     return fetch({
-        url: '/jwt/user',
+        url: '/baseUser/info',
         method: 'get'
     });
 }

@@ -55,7 +55,7 @@
         data: function () {
             return {
                 TreeData: [],
-                CurrentDevice: 0,
+                CurrentDevice: null,
                 DataPickerOption: {
                     shortcuts: [
                         {
@@ -130,12 +130,12 @@
         methods: {
             getTreeDate () {
                 this.$store.dispatch('GetDeviceTree').then((result) => {
-                    if (this.CurrentDevice == 0) {
+                    if (this.CurrentDevice == null) {
                         for (let device of result.data) {
                             if (device.children == undefined || device.children == null || device.children.length == 0) {
 
                             } else {
-                                this.CurrentDevice = device.children[0].id;
+                                this.CurrentDevice = device.children[0];
                                 this.selectDate();
                                 break;
                             }
@@ -149,10 +149,10 @@
             selectChange(){
                 let current = this.$refs.deviceTree.getSelectedNodes()[0];
                 if (current.children != undefined || current.children != null) {
-                    this.CurrentDevice = 0;
+                    this.CurrentDevice = null;
                     return;
                 }
-                this.CurrentDevice = current.id;
+                this.CurrentDevice = current;
                 this.selectDate();
             },
             dateChange(value){
@@ -162,7 +162,7 @@
             selectDate(){
                 if (this.validateDevice() && this.validateDate()) {
                     let data = {
-                        deviceId: this.CurrentDevice,
+                        deviceId: this.CurrentDevice.id,
                         beginTime: this.SelectedDate[0],
                         endTime: this.SelectedDate[1],
                         page: this.page,
@@ -181,7 +181,7 @@
                 }
             },
             validateDevice(){
-                if (this.CurrentDevice < 1) {
+                if (this.CurrentDevice == null || this.CurrentDevice.id < 1) {
                     this.$Message.error('请选择设备');
                     return false;
                 }
@@ -197,16 +197,16 @@
             exportHistoryExcel(){
                 if (this.validateDevice() && this.validateDate()) {
                     let data = {
-                        deviceId: this.CurrentDevice,
+                        deviceId: this.CurrentDevice.id,
                         beginTime: this.SelectedDate[0],
                         endTime: this.SelectedDate[1],
-                        page: 100000,
-                        row: 1
+                        page: 1,
+                        row: 100000
                     };
                     this.$store.dispatch('GetDeviceMonthExcel', data).then((result) => {
                         const content = result;
                         const elink = document.createElement('a');// 创建a标签
-                        elink.download = 'device-month' + this.CurrentDevice + '-' + Date.parse(new Date()) + '.xls'; // 文件名
+                        elink.download = 'device-month' + this.CurrentDevice.title + '-' + Date.parse(new Date()) + '.xls'; // 文件名
                         elink.style.display = 'none';
                         const blob = new Blob([content]);
                         elink.href = URL.createObjectURL(blob);

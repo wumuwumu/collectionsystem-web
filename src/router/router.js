@@ -1,4 +1,4 @@
-import Main from '@/views/Main.vue';
+import Main from '@/views/Main.vue'
 
 // 不作为Main组件的子页面展示的页面单独写，如下
 export const loginRouter = {
@@ -8,9 +8,9 @@ export const loginRouter = {
         title: 'Login - 登录'
     },
     component: resolve => {
-        require(['@/views/login.vue'], resolve);
+        require(['@/views/login.vue'], resolve)
     }
-};
+}
 
 export const page404 = {
     path: '/*',
@@ -19,9 +19,9 @@ export const page404 = {
         title: '404-页面不存在'
     },
     component: resolve => {
-        require(['@/views/error-page/404.vue'], resolve);
+        require(['@/views/error-page/404.vue'], resolve)
     }
-};
+}
 
 export const page403 = {
     path: '/403',
@@ -30,9 +30,9 @@ export const page403 = {
     },
     name: 'error-403',
     component: resolve => {
-        require(['@//views/error-page/403.vue'], resolve);
+        require(['@//views/error-page/403.vue'], resolve)
     }
-};
+}
 
 export const page500 = {
     path: '/500',
@@ -41,18 +41,17 @@ export const page500 = {
     },
     name: 'error-500',
     component: resolve => {
-        require(['@/views/error-page/500.vue'], resolve);
+        require(['@/views/error-page/500.vue'], resolve)
     }
-};
-
+}
 
 export const locking = {
     path: '/locking',
     name: 'locking',
     component: resolve => {
-        require(['@/views/main-components/lockscreen/components/locking-page.vue'], resolve);
+        require(['@/views/main-components/lockscreen/components/locking-page.vue'], resolve)
     }
-};
+}
 
 // 作为Main组件的子页面展示但是不在左侧菜单显示的路由写在otherRouter里
 export const otherRouter = {
@@ -63,14 +62,14 @@ export const otherRouter = {
     children: [
         {
             path: 'home', title: {i18n: 'home'}, name: 'home_index', component: resolve => {
-            require(['@/views/home/home.vue'], resolve);
+            require(['@/views/home/home.vue'], resolve)
         }
         },
-        {
-            path: 'ownspace', title: '个人中心', name: 'ownspace_index', component: resolve => {
-            require(['@/views/own-space/own-space.vue'], resolve);
-        }
-        },
+        // {
+        //     path: 'ownspace', title: '个人中心', name: 'ownspace_index', component: resolve => {
+        //     require(['@/views/own-space/own-space.vue'], resolve)
+        // }
+        // },
         // {
         //     path: 'order/:order_id', title: '订单详情', name: 'order_info', component: resolve => {
         //     require(['@/views/advanced-router/component/order-info.vue'], resolve);
@@ -81,17 +80,17 @@ export const otherRouter = {
         //     require(['@/views/advanced-router/component/shopping-info.vue'], resolve);
         // }
         // },  // 用于展示带参路由
-        {
-            path: 'message', title: '消息中心', name: 'message_index', component: resolve => {
-            require(['@/views/message/message.vue'], resolve);
-        }
-        },
+        // {
+        //     path: 'message', title: '消息中心', name: 'message_index', component: resolve => {
+        //     require(['@/views/message/message.vue'], resolve);
+        // }
+        // },
         {
             path: 'device-admin/device-type-control/add',
             title: '采集类型添加',
             name: 'collectionTypeAdd',
             component: resolve => {
-                require(['@/views/admin-control/device/components/device-type-add.vue'], resolve);
+                require(['@/views/admin-control/device/components/device-type-add.vue'], resolve)
             }
         },
         {
@@ -99,11 +98,19 @@ export const otherRouter = {
             title: '用户添加',
             name: 'userAdd',
             component: resolve => {
-                require(['@/views/admin-control/user/components/user-add.vue'], resolve);
+                require(['@/views/admin-control/user/components/user-add.vue'], resolve)
+            }
+        },
+        {
+            path: '/device-user/device_monitor/current-history',
+            title: '当前设备的历史',
+            name: 'CurrentHistory',
+            component: resolve => {
+                require(['@/views/device/device-monitor/components/current-history.vue'], resolve)
             }
         }
     ]
-};
+}
 
 // 作为Main组件的子页面展示并且在左侧菜单显示的路由写在appRouter里
 export const appRouter = [
@@ -111,7 +118,7 @@ export const appRouter = [
         path: '/device-user',
         icon: 'lock-combination',
         title: '设备监控',
-        name: 'deviceuser',
+        name: 'device-user',
         component: Main,
         children: [
             {
@@ -120,8 +127,11 @@ export const appRouter = [
                 title: '设备监控',
                 name: 'device_monitor',
                 component: resolve => {
-                require(['@/views/device/device-monitor/device-monitor.vue'], resolve);
-            }
+                    require(['@/views/device/device-monitor/device-monitor.vue'], resolve)
+                },
+                meta: {
+                    keepAlive: true // 需要被缓存
+                }
             },
             {
                 path: 'device_operater',
@@ -129,53 +139,53 @@ export const appRouter = [
                 name: 'device-operater',
                 title: '设备管理',
                 component: resolve => {
-                    require(['@/views/device/device-operater/device-operater.vue'], resolve);
+                    require(['@/views/device/device-operater/device-operater.vue'], resolve)
                 }
-            },
+            }
         ]
     },
     {
-        path:"/device-history",
-        title:'设备历史',
+        path: '/device-history',
+        title: '设备历史',
         icon: 'archive',
-        name:'device_history',
-        component:Main,
-        children:[
+        name: 'device_history',
+        component: Main,
+        children: [
             {
                 path: 'device_history',
                 icon: 'ios-list',
-                name: 'device-allhistory',
+                name: 'device-all-history',
                 title: '设备历史记录',
                 component: resolve => {
-                    require(['@/views/device/device-allhistory/device-allhistory.vue'], resolve);
+                    require(['@/views/device/device-allhistory/device-allhistory.vue'], resolve)
                 }
             },
             {
-                path: 'historychart', title: "历史曲线", name: "historychart", icon: 'ios-pulse', component: reslove => {
-                    require(['@/views/device/device-history/device-history-chart.vue'],reslove);
+                path: 'historychart', title: '历史曲线', name: 'history-chart', icon: 'ios-pulse', component: reslove => {
+                require(['@/views/device/device-history/device-history-chart.vue'], reslove)
             }
             },
             {
                 path: 'historyofflinelog',
-                title: "离线记录",
-                name: "hostoryofflinelog",
+                title: '离线记录',
+                name: 'hostory-offline-log',
                 icon: 'alert',
                 component: reslove => {
-                require(['@/views/device/device-history/device-offline-log.vue'], reslove);
-            }
+                    require(['@/views/device/device-history/device-offline-log.vue'], reslove)
+                }
             }
         ]
     },
     {
-        path:"/device-ervery-report",
-        title:'设备报表',
+        path: '/device-ervery-report',
+        title: '设备报表',
         icon: 'ios-book',
-        name:'device_everyreport',
-        component:Main,
-        children:[
+        name: 'device-every-report',
+        component: Main,
+        children: [
             {
-                path: 'dayreport', title: "日报表", name: "dayreport", icon: 'ios-paper', component: reslove => {
-                    require(['@/views/device/device-everyreport/day-report.vue'],reslove);
+                path: 'dayreport', title: '日报表', name: 'day-report', icon: 'ios-paper', component: reslove => {
+                require(['@/views/device/device-everyreport/day-report.vue'], reslove)
             }
             },
             // {
@@ -184,8 +194,8 @@ export const appRouter = [
             // }
             // },
             {
-                path: 'monthreport', title: "月报表", name: "monthreport", icon: 'ios-paper', component: reslove => {
-                require(['@/views/device/device-everyreport/month-report.vue'],reslove);
+                path: 'monthreport', title: '月报表', name: 'month-report', icon: 'ios-paper', component: reslove => {
+                require(['@/views/device/device-everyreport/month-report.vue'], reslove)
             }
             },
             // {
@@ -202,26 +212,26 @@ export const appRouter = [
     },
     {
         path: '/',
-        title: '用户管理',
+        title: '用户中心',
         icon: 'android-person',
-        name: 'user-control',
+        name: 'user-center',
         component: Main,
         children: [
             {
                 path: 'message', title: '消息中心', name: 'message_index', icon: 'android-textsms', component: resolve => {
-                require(['@/views/message/message.vue'], resolve);
+                require(['@/views/message/message.vue'], resolve)
             }
             },
             {
                 path: 'ownspace', title: '个人中心', name: 'ownspace_index', icon: 'person', component: resolve => {
-                require(['@/views/own-space/own-space.vue'], resolve);
+                require(['@/views/own-space/own-space.vue'], resolve)
             }
             },
         ]
 
     },
     {
-        path: "/user-admin",
+        path: '/user-admin',
         title: '系统管理',
         icon: 'wrench',
         name: 'user-admin',
@@ -229,32 +239,31 @@ export const appRouter = [
         component: Main,
         children: [
             {
-                path: 'user-control', title: "用户管理", name: "usercontrol", icon: 'ios-paper', component: reslove => {
-                require(['@/views/admin-control/user/user-control.vue'], reslove);
+                path: 'user-control', title: '用户管理', name: 'user-control', icon: 'ios-paper', component: reslove => {
+                require(['@/views/admin-control/user/user-control.vue'], reslove)
             }
             },
             {
-                path: 'menu-control', title: "菜单管理", name: "menucontrol", icon: 'pricetag', component: reslove => {
-                require(['@/views/admin-control/user/menu-control.vue'], reslove);
+                path: 'menu-control', title: '菜单管理', name: 'menu-control', icon: 'pricetag', component: reslove => {
+                require(['@/views/admin-control/user/menu-control.vue'], reslove)
             }
             },
             {
                 path: 'role-control',
-                title: "角色管理",
-                name: "rolecontrol",
+                title: '角色管理',
+                name: 'role-control',
                 icon: 'android-person',
                 component: reslove => {
-                require(['@/views/admin-control/user/role-control.vue'], reslove);
-            }
+                    require(['@/views/admin-control/user/role-control.vue'], reslove)
+                }
             },
-
 
         ]
     },
     {
         path: '/device-admin',
         title: '设备管理',
-        icon: "earth",
+        icon: 'earth',
         access: 'admin',
         name: 'device-admin',
         component: Main,
@@ -262,42 +271,54 @@ export const appRouter = [
             {
                 path: 'device-type-control',
                 title: '采集类型管理',
-                name: 'devicetypecontrol',
+                name: 'device-type-control',
                 icon: 'paper-airplane',
                 component: reslove => {
-                require(['@/views/admin-control/device/device-type-control.vue'], reslove);
-            }
+                    require(['@/views/admin-control/device/device-type-control.vue'], reslove)
+                },
+                meta: {
+                    keepAlive: true // 需要被缓存
+                }
             },
             {
                 path: 'device-con-control',
                 title: '集中器管理',
-                name: 'deviceconcontrol',
+                name: 'device-con-control',
                 icon: 'drag',
                 component: reslove => {
-                    require(['@/views/admin-control/device/device-concentrator-control.vue'], reslove);
+                    require(['@/views/admin-control/device/device-concentrator-control.vue'], reslove)
+                },
+                meta: {
+                    keepAlive: true // 需要被缓存
                 }
             },
             {
                 path: 'device-monitor-control',
                 title: '设备监控',
-                name: 'devicemonitorcontrol',
+                name: 'device-monitor-control',
                 icon: 'podium',
                 component: reslove => {
-                require(['@/views/admin-control/device/device-monitor-control.vue'], reslove);
-            }
+                    require(['@/views/admin-control/device/device-monitor-control.vue'], reslove)
+                },
+                meta: {
+                    keepAlive: true // 不需要被缓存
+                }
             },
             {
                 path: 'device-operate-control',
                 title: '设备管理',
-                name: 'deviceoperatecontrol',
+                name: 'device-operate-control',
                 icon: 'ios-keypad',
                 component: reslove => {
-                require(['@/views/admin-control/device/device-operate-control.vue'], reslove);
-            }
+                    require(['@/views/admin-control/device/device-operate-control.vue'], reslove)
+                },
+                meta: {
+                    keepAlive: true // 需要被缓存
+                }
             },
         ]
     }
-];
+]
 
 // 所有上面定义的路由都要写在下面的routers里
 export const routers = [
@@ -308,4 +329,4 @@ export const routers = [
     page500,
     page403,
     page404
-];
+]

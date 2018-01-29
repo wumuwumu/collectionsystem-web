@@ -3,13 +3,13 @@ import store from '../store'
 import vue from 'vue'
 import Cookies from 'js-cookie'
 
-
-const baseUrl = "http://127.0.0.1:9791";
+const baseUrl = 'http://sciento.top:9791'
+// const baseUrl = "http://127.0.0.1:9791";
 
 // 创建axios实例
 const service = axios.create({
     baseURL: baseUrl, // api的base_url
-    timeout: 5000            // 请求超时时间
+    timeout: 20000            // 请求超时时间
 })
 
 // request拦截器
@@ -30,42 +30,35 @@ service.interceptors.request.use(config => {
 // respone拦截器
 service.interceptors.response.use(
     (response) => {
-        //     vue.$Message.error({
-        //         message: "获取资源后",
-        //         duration: 5 * 1000,
-        //         closable: true
-        //     })
-        //     console.log("获取资源后");
-        // const res = response.data
-        // if (res.code !== 1) {
-        //   Message({
-        //     message: "错误1",
-        //     type: 'error',
-        //     duration: 5 * 1000
-        //   })
-        //   if (res.code === 401) {
-        //     MessageBox.confirm('你已被登出，可以取消继续留在该页面，或者重新登录', '确定登出', {
-        //       confirmButtonText: '重新登录',
-        //       cancelButtonText: '取消',
-        //       type: 'warning'
-        //     }).then(() => {
-        //       store.dispatch('FedLogOut').then(() => {
-        //         location.reload()// 为了重新实例化vue-router对象 避免bug
-        //       })
-        //     })
-        //   }
-        //   return Promise.reject(error)
-        // } else {
-        if (response.data.code == 401) {
-            store.dispatch('FedLogOut').then(() => {
-                location.reload()// 为了重新实例化vue-router对象 避免bug
-            })
+        if (response.data.code != undefined && response.data.code !== 1) {
+            this.$Message.error('失败')
+            // if (res.code === 401) {
+            //   MessageBox.confirm('你已被登出，可以取消继续留在该页面，或者重新登录', '确定登出', {
+            //     confirmButtonText: '重新登录',
+            //     cancelButtonText: '取消',
+            //     type: 'warning'
+            //   }).then(() => {
+            //     store.dispatch('FedLogOut').then(() => {
+            //       location.reload()// 为了重新实例化vue-router对象 避免bug
+            //     })
+            //   })
+            // }
+            if (response.data.code == 403) {
+                store.dispatch('FedLogOut').then(() => {
+                    location.reload()// 为了重新实例化vue-router对象 避免bug
+                })
+            }
+            if (response.data.code == 401) {
+                this.$Message.error('没有权限访问')
+            }
+        } else {
+            return response.data
         }
-        return response.data;
+
     },
     error => {
         console.log('请求错误：' + error.message)// for debug
-        if (error.response.status == 401) {
+        if (error.response.status == 403) {
             store.dispatch('FedLogOut').then(() => {
                 location.reload()// 为了重新实例化vue-router对象 避免bug
             })

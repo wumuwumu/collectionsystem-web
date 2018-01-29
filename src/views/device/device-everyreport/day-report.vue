@@ -57,6 +57,7 @@
             return {
                 TreeData: [],
                 CurrentDevice: 0,
+                CurrentName: null,
                 DataPickerOption: {
                     shortcuts: [
                         {
@@ -147,6 +148,7 @@
 
                             } else {
                                 this.CurrentDevice = device.children[0].id;
+                                this.CurrentName = device.children[0].title;
                                 this.selectDate();
                                 break;
                             }
@@ -161,13 +163,14 @@
                 let current = this.$refs.deviceTree.getSelectedNodes()[0];
                 if (current.children != undefined || current.children != null) {
                     this.CurrentDevice = 0;
+                    this.CurrentName = null;
                     return;
                 }
                 this.CurrentDevice = current.id;
+                this.CurrentName = current.title;
                 this.selectDate();
             },
             dateChange(value){
-                console.log(value);
 //                this.SelectedDate = value;
             },
             selectDate(){
@@ -180,12 +183,10 @@
                         row: this.row
                     };
                     this.$store.dispatch('GetDeviceDayReport', data).then((result) => {
-                        console.log(result.data);
                         this.ReportData = result.data;
                         this.DeviceReportMax = result.other.max;
                         this.DeviceReportMin = result.other.min;
                         this.DeviceReportAvg = result.other.avg;
-                        console.log(this.DeviceReportMax);
                     }).catch((err) => {
                         this.$Message.error("获取历史出现错误");
                     });
@@ -211,13 +212,13 @@
                         deviceId: this.CurrentDevice,
                         beginTime: this.SelectedDate[0],
                         endTime: this.SelectedDate[1],
-                        page: 100000,
-                        row: 1
+                        page: 1,
+                        row: 1000000
                     };
                     this.$store.dispatch('GetDeviceDayExcel', data).then((result) => {
                         const content = result;
                         const elink = document.createElement('a');// 创建a标签
-                        elink.download = 'device-day' + this.CurrentDevice + '-' + Date.parse(new Date()) + '.xls'; // 文件名
+                        elink.download = 'device-day' + this.CurrentName + '-' + Date.parse(new Date()) + '.xls'; // 文件名
                         elink.style.display = 'none';
                         const blob = new Blob([content]);
                         elink.href = URL.createObjectURL(blob);
@@ -225,7 +226,7 @@
                         elink.click() // 触发点击a标签事件
                         document.body.removeChild(elink);
                     }).catch((err) => {
-                        this.$Message.error("到处excel出现错误");
+                        this.$Message.error("导出excel出现错误");
                     });
                 }
             },
@@ -235,7 +236,6 @@
             date.setDate(date.getDate() - 30);
             this.SelectedDate.push(date);
             this.SelectedDate.push(new Date());
-            console.log(this.SelectedDate);
         },
         mounted: function () {
             this.getTreeDate();

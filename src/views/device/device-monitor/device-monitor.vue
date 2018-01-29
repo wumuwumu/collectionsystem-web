@@ -54,18 +54,22 @@
             </Col>
             <Col :sm="24" :md="18" :lg="19" class="padding-left-10">
             <Card  style="width:100%;height:100%;">
+                <p slot="title">
+                    <Icon type="android-remove"></Icon>
+                    区域管理
+                </p>
+                <DeviceList :areaId="AreaId"/>
+                <!--<Tabs style="width:100%;height:100%;" active-key="key1">-->
+                <!--<Tab-pane label="实时数据" key="key1">-->
+                <!--&lt;!&ndash;<Col :xs="24" :sm="12" :md="6" :style="{marginBottom: '10px'}">&ndash;&gt;-->
+                <!--<DeviceList :areaId="AreaId"/>-->
+                <!--&lt;!&ndash;</Col>&ndash;&gt;-->
+                <!--</Tab-pane>-->
+                <!--<Tab-pane label="历史记录" key="key2">-->
+                <!--<DeviceTableHistory></DeviceTableHistory>-->
 
-                <Tabs style="width:100%;height:100%;" active-key="key1">
-                    <Tab-pane label="实时数据" key="key1">
-                        <!--<Col :xs="24" :sm="12" :md="6" :style="{marginBottom: '10px'}">-->
-                        <DeviceList :areaId="AreaId"/>
-                    <!--</Col>-->
-                    </Tab-pane>
-                    <Tab-pane label="历史记录" key="key2">
-                        <DeviceTableHistory></DeviceTableHistory>
-
-                    </Tab-pane>
-                </Tabs>
+                <!--</Tab-pane>-->
+                <!--</Tabs>-->
             </Card>
             </Col>
         </Row>

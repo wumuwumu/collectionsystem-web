@@ -25,6 +25,14 @@ export function getMenuTree() {
     })
 }
 
+export function getRoleMenuAndTree (data) {
+    return fetch({
+        url: '/authorize/role/menu/author',
+        method: 'post',
+        params: data
+    })
+}
+
 export function getAllMenuList() {
     return fetch({
         url: '/menu/list',

@@ -4,6 +4,7 @@
 </style>
 <template>
   <div>
+      <Spin v-if="Loading" fix size="large"></Spin>
     <Row class="margin-top-10">
       <Col :sm="24" :md="6" :lg="5">
 
@@ -23,7 +24,7 @@
       <Col :sm="24" :md="18" :lg="19" class="padding-left-10">
       <Card>
         <div style="margin-bottom: 20px;margin-top: 10px">
-          <Select v-model="DeviceSelectModel"  @on-change ="changeSelect"  style="width: 150px">
+            <Select v-model="DeviceSelectModel" @on-change="changeSelect" style="width: 150px">
             <Option v-for="item in deviceList" :value="item.id" :key="item.id">{{ item.name }}</Option>
           </Select>
           <Button type="primary" shape="circle" @click="downloadHistory" style="margin-left: 20px">下载设备历史记录</Button>
@@ -103,7 +104,8 @@
                 PageTotal:0,
                 deviceId:0,
                 DeviceSelectModel: 0,
-                deviceList:[]
+                deviceList: [],
+                Loading: false,
             };
         },
         computed:{
@@ -181,11 +183,14 @@
                     day:30,
                     deviceId:this.deviceId
                 }
+                this.Loading = true;
                 this.$store.dispatch('DownloadCsvHistory',data).then((result) => {
                     const content = result;
                     const elink = document.createElement('a');// 创建a标签
                     elink.download = 'device'+this.deviceId+'-'+Date.parse(new Date())+'.csv'; // 文件名
                     elink.style.display = 'none';
+
+                    this.Loading = false;
                     const blob = new Blob([content]);
                     elink.href = URL.createObjectURL(blob);
                     document.body.appendChild(elink);
@@ -193,6 +198,7 @@
                     document.body.removeChild(elink);
                 }).catch((err) => {
                     this.$Message.error('下载失败');
+                    this.Loading = false;
                 });
             },
 

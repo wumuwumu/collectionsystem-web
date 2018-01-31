@@ -75,6 +75,14 @@ export function getAreaDouDevice (data) {
     })
 }
 
+export function getAreaDouDevicePage (data) {
+    return fetch({
+        url: '/device/devicelist/area/douPage?areaId=' + data.areaId,
+        method: 'post',
+        data
+    })
+}
+
 export function getDeviceHistory (data) {
     console.log('getDeviceHistory' + data.deviceId)
     return fetch({
@@ -127,6 +135,27 @@ export function readMessage (id) {
         url: 'device/onlinelog/read',
         method: 'post',
         params: id
+    })
+}
+
+export function deleteReadMessage (id) {
+    return fetch({
+        url: 'device/onlinelog/user/read',
+        method: 'delete'
+    })
+}
+
+export function deleteUnreadMessage (id) {
+    return fetch({
+        url: 'device/onlinelog/user/unread',
+        method: 'delete'
+    })
+}
+
+export function deleteUserAllMessage () {
+    return fetch({
+        url: 'device/onlinelog/user',
+        method: 'delete'
     })
 }
 

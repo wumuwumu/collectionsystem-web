@@ -294,7 +294,7 @@ export const appRouter = [
             },
             {
                 path: 'device-monitor-control',
-                title: '设备监控',
+                title: '用户设备监控',
                 name: 'device-monitor-control',
                 icon: 'podium',
                 component: reslove => {

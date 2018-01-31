@@ -3,7 +3,7 @@
         <Row>
             <Col :xs="24" :sm="6" :md="4" :lg="4">
             <Card>
-                <p slot="title">
+                <p slot="title" @click="getAreaTreeData">
                     <Icon type="android-remove"></Icon>
                     区域管理
                 </p>

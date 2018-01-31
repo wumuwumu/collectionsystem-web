@@ -12,13 +12,16 @@
             };
         },
         mounted () {
-
+            console.log("这里是app初始化的地方");
+            this.updateToken();
         },
         beforeDestroy () {
 
         },
         methods: {
-
+            updateToken(){
+                this.$store.dispatch("UpdateToken");
+            }
         }
     };
 </script>

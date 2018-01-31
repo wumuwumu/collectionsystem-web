@@ -111,7 +111,19 @@ const device = {
         GetAreaDouDevice({commit}, data) {
             return new Promise((resolve, reject) => {
                 request.getAreaDouDevice(data).then(response => {
-                    commit('SET_AREADEVICE', response)
+                    // commit('SET_AREADEVICE', response)
+                    resolve(response)
+                }).catch(error => {
+                    reject(error)
+                })
+            })
+        },
+
+        //分页获取区域设备和类型
+        GetAreaDouDevicePage({commit}, data) {
+            return new Promise((resolve, reject) => {
+                request.getAreaDouDevicePage(data).then(response => {
+                    // commit('SET_AREADEVICE', response)
                     resolve(response)
                 }).catch(error => {
                     reject(error)
@@ -196,6 +208,39 @@ const device = {
                 })
             })
         },
+        //删除用户全部读消息
+        DeleteReadMessage({commit}){
+            return new Promise((resolve, reject) => {
+                request.deleteReadMessage().then(response => {
+                    resolve(response)
+                }).catch(error => {
+                    reject(error)
+                })
+            })
+        },
+
+        //删除用户所有消息
+        DeleteUserMessage({commit}){
+            return new Promise((resolve, reject) => {
+                request.deleteUserAllMessage().then(response => {
+                    resolve(response)
+                }).catch(error => {
+                    reject(error)
+                })
+            })
+        },
+
+        //删除用户全部没有读消息
+        DeleteUnreadMessage({commit}){
+            return new Promise((resolve, reject) => {
+                request.deleteUnreadMessage().then(response => {
+                    resolve(response)
+                }).catch(error => {
+                    reject(error)
+                })
+            })
+        },
+
         //删除消息
         DeleteMessage({commit}, id){
             return new Promise((resolve, reject) => {

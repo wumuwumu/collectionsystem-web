@@ -76,14 +76,12 @@ const user = {
             const username = userInfo.username.trim();
             return new Promise((resolve, reject) => {
                 request.loginByUsername(username, userInfo.password).then((response) => {
-                    console.log("登录获取token："+response.data);
                     Cookies.set('token', response.data,{ expires: 7 });
-                    Cookies.set('user', username,{ expires: 7 });
+                    Cookies.set('user', username)
                     // // commit('SET_TOKEN', data);
                     // commit('SET_NAME', username);
                     resolve(response);
                 }).catch(error => {
-                    console.log("出错");
                     reject(error);
                 });
             });
@@ -95,9 +93,7 @@ const user = {
             return new Promise((resolve, reject) => {
                 request.getInfo(state.token).then(response => {
                     const data = response.data;
-                    console.log(data);
                     commit('SET_ROLES', JSON.stringify(data.roleList));
-                    console.log(JSON.stringify(data.roleList));
                     commit('SET_UID', data.id);
                     commit('SET_NAME', data.username)
                     commit('SET_INTRODUCTION', data.company);
@@ -111,7 +107,6 @@ const user = {
         LogOut({ commit, state }) {
             return new Promise((resolve, reject) => {
                 request.logout().then((response) => {
-                    console.log("退出后的操作");
                     commit('SET_ROLES', []);
                     Cookies.remove('token');
                     Cookies.remove('user');
@@ -129,7 +124,6 @@ const user = {
                         localStorage.theme = theme
                     }
                     resolve(response);
-                    console.log("退出操作完成");
                 }).catch(error => {
                     reject(error);
                     Cookies.remove('token');
@@ -137,6 +131,16 @@ const user = {
                     Cookies.remove('access');
                 });
             });
+        },
+
+        //更新token
+        UpdateToken({commit}){
+            return new Promise(resolve => {
+                request.updateToken().then((response) => {
+                    Cookies.set('token', response.data, {expires: 7})
+                    resolve(response)
+                })
+            })
         },
 
         // 前端 登出

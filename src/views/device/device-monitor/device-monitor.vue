@@ -31,13 +31,13 @@
             </tr>
         </Modal>
         <Row class="margin-top-10">
-            <Col :sm="24" :md="6" :lg="5">
+            <Col :sm="24" :md="6" :lg="4">
 
             <Card v-if="AreaShow">
-                <i-button type="info" size="small" @click="AddAreaModel = true">添加区域</i-button>
-                <i-button type="success" size="small" @click="updatePreArea()">更新区域</i-button>
-                <i-button type="error" size="small" @click="deleteArea()">删除区域</i-button>
-                <i-button size="small" @click="refreshArea()">刷新区域</i-button>
+                <i-button class="margin-top-5" type="info" size="small" @click="AddAreaModel = true">添加区域</i-button>
+                <i-button class="margin-top-5" type="success" size="small" @click="updatePreArea()">更新区域</i-button>
+                <i-button class="margin-top-5" type="error" size="small" @click="deleteArea()">删除区域</i-button>
+                <i-button class="margin-top-5" size="small" @click="refreshArea()">刷新区域</i-button>
                 <p slot="title" >
                     <Icon type="android-remove"></Icon>
                     区域管理
@@ -52,11 +52,12 @@
                 </div>
             </Card>
             </Col>
-            <Col :sm="24" :md="18" :lg="19" class="padding-left-10">
-            <Card  style="width:100%;height:100%;">
-                <p slot="title">
+            <Col :sm="DeviceWidth.sm" :md="DeviceWidth.md" :lg="DeviceWidth.lg" class="padding-left-10">
+            <Card>
+                <p slot="title" @click="changeAreaShow">
                     <Icon type="android-remove"></Icon>
-                    区域管理
+                    设备列表
+
                 </p>
                 <DeviceList :areaId="AreaId"/>
                 <!--<Tabs style="width:100%;height:100%;" active-key="key1">-->
@@ -102,6 +103,11 @@
                 UpdateAreaModel:false,
                 AreaShow:true,
                 AreaId:0,
+                DeviceWidth: {
+                    sm: 24,
+                    md: 18,
+                    lg: 20
+                }
             };
         },
         methods: {
@@ -201,6 +207,23 @@
             refreshArea(){
                 this.getData();
             },
+            changeAreaShow(){
+                if (this.AreaShow == true) {
+                    this.DeviceWidth = {
+                        sm: 24,
+                        md: 24,
+                        lg: 24
+                    }
+                    this.AreaShow = false;
+                } else {
+                    this.DeviceWidth = {
+                        sm: 24,
+                        md: 18,
+                        lg: 20
+                    }
+                    this.AreaShow = true;
+                }
+            }
 
         },
         created () {

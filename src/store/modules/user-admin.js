@@ -46,6 +46,17 @@ const userAdmin = {
             });
         },
 
+        //获取角色菜单树
+        GetRoleMenuAndTree({commit}, data){
+            return new Promise((resolve, reject) => {
+                request.getRoleMenuAndTree(data).then(response => {
+                    resolve(response)
+                }).catch(error => {
+                    reject(error)
+                })
+            })
+        },
+
         //获取所有的菜单list
         GetAllMenuList({commit}){
             return new Promise((resolve, reject) => {

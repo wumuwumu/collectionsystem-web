@@ -1,22 +1,25 @@
 <template>
     <div>
-        <Card>
-            {{areaData}}
+        <div>
             <Select :disabled = "SelectDisabled" v-model="SelectModel" size="small" style="width:100px">
                 <Option v-for="item in timerSelectList" :value="item.value" :key="item.value">{{ item.label }}</Option>
             </Select>
             <i-button type="success" size="small" @click ="getData">立即刷新</i-button>
             <i-button type="info" size="small" @click = "timerRefresh" >{{BtnContent}}<span v-if="TimerOn">{{RefreshValue}}</span></i-button>
 
-        </Card>
+        </div>
         <Row :gutter="16" style="margin-top: 10px">
             <DeviceNode :DeviceInfo="item" v-for="item in AreaData" :key="item.id" @refrshData="getData()"></DeviceNode>
         </Row>
+        <Page :total="PageTotal" show-sizer show-total @on-change="pageChange" :placement="top"
+              @on-page-size-change="sizeChange" :page-size-opts="PageSizeOpt" :page-size="row" :current="page"
+              style="text-align:center;align:right"></Page>
     </div>
 </template>
 <script>
     import DeviceNode from "./device-node.vue";
     import store from "../../../../store";
+    import CommonUtil from '../../../../utils/CommonUtil';
     export default{
         name: 'DeviceList',
         props: {
@@ -54,26 +57,35 @@
                 TimerValue:0,
                 BtnContent:"定时刷新",
                 RefreshValue:0,
+                PageTotal: 0,
+                page: 1,
+                row: 12,
+                AreaData: {},
+                AllAreaData: {},
+                PageSizeOpt: [9, 12, 15, 18],
+                top: "top"
 
             }
         },
         computed: {
-            areaData: function () {
-                //从服务器获取区域的数据
-                this.getData();
-            },
-            AreaData: function () {
-                return store.getters.areaDevice.data;
-            }
+//            areaData: function () {
+//                //从服务器获取区域的数据
+//                this.getData();
+//            },
+//            AreaData: function () {
+//                return store.getters.areaDevice.data;
+//            }
         },
         methods: {
             getData(){
                 let data = {
-                    areaId: this.areaId
+                    areaId: this.areaId,
                 };
                 this.$store.dispatch('GetAreaDouDevice', data).then((result) => {
                     console.log(result.data);
-//                    this.AreaData = result.data;
+                    this.AllAreaData = result.data;
+                    this.AreaData = CommonUtil.pagination(this.page, this.row, this.AllAreaData);
+                    this.PageTotal = result.data.length;
                 }).catch((err) => {
                     console.log("获取区域设备出现错误");
                     this.$Message.error(err);
@@ -111,8 +123,22 @@
                    this.$Message.info("请选择一个时间段");
                }
             },
+            pageChange(page){
+                this.page = page;
+                this.AreaData = CommonUtil.pagination(this.page, this.row, this.AllAreaData);
+            },
+            sizeChange(row){
+                this.row = row;
+                this.AreaData = CommonUtil.pagination(this.page, this.row, this.AllAreaData);
+            }
         },
-        watch: {},
+        watch: {
+            areaId: function () {
+                this.page = 1;
+                this.row = 12;
+                this.getData();
+            }
+        },
         mounted(){
             this.timerRefresh();
         },

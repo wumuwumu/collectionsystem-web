@@ -10,9 +10,11 @@
                 title="配置权限"
                 @on-ok="authorRole">
             <div>
-                <Tree :data="MenuData" show-checkbox
-                      ref="Tree"
-                ></Tree>
+                <Scroll>
+                    <Tree :data="MenuData" show-checkbox
+                          ref="Tree"
+                    ></Tree>
+                </Scroll>
             </div>
         </Modal>
         <Spin size="large" fix v-if="spinShow"></Spin>
@@ -187,8 +189,30 @@
                 });
             },
             getAllMenuList(){
-                this.$store.dispatch('GetMenuTree').then((result) => {
-                    this.MenuData = result.data;
+                let data = {
+                    roleId: this.FormItem.id
+                }
+                this.$store.dispatch('GetRoleMenuAndTree', data).then((result) => {
+                    console.log(result.data);
+                    this.MenuData = result.data.menu;
+                    let roleMenuList = result.data.roleMenu;
+                    for (let roleMenu of roleMenuList) {
+                        for (let menu of this.MenuData) {
+                            if (menu.children == undefined || menu.children == null) {
+                                if (menu.id == roleMenu.menuId) {
+                                    menu.checked = true;
+                                    continue;
+                                }
+                            } else {
+                                for (let children of menu.children) {
+                                    if (children.id == roleMenu.menuId) {
+                                        children.checked = true;
+                                        break;
+                                    }
+                                }
+                            }
+                        }
+                    }
                 }).catch((err) => {
                     this.$Message.error("获取菜单出现错误");
                 });

@@ -88,8 +88,8 @@
                     设备列表
                 </p>
                 <div class=" margin-top-8">
-                <Table ref="DeviceSelection"  :columns="DeviceListColums" height="auto"  :data="DeviceListData"
-                        highlight-row
+                    <Table ref="DeviceSelection" :columns="DeviceListColums" :data="DeviceListData"
+                           highlight-row
                 ></Table>
                     <Page :total="PageTotal" show-sizer show-total @on-change="pageChange"
                           @on-page-size-change="sizeChange"
@@ -123,12 +123,11 @@
                     {
                         type: 'selection',
                         width: 60,
-                        align: 'center'
+                        align: 'center',
                     },
                     {
                         title: '设备名',
                         key: 'name',
-//                    ellipsis:'true',
                     },
                     {
                         title: '集中器编号',
@@ -164,16 +163,6 @@
                     {
                         title: '类型',
                         key: 'collectionType',
-//                        render: (h, params) => {
-//                            return h('div', [
-//                                h('Tag', {
-//                                    props: {
-//                                    }
-//                                }, params.row.collectionType),
-//                            ]);
-//
-//
-//                        }
                     },
 
                 ],//cloumn

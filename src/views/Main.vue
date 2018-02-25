@@ -1,8 +1,31 @@
 <style lang="less">
     @import "./main.less";
+    /* 可以设置不同的进入和离开动画 */
+    /* 设置持续时间和动画函数 */
+    .slide-fade-enter-active {
+        transition: all .3s ease;
+    }
+
+    .slide-fade-leave-active {
+        transition: all .4s cubic-bezier(1.0, 0.5, 0.8, 1.0);
+    }
+
+    .slide-fade-enter, .slide-fade-leave-to
+        /* .slide-fade-leave-active for below version 2.1.8 */
+    {
+        transform: translateX(10px);
+        opacity: 0;
+    }
+
+    @media screen and (max-width: 500px) {
+        .auto-hide {
+            display: none;
+        }
+    }
 </style>
 <template>
     <div class="main" :class="{'main-hide-text': shrink}">
+
         <div class="sidebar-menu-con" :style="{width: shrink?'60px':'200px', overflow: shrink ? 'visible' : 'auto'}">
             <shrinkable-menu
                     :shrink="shrink"
@@ -20,24 +43,25 @@
             </shrinkable-menu>
         </div>
         <div class="main-header-con" :style="{paddingLeft: shrink?'60px':'200px'}">
-            <div class="main-header">
-                <div class="navicon-con">
+            <div class="main-header ">
+                <div class="navicon-con ">
                     <Button :style="{transform: 'rotateZ(' + (this.shrink ? '-90' : '0') + 'deg)'}" type="text"
                             @click="toggleClick">
                         <Icon type="navicon" size="32"></Icon>
                     </Button>
                 </div>
-                <div class="header-middle-con">
+                <div class="header-middle-con auto-hide">
                     <div class="main-breadcrumb">
                         <breadcrumb-nav :currentPath="currentPath"></breadcrumb-nav>
                     </div>
                 </div>
-                <div class="header-avator-con">
-                    <full-screen v-model="isFullScreen" @on-change="fullscreenChange"></full-screen>
-                    <lock-screen></lock-screen>
-                    <message-tip v-model="mesCount"></message-tip>
-                    <theme-switch></theme-switch>
-
+                <div class="header-avator-con auto-hide">
+                    <div class="auto-hide">
+                        <full-screen v-model="isFullScreen" @on-change="fullscreenChange"></full-screen>
+                        <lock-screen></lock-screen>
+                        <message-tip v-model="mesCount"></message-tip>
+                        <theme-switch></theme-switch>
+                    </div>
                     <div class="user-dropdown-menu-con">
                         <Row type="flex" justify="end" align="middle" class="user-dropdown-innercon">
                             <Dropdown transfer trigger="click" @on-click="handleClickUserDropdown">
@@ -64,11 +88,17 @@
                 <!--<keep-alive :include="cachePage">-->
                 <!--<router-view></router-view>-->
                 <!--</keep-alive>-->
+
                 <keep-alive>
+                    <!--<transition name="slide-fade">-->
                     <router-view v-if="$route.meta.keepAlive"></router-view>
+                    <!--</transition>-->
                 </keep-alive>
+                <!--<transition name="slide-fade">-->
                 <router-view v-if="!$route.meta.keepAlive"></router-view>
+                <!--</transition>-->
             </div>
+
         </div>
     </div>
 </template>
@@ -236,3 +266,5 @@
         }
     };
 </script>
+
+

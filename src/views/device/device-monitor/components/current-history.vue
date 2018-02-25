@@ -35,7 +35,7 @@
             },
             backDeviceMonitor(){
                 this.$store.commit('closeOneTag', this);
-                this.$router.push({path: '/device-user/device_monitor'});
+                this.$router.back(-1);
             }
         },
         created: function () {

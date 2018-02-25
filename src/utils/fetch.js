@@ -3,8 +3,8 @@ import store from '../store'
 import vue from 'vue'
 import Cookies from 'js-cookie'
 
-const baseUrl = 'http://sciento.top:9791'
-// const baseUrl = "http://127.0.0.1:9791";
+// const baseUrl = 'http://sciento.top:9791'
+const baseUrl = 'http://127.0.0.1:9791'
 
 // 创建axios实例
 const service = axios.create({
@@ -31,7 +31,7 @@ service.interceptors.request.use(config => {
 service.interceptors.response.use(
     (response) => {
         if (response.data.code != undefined && response.data.code !== 1) {
-            this.$Message.error('失败')
+            // this.$Message.error('失败')
             // if (res.code === 401) {
             //   MessageBox.confirm('你已被登出，可以取消继续留在该页面，或者重新登录', '确定登出', {
             //     confirmButtonText: '重新登录',
@@ -45,7 +45,7 @@ service.interceptors.response.use(
             // }
             if (response.data.code == 403) {
                 store.dispatch('FedLogOut').then(() => {
-                    location.reload()// 为了重新实例化vue-router对象 避免bug
+                    // location.reload()// 为了重新实例化vue-router对象 避免bug
                 })
             }
             if (response.data.code == 401) {

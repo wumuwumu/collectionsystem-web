@@ -43,6 +43,17 @@ const device = {
                 })
             })
         },
+
+        //通过id获取区域
+        GetArea({commit}, data){
+            return new Promise((resolve, reject) => {
+                request.getArea(data).then(response => {
+                    resolve(response)
+                }).catch(error => {
+                    reject(error)
+                })
+            })
+        },
         //添加区域
         AddArea({commit}, area) {
             return new Promise((resolve, reject) => {
@@ -67,7 +78,7 @@ const device = {
         //更新区域
         UpdateArea({commit}, area) {
             return new Promise((resolve, reject) => {
-                request.updataArea(area).then(response => {
+                request.updateArea(area).then(response => {
                     resolve(response)
                 }).catch(error => {
                     reject(error)
@@ -85,7 +96,7 @@ const device = {
             })
         },
 
-        //管理获取区域设备
+        //分页获取区域设备
         GetAreaAdminDevice({commit}, areaId) {
             return new Promise((resolve, reject) => {
                 request.getAreaAdminDevice(areaId).then(response => {

@@ -57,7 +57,7 @@ export function updateUserInfo(data) {
 export function updateToken () {
     return fetch({
         url: '/jwt/refresh',
-        method: 'get'
+        method: 'post'
     })
 }
 

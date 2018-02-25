@@ -22,6 +22,13 @@ export function getALlArea () {
     })
 }
 
+export function getArea (data) {
+    return fetch({
+        url: '/area/read/' + data.id,
+        method: 'get'
+    })
+}
+
 export function deleteArea (id) {
     return fetch({
         url: '/area/' + id,
@@ -29,7 +36,7 @@ export function deleteArea (id) {
     })
 }
 
-export function updataArea (data) {
+export function updateArea (data) {
     return fetch({
         url: '/area/update',
         method: 'put',

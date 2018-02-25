@@ -102,11 +102,27 @@ export const otherRouter = {
             }
         },
         {
+            path: 'device-user/area-edit',
+            title: '区域编辑',
+            name: 'area_edit',
+            component: resolve => {
+                require(['@/views/device/device-area/area-edit.vue'], resolve)
+            }
+        },
+        {
             path: '/device-user/device_monitor/current-history',
             title: '当前设备的历史',
             name: 'CurrentHistory',
             component: resolve => {
                 require(['@/views/device/device-monitor/components/current-history.vue'], resolve)
+            }
+        },
+        {
+            path: '/device-operater/device-control',
+            title: '设备管理',
+            name: 'device_Control',
+            component: resolve => {
+                require(['@/views/device/device-operater/device-control.vue'], resolve)
             }
         }
     ]
@@ -131,6 +147,24 @@ export const appRouter = [
                 },
                 meta: {
                     keepAlive: true // 需要被缓存
+                }
+            },
+            {
+                path: 'device-area',
+                icon: 'arrow-swap',
+                title: '区域管理',
+                name: 'device_area',
+                component: resolve => {
+                    require(['@/views/device/device-area/device-area.vue'], resolve)
+                }
+            },
+            {
+                path: 'area-add',
+                icon: 'arrow-swap',
+                title: '区域添加',
+                name: 'area_add',
+                component: resolve => {
+                    require(['@/views/device/device-area/area-add.vue'], resolve)
                 }
             },
             {

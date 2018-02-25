@@ -13,6 +13,9 @@ import highChartsTheme from "./styles/highcharts-sand-signika.js";
 import VueHighcharts from 'vue-highcharts';
 import Highcharts from 'highcharts';
 import loadStock from 'highcharts/modules/stock';
+
+import VueAMap from 'vue-amap'
+
 loadStock(Highcharts);
 Highcharts.setOptions({
     global: {
@@ -42,6 +45,23 @@ Highcharts.setOptions({
         weekdays: ['星期一', '星期二', '星期三', '星期三', '星期四', '星期五', '星期六', '星期天']
     },
 })
+
+// 引入vue-amap
+Vue.use(VueAMap)
+
+// 初始化vue-amap
+VueAMap.initAMapApiLoader({
+    // 高德的key
+    key: '548c7cd983af89e1c4bab2bea117939f',
+    // 插件集合
+    plugin: ['AMap.Autocomplete', 'AMap.PlaceSearch', 'AMap.Scale', 'AMap.OverView', 'AMap.ToolBar', 'AMap.PolyEditor', 'MapType', 'AMap.CircleEditor'],
+    // 高德 sdk 版本，默认为 1.4.4
+    v: '1.4.4'
+})
+
+
+
+
 Vue.use(VueI18n);
 Vue.use(iView);
 

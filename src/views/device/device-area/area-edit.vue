@@ -47,7 +47,8 @@
                 }
                 this.$store.dispatch('UpdateArea', this.areaInfo).then((result) => {
                     if (result.code == 1) {
-                        this.$router.push({path: '/device-user/device-area'});
+                        this.$store.commit('closeOneTag', this);
+                        this.$router.push({path: '/device-area/device-area'});
                     } else {
                         this.$Message.error("删除失败");
                     }
@@ -58,7 +59,8 @@
                 this.UpdateAreaName = "";
             },
             cancel(){
-                this.$router.push({path: '/device-user/device-area'});
+                this.$store.commit('closeOneTag', this);
+                this.$router.push({path: '/device-area/device-area'});
             }
         },
         created () {

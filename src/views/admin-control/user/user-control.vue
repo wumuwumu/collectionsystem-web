@@ -166,7 +166,7 @@
                 };
                 this.$store.dispatch('GetUserListPage', data).then((result) => {
                     this.UserData = result.data;
-                    this.PageTotal = result.data.length;
+                    this.PageTotal = result.total;
                 }).catch((err) => {
                     this.$Message.error("获取用户列表出现错误");
                 });

@@ -44,7 +44,9 @@ service.interceptors.response.use(
             //   })
             // }
             if (response.data.code == 403) {
+                console.log('已经进入了这里')
                 store.dispatch('FedLogOut').then(() => {
+                    // this.$router.push({path:'/login'});
                     // location.reload()// 为了重新实例化vue-router对象 避免bug
                 })
             }

@@ -75,6 +75,13 @@
                 return "离线";
             },
             lastestData: function () {
+                if (this.DeviceInfo.collectionType == 'switch') {
+                    if (this.DeviceInfo.lastestData == 1) {
+                        return '开';
+                    } else {
+                        return '关';
+                    }
+                }
                 return this.DeviceInfo.lastestData + this.DeviceInfo.showUnit;
             }
         },

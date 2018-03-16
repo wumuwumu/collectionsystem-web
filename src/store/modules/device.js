@@ -36,7 +36,18 @@ const device = {
         //获取用户区域
         GetUserArea({commit}) {
             return new Promise((resolve, reject) => {
-                request.getALlArea().then(response => {
+                request.getAllArea().then(response => {
+                    resolve(response)
+                }).catch(error => {
+                    reject(error)
+                })
+            })
+        },
+
+        //分页获取用户区域
+        GetUserAreaPage({commit}, data) {
+            return new Promise((resolve, reject) => {
+                request.getAllAreaPage(data).then(response => {
                     resolve(response)
                 }).catch(error => {
                     reject(error)
@@ -175,7 +186,29 @@ const device = {
             })
         },
 
+        //获取设备类型
+        GetDevice({commit}, data){
+            return new Promise((resolve, reject) => {
+                request.getDevice(data).then(response => {
+                    resolve(response)
+                }).catch(error => {
+                    reject(error)
+                })
+            })
+        },
+
         //删除设备
+        DeleteDevice({commit}, data){
+            return new Promise((resolve, reject) => {
+                request.deleteDevice(data).then(response => {
+                    resolve(response)
+                }).catch(error => {
+                    reject(error)
+                })
+            })
+        },
+
+        //批量删除设备
         BatchDeleteDevice({commit}, data){
             return new Promise((resolve, reject) => {
                 request.batchDeleteData(data).then(response => {
@@ -398,6 +431,71 @@ const device = {
         GetDeviceInfo({commit}, data){
             return new Promise((resolve, reject) => {
                 request.getDeviceInfo(data).then(response => {
+                    resolve(response)
+                }).catch(error => {
+                    reject(error)
+                })
+            })
+        },
+
+        //获取用户的触发器
+        GetUserTrigger({commit}){
+            return new Promise((resolve, reject) => {
+                request.getUserTrigger().then(response => {
+                    resolve(response)
+                }).catch(error => {
+                    reject(error)
+                })
+            })
+        },
+
+        //获取用户的触发器及设备的信息
+        GetUserDeviceTrigger({commit}, data){
+            return new Promise((resolve, reject) => {
+                request.getUserDeviceTrigger(data).then(response => {
+                    resolve(response)
+                }).catch(error => {
+                    reject(error)
+                })
+            })
+        },
+
+        //添加触发器
+        AddTrigger({commit}, data){
+            return new Promise((resolve, reject) => {
+                request.addTrigger(data).then(response => {
+                    resolve(response)
+                }).catch(error => {
+                    reject(error)
+                })
+            })
+        },
+
+        //删除触发器
+        DeleteTrigger({commit}, id){
+            return new Promise((resolve, reject) => {
+                request.deleteTrigger(id).then(response => {
+                    resolve(response)
+                }).catch(error => {
+                    reject(error)
+                })
+            })
+        },
+
+        //更新触发器
+        UpdateTrigger({commit}, data){
+            return new Promise((resolve, reject) => {
+                request.updateTrigger(data).then(response => {
+                    resolve(response)
+                }).catch(error => {
+                    reject(error)
+                })
+            })
+        },
+
+        GetTriggerInfo({commit}, id){
+            return new Promise((resolve, reject) => {
+                request.getTriggerInfo(id).then(response => {
                     resolve(response)
                 }).catch(error => {
                     reject(error)

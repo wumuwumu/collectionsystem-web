@@ -15,10 +15,18 @@ export function unlock (password) {
     })
 }
 
-export function getALlArea () {
+export function getAllArea () {
     return fetch({
         url: '/area/user/list',
         method: 'get'
+    })
+}
+
+export function getAllAreaPage (data) {
+    return fetch({
+        url: '/area/user/page',
+        method: 'post',
+        data
     })
 }
 
@@ -111,6 +119,20 @@ export function addDevice (device) {
         url: 'device/devicelist/add',
         method: 'post',
         data: device
+    })
+}
+
+export function getDevice (data) {
+    return fetch({
+        url: 'device/devicelist/read/' + data,
+        method: 'get'
+    })
+}
+
+export function deleteDevice (data) {
+    return fetch({
+        url: 'device/devicelist/' + data,
+        method: 'delete',
     })
 }
 
@@ -307,6 +329,50 @@ export function controlDeviceMqtt (data) {
 export function getDeviceInfo (id) {
     return fetch({
         url: '/device/devicelist/read/' + id,
+        method: 'get'
+    })
+}
+
+export function getUserTrigger () {
+    return fetch({
+        url: '/device/trigger/user',
+        method: 'get'
+    })
+}
+
+export function getUserDeviceTrigger (data) {
+    return fetch({
+        url: '/device/trigger/deviceUser',
+        method: 'post',
+        data
+    })
+}
+
+export function addTrigger (data) {
+    return fetch({
+        url: '/device/trigger/add',
+        method: 'post',
+        data
+    })
+}
+
+export function deleteTrigger (id) {
+    return fetch({
+        url: '/device/trigger/' + id,
+        method: 'delete'
+    })
+}
+export function updateTrigger (data) {
+    return fetch({
+        url: '/device/trigger/update',
+        method: 'put',
+        data
+    })
+}
+
+export function getTriggerInfo (id) {
+    return fetch({
+        url: '/device/trigger/' + id,
         method: 'get'
     })
 }

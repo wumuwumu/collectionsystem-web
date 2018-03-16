@@ -45,7 +45,8 @@
                     }
                     this.$store.dispatch('AddArea', data).then((result) => {
                         if (result.code == 1) {
-                            this.$router.push({path: '/device-user/device-area'});
+                            this.$router.push({path: '/device-area/device-area'});
+                            this.$store.commit('closeOneTag', this);
                         } else {
                             this.$Message.error("添加失败");
                         }
@@ -57,7 +58,9 @@
                 }
             },
             cancel(){
-                this.$router.push({path: '/device-user/device-area'});
+
+                this.$store.commit('closeOneTag', this);
+                this.$router.push({path: '/device-area/device-area'});
             }
         }
     }

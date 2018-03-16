@@ -3,9 +3,11 @@
     <div style="padding: 20px">
         <Button type="primary" @click="addArea" class="margin-bottom-10">添加</Button>
         <Table :columns="editAreaColumns" :show-header="true" :data="editAreaData"
-               @on-current-change="selectArea"
                highlight-row
         ></Table>
+        <Page :total="PageTotal" show-sizer show-total @on-change="pageChange" :placement="top"
+              @on-page-size-change="sizeChange" :page-size-opts="PageSizeOpt" :page-size="Row" :current="Page"
+              style="text-align:center;align:right;margin-top: 5px"></Page>
     </div>
 </template>
 
@@ -73,24 +75,33 @@
                         }
                     }
                 ],
+                PageTotal: 0,
+                PageSizeOpt: [10, 20, 30, 40],
+                top: "top",
+                Page: 1,
+                Row: 10,
             }
         },
         methods: {
             getAreaData () {
+                let data = {
+                    page: this.Page,
+                    row: this.Row
+                }
                 //从服务器获取区域数据
-                this.$store.dispatch('GetUserArea').then((result) => {
+                this.$store.dispatch('GetUserAreaPage', data).then((result) => {
                     this.editAreaData = result.data;
+                    this.PageTotal = result.total;
                 }).catch((err) => {
-                    console.log("获取区域出现错误");
-                    this.$Message.error(err);
+                    this.$Message.error("获取区域出现错误");
                 });
 
             },
             addArea(){
-                this.$router.push({path: '/device-user/area-add'});
+                this.$router.push({path: '/device-area/area-add'});
             },
             updateArea(row){
-                this.$router.push({path: '/device-user/area-edit', query: {id: row.id}});
+                this.$router.push({path: '/device-area/area-edit', query: {id: row.id}});
             },
             deleteArea(row){
                 this.$Modal.confirm({
@@ -111,7 +122,18 @@
                 });
             },
             deviceOperate(row){
-                this.$router.push({path: '/device-operater/device-control', query: {id: row.id, name: row.areaName}});
+                this.$router.push({
+                    path: '/device-user/device-operater/device-control',
+                    query: {id: row.id, name: row.areaName}
+                });
+            },
+            pageChange(page){
+                this.Page = page;
+                this.getAreaData();
+            },
+            sizeChange(row){
+                this.Row = row;
+                this.getAreaData();
             }
         },
         mounted: function () {

@@ -155,7 +155,7 @@
                     series: [{
                         type: 'line',
                         name: '数据',
-                        gapSize: 10,
+                        gapSize: 50,
                         marker: {
                             enabled: false,
                             radius: 0,

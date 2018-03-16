@@ -15,6 +15,7 @@
             <div class="amap-page-container">
                 <el-amap ref="map" vid="amapDevice" :plugin="MapPlugin" :center="MapCenter" :zoom="Zoom">
                     <el-amap-marker v-for="marker in Markers" :position="marker.position" :events="marker.events"
+                                    :key="marker.id"
                                     :vid="marker.id" :title="marker.name" :content="marker.content"></el-amap-marker>
 
                     <el-amap-info-window v-if="InfoWindow" :position="InfoWindow.position" :visible="InfoWindow.visible"
@@ -125,6 +126,9 @@
                 });
             },
             openInfoWindow(device) {
+                this.InfoWindows.forEach(window => {
+                    window.visible = false;
+                });
                 let window = this.InfoWindows.get(device.id);
                 if (window != null && window != undefined) {
                     this.InfoWindow = window;
@@ -139,7 +143,12 @@
                     path: '/device-user/device_monitor/current-history',
                     query: {id: device.id}
                 });
-            }
+            },
+            timerRefresh(){
+                this.TimerObject = setInterval(() => {
+                    this.getData();
+                }, 30 * 1000);
+            },
         },
         created(){
             if (this.$route.query && this.$route.query != null && this.$route.query.id && this.$route.query.id != null) {
@@ -147,6 +156,14 @@
                 this.AreaName = this.$route.query.name;
             }
             this.getData();
+            this.timerRefresh();
+        },
+        beforeRouteLeave: function (to, from, next) {
+            clearInterval(this.TimerObject);
+            next();
+        },
+        destroyed () {
+            clearInterval(this.TimerObject);
         }
     }
 </script>

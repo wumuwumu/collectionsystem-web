@@ -62,10 +62,10 @@
             <Col :sm="24" :md="6" :lg="5">
 
             <Card v-if="AreaShow">
-                <i-button type="info" size="small" @click="AddAreaModel = true">添加区域</i-button>
-                <i-button type="success" size="small" @click="updatePreArea()">更新区域</i-button>
-                <i-button type="error" size="small" @click="deleteArea()">删除区域</i-button>
-                <i-button size="small" @click="refreshArea()">刷新区域</i-button>
+                <!--<Button type="info" size="small" @click="AddAreaModel=true">添加区域</Button>-->
+                <!--<Button type="success" size="small" @click="updatePreArea()">更新区域</Button>-->
+                <!--<Button type="error" size="small" @click="deleteArea()">删除区域</Button>-->
+                <!--<Button size="small" @click="refreshArea()">刷新区域</Button>-->
                 <p slot="title" >
                     <Icon type="android-remove"></Icon>
                     区域管理
@@ -80,9 +80,8 @@
             </Col>
             <Col :sm="24" :md="18" :lg="19" class="padding-left-10">
             <Card  style="width:100%;height:100%;">
-                <i-button type="info" size="small" @click="addDevicePre()">添加设备</i-button>
-                <i-button type="error" size="small" @click="deleteDevice()">删除设备</i-button>
-                <Button type="primary" size="small" @click="updateDevicePre()">更新设备</Button>
+                <i-button type="info" size="small" @click="addDevice()">添加设备</i-button>
+                <!--<Button type="primary" size="small" @click="updateDevicePre()">更新设备</Button>-->
                 <p slot="title" >
                     <Icon type="android-remove"></Icon>
                     设备列表
@@ -164,6 +163,43 @@
                         title: '类型',
                         key: 'collectionType',
                     },
+                    {
+                        title: '操作',
+                        key: 'action',
+                        align: 'center',
+                        render: (h, params) => {
+                            return h('div', [
+                                h('Button', {
+                                    props: {
+                                        type: 'error',
+                                        size: 'small'
+                                    },
+                                    style: {
+                                        marginRight: '5px'
+                                    },
+                                    on: {
+                                        click: () => {
+                                            this.deleteDevice(params.row);
+                                        }
+                                    }
+                                }, '删除'),
+                                h('Button', {
+                                    props: {
+                                        type: 'primary',
+                                        size: 'small'
+                                    },
+                                    style: {
+                                        marginRight: '5px'
+                                    },
+                                    on: {
+                                        click: () => {
+                                            this.updateDevicePre(params.row);
+                                        }
+                                    }
+                                }, '更新')
+                            ]);
+                        }
+                    }
 
                 ],//cloumn
                 currentArea:null,
@@ -286,22 +322,13 @@
             refreshArea(){
                 this.getData();
             },
-            deleteDevice(){
-                let selectData = this.$refs.DeviceSelection.getSelection();
-               if(selectData.length <1){
-                   this.$Message.info("请选择设备");
-                   return;
-               }
-
-                let data = [];
-                for (let i = 0; i < selectData.length; i++) {
-                   data.push(selectData[i].id);
-               }
+            deleteDevice(device){
+                let data = device.id;
                 this.$Modal.confirm({
                     title: '删除设备',
-                    content: '<p>确定删除设备' + '</p>',
+                    content: '<p>确定删除设备' + device.name + '</p>',
                     onOk: () => {
-                        this.$store.dispatch('BatchDeleteDevice',data).then((result) => {
+                        this.$store.dispatch('DeleteDevice', data).then((result) => {
                             if(result.code == 1){
                                 this.getDeviceData(this.AreaId);
                                 this.$Message.info("删除成功");
@@ -324,52 +351,16 @@
                     this.updateDevice();
                 }
             },
-            updateDevicePre(){
-                let selectData = this.$refs.DeviceSelection.getSelection();
-                if (selectData.length != 1) {
-                    this.$Message.info("请选择一个设备");
-                    return;
-                }
-                this.formDevice = selectData[0];
-                this.getDeviceType();
-                this.AddDeviceModel = true;
-                this.AddOrUpdate = true;
+            updateDevicePre(device){
                 if (this.formDevice.parentType == 1) {
                     this.ConcentratorLink = true;
                 } else {
                     this.ConcentratorLink = false;
                 }
-
-            },
-            updateDevice(){
-                this.ConcentratorLink ? this.formDevice.parentType = 1 : this.formDevice.parentType = 0;
-                console.log(this.formDevice);
-                this.$store.dispatch('UpdateDevice', this.formDevice).then((result) => {
-                    if (result.code == 1) {
-                        this.getDeviceData(this.AreaId);
-                        this.formDevice = {};
-                        this.$Message.info("更新成功");
-                    } else {
-                        this.$Message.error("更新失败");
-                    }
-                }).catch((err) => {
-                    this.$Message.error("更新设备出现错误");
+                this.$router.push({
+                    path: '/device-user/device-operater/device-edit',
+                    query: {id: device.id}
                 });
-            },
-            getDeviceType(){
-                if (this.DeviceTypeList.length == 0) {
-                    this.$store.dispatch('GetDeviceType').then((result) => {
-                        if (result.code == 1) {
-                            this.DeviceTypeList = result.data;
-                        } else {
-                            this.$Message.error("获取设备类型失败");
-                        }
-                    }).catch((err) => {
-                        console.log("添加设备类型出现错误");
-                        this.$Message.error(err);
-                    });
-                }
-
             },
             addDevicePre(){
                 this.getDeviceType();
@@ -377,23 +368,13 @@
                 this.AddDeviceModel = true;
             },
             addDevice(){
-                if(this.AreaId < 1){
+                if (this.AreaId < 1) {
                     this.$Message.warning("请选择区域");
                     return;
                 }
-                this.ConcentratorLink ? Object.assign(this.formDevice, {parentType: 1}) : Object.assign(this.formDevice, {parentType: 0});
-                 Object.assign(this.formDevice,{area:this.AreaId,online:0});
-                this.$store.dispatch('AddDevice',this.formDevice).then((result) => {
-                    if(result.code == 1){
-                        this.getDeviceData(this.AreaId);
-                        this.formDevice = {};
-                        this.$Message.info("添加成功");
-                    }else {
-                        this.$Message.error("添加失败");
-                    }
-                }).catch((err) => {
-                    console.log("添加设备出现错误");
-                    this.$Message.error(err);
+                this.$router.push({
+                    path: '/device-user/device-operater/device-add',
+                    query: {id: this.AreaId}
                 });
             },
             pageChange(page){

@@ -102,7 +102,7 @@ export const otherRouter = {
             }
         },
         {
-            path: 'device-user/area-edit',
+            path: 'device-area/area-edit',
             title: '区域编辑',
             name: 'area_edit',
             component: resolve => {
@@ -118,11 +118,36 @@ export const otherRouter = {
             }
         },
         {
-            path: '/device-operater/device-control',
+            path: '/device-user/device-operater/device-control',
             title: '设备管理',
             name: 'device_Control',
             component: resolve => {
                 require(['@/views/device/device-operater/device-control.vue'], resolve)
+            }
+        },
+        {
+            path: '/device-user/device-operater/device-add',
+            title: '设备添加',
+            name: 'device_add',
+            component: resolve => {
+                require(['@/views/device/device-operater/device-add.vue'], resolve)
+            }
+        },
+        {
+            path: '/device-user/device-operater/device-edit',
+            title: '设备添加',
+            name: 'device_edit',
+            component: resolve => {
+                require(['@/views/device/device-operater/device-edit.vue'], resolve)
+            }
+        },
+        {
+            path: '/device-trigger/trigger-update',
+            title: '编辑设备触发器',
+            icon: 'archive',
+            name: 'trigger_update',
+            component: resovle => {
+                require(['@/views/device/device-trigger/trigger-update.vue'], resovle)
             }
         }
     ]
@@ -150,6 +175,24 @@ export const appRouter = [
                 }
             },
             {
+                path: 'device_operater',
+                icon: 'pound',
+                name: 'device-operater',
+                title: '设备管理',
+                component: resolve => {
+                    require(['@/views/device/device-operater/device-operater.vue'], resolve)
+                }
+            }
+        ]
+    },
+    {
+        path: '/device-area',
+        icon: 'lock-combination',
+        title: '区域管理',
+        name: 'device-area',
+        component: Main,
+        children: [
+            {
                 path: 'device-area',
                 icon: 'arrow-swap',
                 title: '区域管理',
@@ -167,13 +210,31 @@ export const appRouter = [
                     require(['@/views/device/device-area/area-add.vue'], resolve)
                 }
             },
+        ]
+    },
+    {
+        path: '/device-trigger',
+        title: '设备触发器',
+        icon: 'archive',
+        name: 'device_trigger',
+        component: Main,
+        children: [
             {
-                path: 'device_operater',
-                icon: 'pound',
-                name: 'device-operater',
-                title: '设备管理',
+                path: 'trigger-list',
+                title: '设备触发器',
+                icon: 'archive',
+                name: 'trigger_list',
                 component: resolve => {
-                    require(['@/views/device/device-operater/device-operater.vue'], resolve)
+                    require(['@/views/device/device-trigger/device-trigger.vue'], resolve)
+                }
+            },
+            {
+                path: 'trigger-add',
+                title: '添加设备触发器',
+                icon: 'archive',
+                name: 'trigger_add',
+                component: resovle => {
+                    require(['@/views/device/device-trigger/trigger-add.vue'], resovle)
                 }
             }
         ]
@@ -329,7 +390,7 @@ export const appRouter = [
             {
                 path: 'device-monitor-control',
                 title: '用户设备监控',
-                name: 'device-monitor-control',
+                name: 'devicemonitorcontrol',
                 icon: 'podium',
                 component: reslove => {
                     require(['@/views/admin-control/device/device-monitor-control.vue'], reslove)

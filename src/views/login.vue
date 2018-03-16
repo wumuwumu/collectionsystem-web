@@ -65,7 +65,7 @@
                     username: [
                         {required: true, trigger: 'blur', validator: validateName}
                     ],
-                    password: [
+                    passwobuttonrd: [
                         {required: true, trigger: 'blur', validator: validatePass}
                     ]
                 }

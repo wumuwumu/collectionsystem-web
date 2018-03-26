@@ -43,8 +43,8 @@
             </shrinkable-menu>
         </div>
         <div class="main-header-con" :style="{paddingLeft: shrink?'60px':'200px'}">
-            <div class="main-header ">
-                <div class="navicon-con ">
+            <div class="main-header">
+                <div class="navicon-con">
                     <Button :style="{transform: 'rotateZ(' + (this.shrink ? '-90' : '0') + 'deg)'}" type="text"
                             @click="toggleClick">
                         <Icon type="navicon" size="32"></Icon>
@@ -160,7 +160,6 @@
             }
         },
         methods: {
-
             toggleClick () {
                 this.shrink = !this.shrink;
             },

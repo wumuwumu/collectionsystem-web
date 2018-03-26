@@ -182,6 +182,15 @@ export const appRouter = [
                 component: resolve => {
                     require(['@/views/device/device-operater/device-operater.vue'], resolve)
                 }
+            },
+            {
+                path: 'single-video',
+                icon: 'pound',
+                name: 'device-video',
+                title: '视频测试',
+                component: resolve => {
+                    require(['@/views/device/device-video/single-video.vue'], resolve)
+                }
             }
         ]
     },

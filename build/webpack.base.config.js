@@ -19,6 +19,7 @@ module.exports = {
         path: path.resolve(__dirname, '../gen/dist')
     },
     module: {
+        noParse: [/videojs-contrib-hls/],
         rules: [
             {
                 test: /\.vue$/,

@@ -42,7 +42,7 @@ Highcharts.setOptions({
         resetZoomTitle: '恢复图表',
         shortMonths: ['一月', '二月', '三月', '四月', '五月', '六月', '七月', '八月', '九月', '十月', '十一月', '十二月'],
         thousandsSep: ',',
-        weekdays: ['星期一', '星期二', '星期三', '星期三', '星期四', '星期五', '星期六', '星期天']
+        weekdays: ['星期天', '星期一', '星期二', '星期三', '星期三', '星期四', '星期五', '星期六']
     },
 })
 
@@ -58,9 +58,6 @@ VueAMap.initAMapApiLoader({
     // 高德 sdk 版本，默认为 1.4.4
     v: '1.4.4'
 })
-
-
-
 
 Vue.use(VueI18n);
 Vue.use(iView);

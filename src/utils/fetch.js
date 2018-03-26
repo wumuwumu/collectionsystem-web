@@ -3,8 +3,8 @@ import store from '../store'
 import vue from 'vue'
 import Cookies from 'js-cookie'
 
-// const baseUrl = 'http://sciento.top:9791'
-const baseUrl = 'http://127.0.0.1:9791'
+const baseUrl = 'http://sciento.top:9791'
+// const baseUrl = 'http://127.0.0.1:9791'
 
 // 创建axios实例
 const service = axios.create({

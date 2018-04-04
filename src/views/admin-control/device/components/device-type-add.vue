@@ -25,7 +25,7 @@
                 <FormItem label="图标颜色">
                     <Sicon :type="FormItem.showIcon" v-model="FormItem.showIcon"
                            :color="FormItem.showIconcolor"></Sicon>
-                    <Button type="text" @click="SelectColorModel=true">选择</Button>
+                    <ColorPicker v-model="iconColor" @on-change="colorChange" alpha recommend/>
                 </FormItem>
                 <FormItem>
                     <Button v-show="FormItem.id" type="primary" @click="updateDeviceType">保存</Button>
@@ -42,7 +42,6 @@
     import  DeviceIconDialog from './device-icon-dialog.vue'
     import Sicon from './sicon.vue'
     import {Photoshop} from 'vue-color'
-    import DeviceColorDialog from './device-color-dialog.vue'
 
 
     export default{
@@ -51,17 +50,18 @@
         components: {
             DeviceIconDialog,
             Sicon,
-            DeviceColorDialog
         },
         data: function () {
             return {
                 FormItem: {
-                    id: null
+                    id: null,
+                    showIconcolor: "#ffff00"
                 },
                 SelectIconModel: false,
                 SelectColorModel: false,
                 SelectColorModel: false,
-                spinShow: false
+                spinShow: false,
+                iconColor: "#ffff00"
             }
         },
         methods: {
@@ -135,6 +135,10 @@
                 this.spinShow = false;
                 this.$store.commit('closeOneTag', this);
                 this.$router.push({path: '/device-admin/device-type-control'});
+            },
+            colorChange(color){
+                console.log(color)
+                this.FormItem.showIconcolor = color;
             }
 
         },

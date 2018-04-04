@@ -14,7 +14,6 @@
                         class="info-window-key">数据：</span><span>{{DeviceInfo.lastestData}}{{DeviceInfo.showUnit}}</span>
                 </li>
                 <li><span class="info-window-key">时间：</span><span>{{lastestTime}}</span></li>
-                <li><span class="info-window-key">位置:</span><span>{{DeviceInfo.address}}</span></li>
             </ul>
         </Row>
         <Row style="margin-top: 10px">

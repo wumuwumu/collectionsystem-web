@@ -110,11 +110,19 @@ export const otherRouter = {
             }
         },
         {
-            path: '/device-user/device_monitor/current-history',
+            path: '/device-user/device-monitor/current-history',
             title: '当前设备的历史',
             name: 'CurrentHistory',
             component: resolve => {
                 require(['@/views/device/device-monitor/components/current-history.vue'], resolve)
+            }
+        },
+        {
+            path: '/device-user/device-monitor/switch-configuration',
+            title: '开关设备配置',
+            name: 'switch_configuration',
+            component: resolve => {
+                require(['@/views/device/device-monitor/components/switch-configuration.vue'], resolve)
             }
         },
         {
@@ -149,6 +157,24 @@ export const otherRouter = {
             component: resovle => {
                 require(['@/views/device/device-trigger/trigger-update.vue'], resovle)
             }
+        },
+        {
+            path: '/switch-timer/switch-timer-update',
+            title: '更新定时',
+            icon: 'archive',
+            name: 'switch-timer-update',
+            component: resolve => {
+                require(['@/views/device/switch-timer/switch-timer-update.vue'], resolve)
+            }
+        },
+        {
+            path: '/switch-strategy/switch-strategy-update',
+            title: '更新策略',
+            icon: 'archive',
+            name: 'switch-strategy_update',
+            component: reslove => {
+                require(['@/views/device/switch-strategy/switch-strategy-update.vue'], reslove)
+            }
         }
     ]
 }
@@ -163,7 +189,7 @@ export const appRouter = [
         component: Main,
         children: [
             {
-                path: 'device_monitor',
+                path: 'device-monitor',
                 icon: 'arrow-swap',
                 title: '设备监控',
                 name: 'device_monitor',
@@ -175,7 +201,7 @@ export const appRouter = [
                 }
             },
             {
-                path: 'device_operater',
+                path: 'device-operater',
                 icon: 'pound',
                 name: 'device-operater',
                 title: '设备管理',
@@ -246,6 +272,63 @@ export const appRouter = [
                     require(['@/views/device/device-trigger/trigger-add.vue'], resovle)
                 }
             }
+        ]
+    },
+    {
+        path: '/switch-timer',
+        title: '设备定时',
+        icon: 'archive',
+        name: 'switch_timer',
+        component: Main,
+        children: [
+            {
+                path: 'switch-timer-list',
+                title: '设备定时',
+                icon: 'archive',
+                name: 'switch_timer_list',
+                component: resolve => {
+                    require(['@/views/device/switch-timer/switch-timer.vue'], resolve)
+                }
+            },
+            {
+                path: 'switch-timer-add',
+                title: '添加定时',
+                icon: 'archive',
+                name: 'switch-timer_add',
+                component: resolve => {
+                    require(['@/views/device/switch-timer/switch-timer-add.vue'], resolve)
+                }
+            }
+
+        ]
+
+    },
+    {
+        path: '/switch-strategy',
+        title: '开关设备策略',
+        icon: 'archive',
+        name: 'switch_strategy',
+        component: Main,
+        children: [
+            {
+                path: 'switch-strategy-list',
+                title: '策略列表',
+                icon: 'archive',
+                name: 'switch-strategy-list',
+                component: resolve => {
+                    require(['@/views/device/switch-strategy/switch-strategy.vue'], resolve)
+                }
+            },
+            {
+                path: 'switch-strategy-add',
+                title: '添加策略',
+                icon: 'archive',
+                name: 'switch-strategy_add',
+                component: reslove => {
+                    require(['@/views/device/switch-strategy/switch-strategy-add.vue'], reslove)
+                }
+            }
+
         ]
     },
     {

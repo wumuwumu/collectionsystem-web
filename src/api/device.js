@@ -98,6 +98,35 @@ export function getAreaDouDevicePage (data) {
     })
 }
 
+export function getAreaSwitch (data) {
+    return fetch({
+        url: '/device/switch/area/list?areaId=' + data,
+        method: 'get'
+    })
+}
+
+export function getSwitchInfo (data) {
+    return fetch({
+        url: '/device/switch?id=' + data,
+        method: 'get'
+    })
+}
+
+export function deleteSwitch (data) {
+    return fetch({
+        url: '/device/switch?id=' + data,
+        method: 'delete'
+    })
+}
+
+export function updateSwitch (data) {
+    return fetch({
+        url: '/device/switch',
+        method: 'put',
+        data
+    })
+}
+
 export function getDeviceHistory (data) {
     console.log('getDeviceHistory' + data.deviceId)
     return fetch({
@@ -320,7 +349,7 @@ export function getDeviceMonthExcel (data) {
 
 export function controlDeviceMqtt (data) {
     return fetch({
-        url: '/mqtt/switch',
+        url: '/mqtt/control/switch',
         method: 'post',
         data
     })
@@ -376,3 +405,71 @@ export function getTriggerInfo (id) {
         method: 'get'
     })
 }
+
+export function getTimerInfo (id) {
+    return fetch({
+        url: '/device/switchTimer/' + id,
+        method: 'get'
+    })
+}
+
+export function addTimer (data) {
+    return fetch({
+        url: '/device/switchTimer/add',
+        method: 'post',
+        data
+    })
+}
+
+export function updateTimer (data) {
+    return fetch({
+        url: '/device/switchTimer/update',
+        method: 'put',
+        data
+    })
+}
+
+export function deleteTimer (id) {
+    return fetch({
+        url: '/device/switchTimer/' + id,
+        method: 'delete',
+    })
+}
+
+export function addStrategy (data) {
+    return fetch({
+        url: 'device/switchStrategy/add',
+        method: 'post',
+        data
+    })
+}
+
+export function updateStrategy (data) {
+    return fetch({
+        url: 'device/switchStrategy/update',
+        method: 'put',
+        data
+    })
+}
+
+export function deleteStrategy (data) {
+    return fetch({
+        url: 'device/switchStrategy/' + data,
+        method: 'delete',
+    })
+}
+
+export function getStrategyInfo (data) {
+    return fetch({
+        url: 'device/switchStrategy/' + data,
+        method: 'get',
+    })
+}
+
+export function getSwitchStrategy (data) {
+    return fetch({
+        url: 'device/switchStrategy/switch/' + data,
+        method: 'get',
+    })
+}
+

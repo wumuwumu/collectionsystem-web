@@ -13,7 +13,7 @@
         </Row>
         <Page :total="PageTotal" show-sizer show-total @on-change="pageChange" :placement="top"
               @on-page-size-change="sizeChange" :page-size-opts="PageSizeOpt" :page-size="row" :current="page"
-              style="text-align:center;align:right"></Page>
+              style="text-align:center;align:right;margin-top: 5px"></Page>
     </div>
 </template>
 <script>

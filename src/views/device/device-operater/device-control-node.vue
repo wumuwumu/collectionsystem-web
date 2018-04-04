@@ -69,7 +69,7 @@
                 return DataUtil.formatDate(this.DeviceInfo.lastestTime);
             },
             online: function () {
-                if (this.DeviceInfo.onLine == 1) {
+                if (this.DeviceInfo.online == 1) {
                     return "在线";
                 }
                 return "离线";

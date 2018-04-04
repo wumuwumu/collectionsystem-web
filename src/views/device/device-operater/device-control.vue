@@ -24,9 +24,18 @@
             </div>
         </Card>
         <Card style="margin-top: 15px">
+            <p slot="title">采集设备列表</p>
             <Row :gutter="16" style="margin-top: 10px">
                 <DeviceControlNode @toHistory="goHistory" @clickNode="openInfoWindow(item)" :DeviceInfo="item"
                                    v-for="item in DeviceListData" :key="item.id"></DeviceControlNode>
+            </Row>
+        </Card>
+
+        <Card style="margin-top: 15px">
+            <p slot="title">控制设备列表</p>
+            <Row :gutter="16" style="margin-top: 10px">
+                <SwitchControlNode @refrshData="getSwitchData" :SwitchInfo="item"
+                                   v-for="item in SwitchListData" :key="item.id"></SwitchControlNode>
             </Row>
         </Card>
 
@@ -37,18 +46,21 @@
     import DeviceControlNode from './device-control-node.vue'
     import { AMapManager } from 'vue-amap';
     import DeviceInfoWindow from './device-info-window.vue';
+    import SwitchControlNode from './switch-control-node.vue';
     let amapManager = new AMapManager;
     export default{
         name: 'DeviceControl',
         components: {
             DeviceControlNode,
-            DeviceInfoWindow
+            DeviceInfoWindow,
+            SwitchControlNode
         },
         data: function () {
             return {
                 areaId: 0,
                 AreaName: "",
                 DeviceListData: [],
+                SwitchListData: [],
                 MapPlugin: ['ToolBar', {
                     pName: 'MapType',
                     defaultType: 0,
@@ -62,7 +74,7 @@
                 InfoWindow: '',
                 InfoWindows: new Map(),
                 MapCenter: [120, 40],
-                Zoom: 5
+                Zoom: 5,
             }
         },
         methods: {
@@ -125,6 +137,15 @@
                     this.$Message.error("获取区域设备出现错误");
                 });
             },
+            getSwitchData(){
+                let data = {
+                    areaId: this.areaId,
+                };
+                this.$store.dispatch('GetAreaSwitch', data).then((result) => {
+                    this.SwitchListData = result.data;
+                }).catch((err) => {
+                });
+            },
             openInfoWindow(device) {
                 this.InfoWindows.forEach(window => {
                     window.visible = false;
@@ -156,6 +177,7 @@
                 this.AreaName = this.$route.query.name;
             }
             this.getData();
+            this.getSwitchData();
             this.timerRefresh();
         },
         beforeRouteLeave: function (to, from, next) {

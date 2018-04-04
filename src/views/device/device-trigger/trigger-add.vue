@@ -67,14 +67,6 @@
                 BValue: "",
                 TypeList: [
                     {
-                        id: 1,
-                        name: '开关ON'
-                    },
-                    {
-                        id: 2,
-                        name: '开关OFF'
-                    },
-                    {
                         id: 3,
                         name: '数值大于A'
                     },
@@ -91,7 +83,7 @@
                         name: '数值大于A小于B'
                     }
                 ],
-                TriggerType: 1,
+                TriggerType: 3,
                 Accepter: '',
                 IsAccepted: true,
             }

@@ -15,8 +15,6 @@
         },
         computed: {
             Alarm: function () {
-                console.log("在这里");
-                console.log(this.trigger);
                 switch (this.trigger.type) {
                     case 1:
                         return '开关ON';

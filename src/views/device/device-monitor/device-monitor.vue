@@ -34,10 +34,13 @@
             <Col :sm="24" :md="6" :lg="4">
 
             <Card v-if="AreaShow">
-                <i-button class="margin-top-5" type="info" size="small" @click="AddAreaModel = true">添加区域</i-button>
-                <i-button class="margin-top-5" type="success" size="small" @click="updatePreArea()">更新区域</i-button>
-                <i-button class="margin-top-5" type="error" size="small" @click="deleteArea()">删除区域</i-button>
-                <i-button class="margin-top-5" size="small" @click="refreshArea()">刷新区域</i-button>
+                <a href="#" slot="extra" @click.prevent="refreshArea()">
+                    <Icon type="ios-loop-strong"></Icon>
+                </a>
+                <!--<i-button class="margin-top-5" type="info" size="small" @click="AddAreaModel = true">添加区域</i-button>-->
+                <!--<i-button class="margin-top-5" type="success" size="small" @click="updatePreArea()">更新区域</i-button>-->
+                <!--<i-button class="margin-top-5" type="error" size="small" @click="deleteArea()">删除区域</i-button>-->
+                <!--<i-button class="margin-top-5" size="small" @click="refreshArea()">刷新区域</i-button>-->
                 <p slot="title" >
                     <Icon type="android-remove"></Icon>
                     区域管理
@@ -55,11 +58,19 @@
             <Col :sm="DeviceWidth.sm" :md="DeviceWidth.md" :lg="DeviceWidth.lg" class="padding-left-10">
             <Card>
                 <p slot="title" @click="changeAreaShow">
-                    <Icon type="android-remove"></Icon>
+                    <Icon :type="deviceIcon"></Icon>
                     设备列表
 
                 </p>
-                <DeviceList :areaId="AreaId"/>
+                <Tabs value="collection" @on-click="tabChange">
+                    <TabPane label="采集设备" name="collection">
+                        <DeviceList :areaId="AreaId"/>
+                    </TabPane>
+                    <TabPane label="控制设备" name="switch">
+                        <SwitchList :areaId="AreaId"/>
+                    </TabPane>
+                </Tabs>
+
                 <!--<Tabs style="width:100%;height:100%;" active-key="key1">-->
                 <!--<Tab-pane label="实时数据" key="key1">-->
                 <!--&lt;!&ndash;<Col :xs="24" :sm="12" :md="6" :style="{marginBottom: '10px'}">&ndash;&gt;-->
@@ -80,6 +91,7 @@
 <script>
     import canEditTable from '../../tables/components/canEditTable.vue';
     import DeviceList from './components/device-list.vue'
+    import SwitchList from './components/switch-list.vue'
     import DeviceTableHistory from './components/device-tablehistory.vue'
     import tableData from './table_data.js';
     import { Modal } from 'iview';
@@ -89,7 +101,9 @@
         components: {
             canEditTable,
             DeviceList,
-            DeviceTableHistory
+            DeviceTableHistory,
+            SwitchList,
+
 
         },
         data () {
@@ -107,7 +121,8 @@
                     sm: 24,
                     md: 18,
                     lg: 20
-                }
+                },
+                deviceIcon: 'android-remove'
             };
         },
         methods: {
@@ -215,6 +230,7 @@
                         lg: 24
                     }
                     this.AreaShow = false;
+                    this.deviceIcon = 'chevron-right';
                 } else {
                     this.DeviceWidth = {
                         sm: 24,
@@ -222,7 +238,11 @@
                         lg: 20
                     }
                     this.AreaShow = true;
+                    this.deviceIcon = 'android-remove';
                 }
+            },
+            tabChange(name){
+
             }
 
         },

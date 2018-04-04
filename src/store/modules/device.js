@@ -153,6 +153,54 @@ const device = {
             })
         },
 
+        //获取区域开关设备列表
+        GetAreaSwitch({commit}, data) {
+            return new Promise((resolve, reject) => {
+                request.getAreaSwitch(data).then(response => {
+                    // commit('SET_AREADEVICE', response)
+                    resolve(response)
+                }).catch(error => {
+                    reject(error)
+                })
+            })
+        },
+
+        //获取开关设备信息
+        GetSwitchInfo({commit}, data) {
+            return new Promise((resolve, reject) => {
+                request.getSwitchInfo(data).then(response => {
+                    // commit('SET_AREADEVICE', response)
+                    resolve(response)
+                }).catch(error => {
+                    reject(error)
+                })
+            })
+        },
+
+        //删除开关设备
+        DeleteSwitch({commit}, data) {
+            return new Promise((resolve, reject) => {
+                request.deleteSwitch(data).then(response => {
+                    // commit('SET_AREADEVICE', response)
+                    resolve(response)
+                }).catch(error => {
+                    reject(error)
+                })
+            })
+        },
+
+        //更新开关设备
+        UpdateSwitch({commit}, data) {
+            return new Promise((resolve, reject) => {
+                request.updateSwitch(data).then(response => {
+                    // commit('SET_AREADEVICE', response)
+                    resolve(response)
+                }).catch(error => {
+                    reject(error)
+                })
+            })
+        },
+
         //获取设备简单历史
         GetDeviceHistory({commit}, data){
             return new Promise((resolve, reject) => {
@@ -493,6 +541,7 @@ const device = {
             })
         },
 
+        //获取触发器信息
         GetTriggerInfo({commit}, id){
             return new Promise((resolve, reject) => {
                 request.getTriggerInfo(id).then(response => {
@@ -501,7 +550,107 @@ const device = {
                     reject(error)
                 })
             })
-        }
+        },
+        //获取开关设备的定时信息
+        GetTimerInfo({commit}, id){
+            return new Promise((resolve, reject) => {
+                request.getTimerInfo(id).then(response => {
+                    resolve(response)
+                }).catch(error => {
+                    reject(error)
+                })
+            })
+        },
+
+        //添加开关定时
+        AddTimer({commit}, data){
+            return new Promise((resolve, reject) => {
+                request.addTimer(data).then(response => {
+                    resolve(response)
+                }).catch(error => {
+                    reject(error)
+                })
+            })
+        },
+
+        //更新开关定时
+        UpdateTimer({commit}, data){
+            return new Promise((resolve, reject) => {
+                request.updateTimer(data).then(response => {
+                    resolve(response)
+                }).catch(error => {
+                    reject(error)
+                })
+            })
+        },
+
+        //删除开关定时
+        DeleteTimer({commit}, id){
+            return new Promise((resolve, reject) => {
+                request.deleteTimer(id).then(response => {
+                    resolve(response)
+                }).catch(error => {
+                    reject(error)
+                })
+            })
+        },
+
+        //添加开关策略
+        AddStrategy({commit}, data){
+            return new Promise((resolve, reject) => {
+                request.addStrategy(data).then(response => {
+                    resolve(response)
+                }).catch(error => {
+                    reject(error)
+                })
+            })
+        },
+
+        //更新开关策略
+        UpdateStrategy({commit}, data){
+            return new Promise((resolve, reject) => {
+                request.updateStrategy(data).then(response => {
+                    resolve(response)
+                }).catch(error => {
+                    reject(error)
+                })
+            })
+        },
+
+        //删除开关策略
+        DeleteStrategy({commit}, data){
+            return new Promise((resolve, reject) => {
+                request.deleteStrategy(data).then(response => {
+                    resolve(response)
+                }).catch(error => {
+                    reject(error)
+                })
+            })
+        },
+
+        //通过id获取开关策略
+        GetStrategyInfo({commit}, data){
+            return new Promise((resolve, reject) => {
+                request.getStrategyInfo(data).then(response => {
+                    resolve(response)
+                }).catch(error => {
+                    reject(error)
+                })
+            })
+        },
+
+        //获取开关设备的策略
+        GetSwitchStrategy({commit}, data){
+            return new Promise((resolve, reject) => {
+                request.getSwitchStrategy(data).then(response => {
+                    resolve(response)
+                }).catch(error => {
+                    reject(error)
+                })
+            })
+        },
+
+
     }
 }
 

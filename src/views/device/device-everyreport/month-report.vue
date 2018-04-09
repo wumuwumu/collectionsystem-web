@@ -13,11 +13,11 @@
             <Col :sm="24" :md="18" :lg="19" class="padding-left-10">
             <Card>
                 <Row>
-                    <DatePicker type="daterange" placement="right-start" placeholder="Select date"
+                    <DatePicker type="month" placement="right-start" placeholder="Select month"
                                 :options="DataPickerOption"
-                                @on-ok="selectDate"
-                                :value="SelectedDate"
-                                @on-change="dateChange"
+                                @on-ok="selectMonth"
+                                :value="SelectedMonth"
+                                @on-change="monthChange"
                                 confirm
                                 style="width: 200px"></DatePicker>
 
@@ -56,72 +56,18 @@
             return {
                 TreeData: [],
                 CurrentDevice: null,
-                DataPickerOption: {
-                    shortcuts: [
-                        {
-                            text: '一个月内',
-                            value () {
-                                const end = new Date();
-                                const start = new Date();
-                                start.setTime(start.getTime() - 3600 * 1000 * 24 * 30);
-                                return [start, end];
-                            }
-                        },
-                        {
-                            text: '三个月内',
-                            value () {
-                                const end = new Date();
-                                const start = new Date();
-                                start.setTime(start.getTime() - 3600 * 1000 * 24 * 90);
-                                return [start, end];
-                            }
-                        },
-                        {
-                            text: '半年内',
-                            value () {
-                                const end = new Date();
-                                const start = new Date();
-                                start.setTime(start.getTime() - 3600 * 1000 * 24 * 183);
-                                return [start, end];
-                            }
-                        },
-                        {
-                            text: '一年内',
-                            value () {
-                                const end = new Date();
-                                const start = new Date();
-                                start.setTime(start.getTime() - 3600 * 1000 * 24 * 365);
-                                return [start, end];
-                            }
-                        }
-                    ]
-                },
-                SelectedDate: [],
+                SelectedMonth: new Date(),
                 DeviceReportColumn: [
-                    {
-                        title: '设备名称',
-                        key: 'deviceName'
-                    },
-                    {
-                        title: '集中器',
-                        key: 'concentrator'
-                    },
-                    {
-                        title: "节点ip",
-                        key: 'node',
-                    },
                     {
                         title: "平均值",
                         key: 'data'
                     },
                     {
-                        title: '日期',
-                        key: 'date'
+                        title: '月份',
+                        key: 'time'
                     }
                 ],
                 ReportData: [],
-                page: 1,
-                row: 100,
                 DeviceReportMax: 0,
                 DeviceReportMin: 0,
                 DeviceReportAvg: 0
@@ -136,7 +82,7 @@
 
                             } else {
                                 this.CurrentDevice = device.children[0];
-                                this.selectDate();
+                                this.selectMonth();
                                 break;
                             }
                         }
@@ -153,28 +99,24 @@
                     return;
                 }
                 this.CurrentDevice = current;
-                this.selectDate();
+                this.selectMonth();
             },
-            dateChange(value){
+            monthChange(value){
 //                console.log(value);
 //                this.SelectedDate = value;
             },
-            selectDate(){
-                if (this.validateDevice() && this.validateDate()) {
+            selectMonth(){
+                if (this.validateDevice()) {
                     let data = {
                         deviceId: this.CurrentDevice.id,
-                        beginTime: this.SelectedDate[0],
-                        endTime: this.SelectedDate[1],
-                        page: this.page,
-                        row: this.row
+                        time: new Date(this.SelectedMonth).valueOf(),
                     };
                     this.$store.dispatch('GetDeviceMonthReport', data).then((result) => {
                         console.log(result.data);
-                        this.ReportData = result.data;
-                        this.DeviceReportMax = result.other.max;
-                        this.DeviceReportMin = result.other.min;
-                        this.DeviceReportAvg = result.other.avg;
-                        console.log(this.DeviceReportMax);
+                        this.ReportData = result.data.list;
+                        this.DeviceReportMax = result.data.max;
+                        this.DeviceReportMin = result.data.min;
+                        this.DeviceReportAvg = result.data.avg;
                     }).catch((err) => {
                         this.$Message.error("获取历史出现错误");
                     });
@@ -187,21 +129,11 @@
                 }
                 return true;
             },
-            validateDate(){
-                if (this.SelectedDate.length != 2) {
-                    this.$Message.error("选择的时间有问题");
-                    return false;
-                }
-                return true;
-            },
             exportHistoryExcel(){
-                if (this.validateDevice() && this.validateDate()) {
+                if (this.validateDevice()) {
                     let data = {
                         deviceId: this.CurrentDevice.id,
-                        beginTime: this.SelectedDate[0],
-                        endTime: this.SelectedDate[1],
-                        page: 1,
-                        row: 100000
+                        time: new Date(this.SelectedMonth).valueOf(),
                     };
                     this.$store.dispatch('GetDeviceMonthExcel', data).then((result) => {
                         const content = result;

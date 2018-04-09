@@ -3,6 +3,7 @@
 </style>
 <template>
     <div>
+        <Button type="primary" @click="back" class="margin-bottom-10">返回</Button>
         <Button type="primary" @click="addStrategy" class="margin-bottom-10">添加</Button>
         <Table :columns="strategyColumns" :show-header="true" :data="strategyList"
                highlight-row
@@ -92,6 +93,9 @@
         components: {},
         computed: {},
         methods: {
+            back(){
+                this.$router.back();
+            },
             loadId(){
                 if (this.$route.query && this.$route.query != null && this.$route.query.id && this.$route.query.id != null) {
                     this.switchId = this.$route.query.id;

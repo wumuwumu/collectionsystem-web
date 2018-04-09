@@ -4,12 +4,15 @@
                 v-model="AddaConModel"
                 title="添加集中器"
                 @on-ok="addUserCon">
-            <tr>
-                <td>集中器编号:</td>
-                <td>
-                    <input type="text" class="margin-left-10" placeholder="集中器编号" v-model="ConNumber">
-                </td>
-            </tr>
+            <Form>
+                <FormItem label="集中器编号:">
+                    <Input type="text" class="margin-left-10" placeholder="集中器编号" v-model="ConNumber"/>
+                </FormItem>
+                <FormItem label="密码：">
+                    <Input type="text" class="margin-left-10" placeholder="集中器编号" v-model="password"/>
+                </FormItem>
+            </Form>
+
         </Modal>
         <Card>
             <Button type="primary" icon="plus" @click="addUserConPre">添加</Button>
@@ -61,6 +64,10 @@
                         key: 'concentratorNumber'
                     },
                     {
+                        title: '密码',
+                        key: 'password'
+                    },
+                    {
                         title: '操作',
                         key: 'action',
                         render: (h, params) => {
@@ -89,7 +96,8 @@
                 row: 10,
                 PageTotal: 0,
                 AddaConModel: false,
-                ConNumber: ""
+                ConNumber: "",
+                password: null
             }
         },
         methods: {
@@ -156,7 +164,8 @@
                     let data = {
                         userId: this.CurrentUser.id,
                         userAccount: this.CurrentUser.account,
-                        concentratorNumber: this.ConNumber
+                        concentratorNumber: this.ConNumber,
+                        password: this.password,
                     };
                     this.$store.dispatch('AddUserCon', data).then((result) => {
                         if (result.code == 1) {

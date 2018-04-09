@@ -1,6 +1,11 @@
 <style>
     @import '../../../styles/common.less';
     @import './components/style/role-list.less';
+
+    .active {
+        background-color: #e2ebe6;
+        opacity: 50;
+    }
 </style>
 
 <template>
@@ -28,9 +33,10 @@
                 </p>
                 <div>
                     <ul class="iview-admin-draggable-list">
-                        <li v-for="(item , index) in RoleList" :key="index" class="notwrap" :data-index="index"
+                        <li v-for="(item , index) in RoleList" :key="index" :class="{active: index == roleId}"
+                            class="notwrap" :data-index="index"
                             style="font-size: small"
-                            @click="clickRole(item)">
+                            @click="clickRole(index,item)">
                             <Icon type="android-contacts"></Icon>
                             {{ item.roleName }}
                         </li>
@@ -83,6 +89,7 @@
                 spinShow: false,
                 AuthorModel: false,
                 MenuData: [],
+                roleId: 0
             }
         },
         methods: {
@@ -157,9 +164,10 @@
                     this.$Message.error("添加角色出现错误");
                 });
             },
-            clickRole(row){
+            clickRole(index, row){
                 this.AddOrUpdate = true;
                 this.FormItem = row;
+                this.roleId = index;
             },
             addRoleMenu(){
                 this.getAllMenuList();

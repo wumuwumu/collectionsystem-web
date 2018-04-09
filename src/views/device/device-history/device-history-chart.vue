@@ -12,26 +12,7 @@
             </Col>
             <Col :sm="24" :md="18" :lg="19" class="padding-left-10">
             <Card>
-                <Row>
-                    <DatePicker type="daterange" placement="right-start" placeholder="Select date"
-                                :options="DataPickerOption"
-                                @on-ok="selectDate"
-                                @on-change="dateChange"
-                                :v-model="SelectDate"
-                                confirm
-                                style="width: 200px"></DatePicker>
-
-                    <RadioGroup v-model="ShowType" type="button" @on-change="showTypeChange">
-                        <Radio label=1 >曲线图</Radio>
-                        <Radio label=2 >面积图</Radio>
-                        <Radio label=3 >点阵图</Radio>
-                        <Radio label=4 >柱状图</Radio>
-                    </RadioGroup>
-
-                </Row>
-                <Row class="margin-top-20">
-                    <highstock :options="ChartOptions"></highstock>
-                </Row>
+                <DeviceHistoryNode :CurrentDevice="CurrentDevice"></DeviceHistoryNode>
             </Card>
             </Col>
         </Row>
@@ -40,134 +21,18 @@
 
 
 <script>
+    import DeviceHistoryNode from './device-history-node.vue'
     import HightTestData from "./data";
     export default {
         name: 'DeviceHistoryChart',
-        components: {},
+        components: {
+            DeviceHistoryNode
+        },
         data: function () {
             return {
                 TreeData: [],
                 CurrentDevice: 1,
-                DataPickerOption: {
-                    global: {
-                        useUTC: false
-                    },
-                    shortcuts: [
-                        {
-                            text: '一天内',
-                            value () {
-                                const end = new Date();
-                                const start = new Date();
-                                start.setTime(start.getTime() - 3600 * 1000 * 24);
-                                return [start, end];
-                            }
-                        },
-                        {
-                            text: '一星期内',
-                            value () {
-                                const end = new Date();
-                                const start = new Date();
-                                start.setTime(start.getTime() - 3600 * 1000 * 24 * 7);
-                                return [start, end];
-                            }
-                        },
-                        {
-                            text: '一个月内',
-                            value () {
-                                const end = new Date();
-                                const start = new Date();
-                                start.setTime(start.getTime() - 3600 * 1000 * 24 * 30);
-                                return [start, end];
-                            }
-                        },
-                        {
-                            text: '三个月内',
-                            value () {
-                                const end = new Date();
-                                const start = new Date();
-                                start.setTime(start.getTime() - 3600 * 1000 * 24 * 90);
-                                return [start, end];
-                            }
-                        },
-                        {
-                            text: '一年内',
-                            value () {
-                                const end = new Date();
-                                const start = new Date();
-                                start.setTime(start.getTime() - 3600 * 1000 * 24 * 365);
-                                return [start, end];
-                            }
-                        }
-                    ]
-                },
-                SelectDate: [],
                 ShowType: 1,
-                ChartOptions: {
-                    credits: {
-                        enabled: false
-                    },
-                    chart: {
-                        zoomType: 'x'
-                    },
-//                    tooltip: {
-//                        split: false,
-//                        shared: true,
-//                    },
-                    rangeSelector: {
-                        buttons: [{
-                            type: 'day',
-                            count: 3,
-                            text: '3d'
-                        }, {
-                            type: 'week',
-                            count: 1,
-                            text: '1w'
-                        }, {
-                            type: 'month',
-                            count: 1,
-                            text: '1m'
-                        }, {
-                            type: 'month',
-                            count: 6,
-                            text: '6m'
-                        }, {
-                            type: 'year',
-                            count: 1,
-                            text: '1y'
-                        }, {
-                            type: 'all',
-                            text: 'all'
-                        }],
-                        selected: 3
-                    },
-                    xAxis: {
-                        breaks: [],
-                        title: '时间'
-                    },
-                    yAxis: {
-                        title: {
-                            text: '数值'
-                        }
-                    },
-                    title: {
-                        text: '历史数据'
-                    },
-                    series: [{
-                        type: 'line',
-                        name: '数据',
-                        gapSize: 50,
-                        marker: {
-                            enabled: false,
-                            radius: 0,
-                        },
-                        data: []
-//                        pointStart: Date.UTC(2004, 3, 1),
-//                        pointInterval: 3600 * 1000,
-//                        tooltip: {
-//                            valueDecimals: 2,
-//                        }
-                    }]
-                },
             }
         },
         methods: {

@@ -57,7 +57,7 @@ export const locking = {
 export const otherRouter = {
     path: '/',
     name: 'otherRouter',
-    redirect: '/device-user/device_monitor',
+    redirect: '/device-user/device-monitor',
     component: Main,
     children: [
         {
@@ -110,6 +110,15 @@ export const otherRouter = {
             }
         },
         {
+            path: '/device-user/device-operate',
+            icon: 'pound',
+            name: 'device-operate',
+            title: '采集设备管理',
+            component: resolve => {
+                require(['@/views/device/device-area/device/device-operate.vue'], resolve)
+            }
+        },
+        {
             path: '/device-user/device-monitor/current-history',
             title: '当前设备的历史',
             name: 'CurrentHistory',
@@ -126,27 +135,43 @@ export const otherRouter = {
             }
         },
         {
-            path: '/device-user/device-operater/device-control',
+            path: '/device-user/device-operate/device-control',
             title: '设备管理',
             name: 'device_Control',
             component: resolve => {
-                require(['@/views/device/device-operater/device-control.vue'], resolve)
+                require(['@/views/device/device-operate/device-control.vue'], resolve)
             }
         },
         {
-            path: '/device-user/device-operater/device-add',
+            path: '/device-user/device-operate/device-add',
             title: '设备添加',
             name: 'device_add',
             component: resolve => {
-                require(['@/views/device/device-operater/device-add.vue'], resolve)
+                require(['@/views/device/device-operate/device-add.vue'], resolve)
             }
         },
         {
-            path: '/device-user/device-operater/device-edit',
-            title: '设备添加',
+            path: '/device-user/device-operate/device-edit',
+            title: '设备编辑',
             name: 'device_edit',
             component: resolve => {
-                require(['@/views/device/device-operater/device-edit.vue'], resolve)
+                require(['@/views/device/device-operate/device-edit.vue'], resolve)
+            }
+        },
+        {
+            path: '/device-user/device-operate/switch-add',
+            title: '开关设备添加',
+            name: 'switch_add',
+            component: resolve => {
+                require(['@/views/device/device-operate/switch-add.vue'], resolve)
+            }
+        },
+        {
+            path: '/device-user/device-operate/switch-edit',
+            title: '开关设备更新',
+            name: 'switch_edit',
+            component: resolve => {
+                require(['@/views/device/device-operate/switch-edit.vue'], resolve)
             }
         },
         {
@@ -198,24 +223,6 @@ export const appRouter = [
                 },
                 meta: {
                     keepAlive: true // 需要被缓存
-                }
-            },
-            {
-                path: 'device-operater',
-                icon: 'pound',
-                name: 'device-operater',
-                title: '设备管理',
-                component: resolve => {
-                    require(['@/views/device/device-operater/device-operater.vue'], resolve)
-                }
-            },
-            {
-                path: 'single-video',
-                icon: 'pound',
-                name: 'device-video',
-                title: '视频测试',
-                component: resolve => {
-                    require(['@/views/device/device-video/single-video.vue'], resolve)
                 }
             }
         ]
@@ -338,15 +345,15 @@ export const appRouter = [
         name: 'device_history',
         component: Main,
         children: [
-            {
-                path: 'device_history',
-                icon: 'ios-list',
-                name: 'device-all-history',
-                title: '设备历史记录',
-                component: resolve => {
-                    require(['@/views/device/device-allhistory/device-allhistory.vue'], resolve)
-                }
-            },
+            // {
+            //     path: 'device_history',
+            //     icon: 'ios-list',
+            //     name: 'device-all-history',
+            //     title: '设备历史记录',
+            //     component: resolve => {
+            //         require(['@/views/device/device-allhistory/device-allhistory.vue'], resolve)
+            //     }
+            // },
             {
                 path: 'historychart', title: '历史曲线', name: 'history-chart', icon: 'ios-pulse', component: reslove => {
                 require(['@/views/device/device-history/device-history-chart.vue'], reslove)
@@ -476,7 +483,7 @@ export const appRouter = [
                     require(['@/views/admin-control/device/device-concentrator-control.vue'], reslove)
                 },
                 meta: {
-                    keepAlive: true // 需要被缓存
+                    keepAlive: false // 需要被缓存
                 }
             },
             {

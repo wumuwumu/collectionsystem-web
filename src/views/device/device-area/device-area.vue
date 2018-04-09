@@ -122,10 +122,8 @@
                 });
             },
             deviceOperate(row){
-                this.$router.push({
-                    path: '/device-user/device-operater/device-control',
-                    query: {id: row.id, name: row.areaName}
-                });
+                this.$router.push({path: "/device-user/device-operate", query: {id: row.id}})
+
             },
             pageChange(page){
                 this.Page = page;

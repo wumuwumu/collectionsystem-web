@@ -24,6 +24,16 @@ const device = {
     },
     actions: {
         // 解锁
+        GetUserCon({commit}) {
+            return new Promise((resolve, reject) => {
+                request.getUserCon().then(response => {
+                    resolve(response)
+                }).catch(error => {
+                    reject(error)
+                })
+            })
+        },
+        // 解锁
         Unlock({commit}, password) {
             return new Promise((resolve, reject) => {
                 request.unlock(password).then(response => {
@@ -165,10 +175,34 @@ const device = {
             })
         },
 
+        //分页获取区域开关设备列表
+        GetAreaSwitchPage({commit}, data) {
+            return new Promise((resolve, reject) => {
+                request.getAreaSwitchPage(data).then(response => {
+                    // commit('SET_AREADEVICE', response)
+                    resolve(response)
+                }).catch(error => {
+                    reject(error)
+                })
+            })
+        },
+
         //获取开关设备信息
         GetSwitchInfo({commit}, data) {
             return new Promise((resolve, reject) => {
                 request.getSwitchInfo(data).then(response => {
+                    // commit('SET_AREADEVICE', response)
+                    resolve(response)
+                }).catch(error => {
+                    reject(error)
+                })
+            })
+        },
+
+        //删除开关设备
+        AddSwitch({commit}, data) {
+            return new Promise((resolve, reject) => {
+                request.addSwitch(data).then(response => {
                     // commit('SET_AREADEVICE', response)
                     resolve(response)
                 }).catch(error => {
@@ -407,6 +441,17 @@ const device = {
             })
         },
 
+        //获取一天的历史记录
+        GetDayHistory({commit}, data){
+            return new Promise((resolve, reject) => {
+                request.getDayHistory(data).then(response => {
+                    resolve(response)
+                }).catch(error => {
+                    reject(error)
+                })
+            })
+        },
+
         //获取掉线信息
         GetOfflineInfoPage({commit}, data){
             return new Promise((resolve, reject) => {
@@ -551,10 +596,21 @@ const device = {
                 })
             })
         },
-        //获取开关设备的定时信息
+        //获取定时信息
         GetTimerInfo({commit}, id){
             return new Promise((resolve, reject) => {
                 request.getTimerInfo(id).then(response => {
+                    resolve(response)
+                }).catch(error => {
+                    reject(error)
+                })
+            })
+        },
+
+        //获取开关设备的定时信息
+        GetSwitchTimer({commit}, id){
+            return new Promise((resolve, reject) => {
+                request.getSwitchTimer(id).then(response => {
                     resolve(response)
                 }).catch(error => {
                     reject(error)

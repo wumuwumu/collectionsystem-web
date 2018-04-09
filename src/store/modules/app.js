@@ -13,14 +13,14 @@ const app = {
         themeColor: '',
         pageOpenedList: [{
             title: '设备监控',
-            path: '/device-user/device_monitor',
+            path: '/device-user/device-monitor',
             name: 'device_monitor'
         }],
         currentPageName: '',
         currentPath: [
             {
                 title: '设备监控',
-                path: '/device-user/device_monitor',
+                path: '/device-user/device-monitor',
                 name: 'device_monitor'
             }
         ],  // 面包屑数组

@@ -1,7 +1,13 @@
 <style scoped>
+
     .amap-page-container {
         height: 350px;
     }
+
+    .input-width {
+        max-width: 400px;
+    }
+
 </style>
 
 <template>
@@ -12,27 +18,33 @@
                 <Col :md="4" style="text-align: left">
                 设备名：</Col>
                 <Col :md="20" style="text-align: left">
-                <Input class="device-add-input" type="text" v-model="formDevice.name" placeholder="name"></Input></Col>
+                <Input class="input-width" type="text" v-model="formDevice.name" placeholder="name"></Input></Col>
             </Row>
             <Row class="margin-top-10">
                 <Col :md="4" style="text-align: left">
                 集中器编号：</Col>
                 <Col :md="20" style="text-align: left">
-                <Input class="device-add-input" type="text" v-model="formDevice.concentrator"
-                       placeholder="concentrator"></Input></Col>
-            </Row>
-            <Row class="margin-top-10">
-                <Col :md="4" style="text-align: left">
-                连接在集中器上：</Col>
-                <Col :md="20" style="text-align: left">
-                <checkbox v-model="ConcentratorLink"/>
+                <!--<Input class="input-width" type="text" v-model="formDevice.concentrator"-->
+                <!--placeholder="concentrator"></Input>-->
+                <Select v-model="formDevice.concentrator" style="width:200px">
+                    <Option v-for="item in conList" :value="item.concentratorNumber" :key="item.id">
+                        {{ item.concentratorNumber }}
+                    </Option>
+                </Select>
                 </Col>
             </Row>
+            <!--<Row class="margin-top-10">-->
+            <!--<Col :md="4" style="text-align: left">-->
+            <!--连接在集中器上：</Col>-->
+            <!--<Col :md="20" style="text-align: left">-->
+            <!--<checkbox v-model="ConcentratorLink"/>-->
+            <!--</Col>-->
+            <!--</Row>-->
             <Row class="margin-top-10">
                 <Col :md="4" style="text-align: left">
                 节点ip：</Col>
                 <Col :md="20" style="text-align: left">
-                <Input class="device-add-input" :disabled="ConcentratorLink" type="text" v-model="formDevice.node"
+                <Input class="input-width" :disabled="ConcentratorLink" type="text" v-model="formDevice.node"
                        placeholder="node">
                 </Input></Col>
             </Row>
@@ -40,7 +52,7 @@
                 <Col :md="4" style="text-align: left">
                 回路位置：</Col>
                 <Col :md="20" style="text-align: left">
-                <Input class="device-add-input" type="text" v-model="formDevice.circuit" placeholder="circuit">
+                <Input class="input-width" type="text" v-model="formDevice.circuit" placeholder="circuit">
                 </Input></Col>
             </Row>
             <Row class="margin-top-10">
@@ -65,7 +77,7 @@
                         </el-amap>
                     </div>
                     <div style="width: 100%;background-color: #cdced0;padding: 10px">
-                        <el-amap-search-box class="device-add-input" :search-option="SearchOption"
+                        <el-amap-search-box class="device-add-input"
                                             :on-search-result="onSearchResult"></el-amap-search-box>
                         <div style="margin-top: 10px">
                             <span>经度:</span><span>{{formDevice.longitude}}</span>
@@ -75,7 +87,7 @@
                 </div>
                 </Col>
             </Row>
-            <Button style="margin-top: 10px" type="primary" @click="updateDevice">保存</Button>
+            <Button style="margin-top: 10px" type="primary" @click="addDevice">保存</Button>
             <Button style="margin-top: 10px" type="error" @click="cancel">取消</Button>
         </Card>
         </Col>
@@ -93,24 +105,33 @@
 
 <script>
     export default{
-        name: 'DeviceEdit',
+        name: 'DeviceAdd',
         data: function () {
             let self = this;
             return {
-                DeviceId: 0,
+                areaId: 0,
                 formDevice: {},
                 ConcentratorLink: false,
                 DeviceTypeList: [],
                 MapPlugin: ['ToolBar', {
-                    pName: 'Geolocation'
+                    pName: 'Geolocation', events: {
+                        init(o) {
+                            // o 是高德地图定位插件实例
+                            o.getCurrentPosition((status, result) => {
+                                if (result && result.position) {
+                                    self.formDevice.longitude = result.position.lng;
+                                    self.formDevice.latitude = result.position.lat;
+                                    self.Marker.position = [result.position.lng, result.position.lat];
+                                    self.$nextTick();
+                                }
+                            });
+                        }
+                    }
                 }],
                 Marker: {
                     position: [122, 36],
                 },
                 mapCenter: [142, 56],
-                SearchOption: {
-                    citylimit: true,
-                },
                 MapEvent: {
                     click: function (MapsEvent) {
                         self.formDevice.longitude = MapsEvent.lnglat.lng;
@@ -119,86 +140,81 @@
                         self.mapCenter = [MapsEvent.lnglat.lng, MapsEvent.lnglat.lat];
 
                     }
-                }
+                },
+                conList: []
             }
         },
         methods: {
-            updateDevice(){
-                this.ConcentratorLink ? this.formDevice.parentType = 1 : this.formDevice.parentType = 0;
-                console.log(this.formDevice);
-                this.$store.dispatch('UpdateDevice', this.formDevice).then((result) => {
+            loadData(){
+                if (this.$route.query && this.$route.query != null && this.$route.query.id && this.$route.query.id != null) {
+                    this.areaId = this.$route.query.id;
+
+                }
+
+            },
+            getDeviceType(){
+                this.$store.dispatch('GetDeviceType').then((result) => {
+                    if (result.code == 1) {
+                        this.DeviceTypeList = result.data;
+                    } else {
+                        this.$Message.error("获取设备类型失败");
+                    }
+                }).catch((err) => {
+                    console.log("添加设备类型出现错误");
+                    this.$Message.error(err);
+                });
+            },
+            getUserCon(){
+                this.$store.dispatch('GetUserCon').then((result) => {
+                    if (result.code == 1) {
+                        this.conList = result.data;
+                    } else {
+                        this.$Message.error("获取设备类型失败");
+                    }
+                }).catch((err) => {
+                    console.log("添加设备类型出现错误");
+                    this.$Message.error(err);
+                });
+            },
+            addDevice(){
+                Object.assign(this.formDevice, {area: this.areaId, online: 0});
+                this.$store.dispatch('AddDevice', this.formDevice).then((result) => {
                     if (result.code == 1) {
                         this.$router.back(-1);
                         this.formDevice = {};
-                        this.$Message.info("更新成功");
+                        this.$Message.info("添加成功");
                     } else {
-                        this.$Message.error("更新失败");
+                        this.$Message.error("添加失败");
                     }
                 }).catch((err) => {
-                    this.$Message.error("更新设备出现错误");
+                    console.log("添加设备出现错误");
+                    this.$Message.error(err);
                 });
             },
-            getDeviceType(){
-                if (this.DeviceTypeList.length == 0) {
-                    this.$store.dispatch('GetDeviceType').then((result) => {
-                        if (result.code == 1) {
-                            this.DeviceTypeList = result.data;
-                        } else {
-                            this.$Message.error("获取设备类型失败");
-                        }
-                    }).catch((err) => {
-                        this.$Message.error("获取设备类型出现错误");
-                    });
+            onSearchResult: function (pos) {
+                if (pos.length == 0) {
+                    return;
                 }
-            },
-            getDevice(data){
-                this.$store.dispatch('GetDevice', data).then(result => {
-                    this.formDevice = result.data;
-                    this.Marker.position = [this.formDevice.longitude, this.formDevice.latitude];
-                    this.mapCenter = [this.formDevice.longitude, this.formDevice.latitude];
-//                    console.log("进入了这里");
-                    if (this.formDevice.parentType == 1) {
-                        this.ConcentratorLink = true;
-                    } else {
-                        this.ConcentratorLink = false;
-                    }
-                }).catch(err => {
-                    this.$Message.error("获取设备信息出现错误");
-                })
+                let address = pos[0];
+                console.log(address);
+                this.formDevice.longitude = address.location.lng;
+                this.formDevice.latitude = address.location.lat;
+                this.Marker.position = [address.location.lng, address.location.lat];
+                this.mapCenter = [address.location.lng, address.location.lat];
+                console.log(this.Marker.position);
             },
             cancel(){
                 this.$store.commit('closeOneTag', this);
                 this.$router.back(-1);
-            },
-            onSearchResult(pois){
-                console.log(pois);
-                let latSum = pois[0].lat;
-                let lngSum = pois[0].lng;
-                if (pois.length > 0) {
-                    console.log(pois.length);
-                    this.Marker.position = [lngSum, latSum];
-//                    pois.forEach(poi => {
-//                        let {lng, lat} = poi;
-//                        lngSum += lng;
-//                        latSum += lat;
-////                        this.markers.push([poi.lng, poi.lat]);
-//                    });
-//                    let center = {
-//                        lng: lngSum / pois.length,
-//                        lat: latSum / pois.length
-//                    };
-
-                    this.mapCenter = [pois[0].lng, pois[0].lat];
-                }
             }
         },
         created: function () {
             if (this.$route.query && this.$route.query != null && this.$route.query.id && this.$route.query.id != null) {
-                this.DeviceId = this.$route.query.id;
+                this.areaId = this.$route.query.id;
             }
+            this.loadData();
             this.getDeviceType();
-            this.getDevice(this.DeviceId);
+            this.getUserCon();
         }
-
     }
 </script>

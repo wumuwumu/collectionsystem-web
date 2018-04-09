@@ -3,18 +3,17 @@
 </style>
 <template>
     <div>
+        <Button type="primary" @click="back" class="margin-bottom-10">返回</Button>
         <Button type="primary" @click="addTimer" class="margin-bottom-10">添加</Button>
-        <Table :columns="timerColumns" :show-header="true" :data="timerData"
+        <Table :columns="timerColumns" :show-header="true" :data="timerList"
                highlight-row
         ></Table>
-        <Page :total="PageTotal" show-sizer show-total @on-change="pageChange" placement="top"
-              @on-page-size-change="sizeChange" :page-size-opts="PageSizeOpt" :page-size="Row" :current="Page"
-              style="text-align:center;align:right;margin-top: 5px"></Page>
     </div>
 </template>
 
 
 <script>
+    import DateUtil from '../../../utils/DateUtil'
     export default{
         name: 'switch-timer',
         data(){
@@ -26,29 +25,65 @@
                         align: 'center'
                     },
                     {
-                        title: '集中器',
-                        key: 'concentrator',
-                        align: 'center'
+                        title: '开始时间',
+                        key: 'startTime',
+                        align: 'center',
+                        render: (h, params) => {
+                            return h('span', {
+                                props: {
+                                    type: 'android-time',
+                                }
+                            }, DateUtil.formatDate(params.row.startTime));
+
+                        }
                     },
                     {
-                        title: '节点',
-                        key: 'node',
-                        align: 'center'
+                        title: '循环方式',
+                        key: 'loop',
+                        align: 'center',
+                        render: (h, params) => {
+                            function transLoop (loop) {
+                                console.log(loop);
+                                let data = loop;
+                                data = data.replace('1', "星期一");
+                                data = data.replace('2', "星期二");
+                                data = data.replace('3', "星期三");
+                                data = data.replace('4', '星期四');
+                                data = data.replace('5', '星期五');
+                                data = data.replace("6", "星期六");
+                                data = data.replace("7", "星期天");
+                                return data;
+                            }
+
+                            return h('span', {
+                                props: {
+                                    type: 'android-time',
+                                }
+                            }, transLoop(params.row.loop));
+
+                        }
                     },
                     {
-                        title: '回路',
-                        key: 'circuit',
-                        align: 'center'
-                    },
-                    {
-                        title: '报警方式',
-                        key: 'alarmType',
-                        align: 'center'
-                    },
-                    {
-                        title: '接收者',
-                        key: 'accepter',
-                        align: 'center'
+                        title: '动作',
+                        key: 'action',
+                        align: 'center',
+                        render: (h, params) => {
+                            function transAction (action) {
+                                if (action > 0) {
+                                    return '开';
+                                } else {
+                                    return '关';
+                                }
+
+                            }
+
+                            return h('span', {
+                                props: {
+                                    type: 'android-time',
+                                }
+                            }, transAction(params.row.action));
+
+                        }
                     },
                     {
                         title: '操作',
@@ -67,7 +102,7 @@
                                     },
                                     on: {
                                         click: () => {
-                                            this.updateTrigger(params.row);
+                                            this.updateTimer(params.row);
                                         }
                                     }
                                 }, '编辑'),
@@ -81,7 +116,7 @@
                                     },
                                     on: {
                                         click: () => {
-                                            this.deleteTrigger(params.row);
+                                            this.deleteTimer(params.row);
                                         }
                                     }
                                 }, '删除')
@@ -89,21 +124,56 @@
                         }
                     }
                 ],
-                timerData: [],
-                PageTotal: 0,
-                PageSizeOpt: [10, 20, 30, 40],
-                Page: 1,
-                Row: 10,
+                timerList: [],
+                switchId: 0
+
             }
         },
         computed: {},
         methods: {
+            back(){
+                this.$router.back();
+            },
+            loadId(){
+                if (this.$route.query && this.$route.query != null && this.$route.query.id && this.$route.query.id != null) {
+                    this.switchId = this.$route.query.id;
+                }
+                if (this.switchId > 0) {
+                    this.getTimer();
+                }
+            },
             addTimer(){
                 this.$router.push({path: '/switch-timer/switch-timer-add'});
+            },
+            getTimer: function () {
+                this.$store.dispatch('GetSwitchTimer', this.switchId).then((result) => {
+                    this.timerList = result.data;
+                }).catch((err) => {
+                });
+            },
+            updateTimer(row){
+                this.$router.push({path: '/switch-timer/switch-timer-update', query: {id: row.id}})
+            },
+            deleteTimer(row){
+                this.$Modal.confirm({
+                    title: '删除定时',
+                    content: '<p>确定删除定时</p>',
+                    onOk: () => {
+                        this.$store.dispatch('DeleteTimer', row.id).then((result) => {
+                            if (result.code == 1) {
+                                this.getTimer();
+                            } else {
+                                this.$Message.error("删除失败");
+                            }
+                        }).catch((err) => {
+                            this.$Message.error("删除出现错误");
+                        });
+                    }
+                });
             }
         },
         created: function () {
-
+            this.loadId();
         }
     }
 </script>

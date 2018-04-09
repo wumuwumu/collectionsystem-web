@@ -1,8 +1,7 @@
 <template>
     <Card>
         <Row>
-            <DatePicker type="daterange" placement="right-start" placeholder="Select date"
-                        :options="DataPickerOption"
+            <DatePicker type="date" placement="right-start" placeholder="Select date"
                         @on-ok="selectDate"
                         @on-change="dateChange"
                         :value="SelectDate"
@@ -80,7 +79,7 @@
                         }
                     ]
                 },
-                SelectDate: [],
+                SelectDate: new Date(),
                 ShowType: 1,
                 DeviceInfo: {},
                 ChartOptions: {
@@ -113,34 +112,34 @@
 //                        split: false,
 //                        shared: true,
 //                    },
-                    rangeSelector: {
-                        buttons: [{
-                            type: 'day',
-                            count: 3,
-                            text: '3d'
-                        }, {
-                            type: 'week',
-                            count: 1,
-                            text: '1w'
-                        }, {
-                            type: 'month',
-                            count: 1,
-                            text: '1m'
-                        }, {
-                            type: 'month',
-                            count: 6,
-                            text: '6m'
-                        }, {
-                            type: 'year',
-                            count: 1,
-                            text: '1y'
-                        }, {
-                            type: 'all',
-                            text: 'all'
-                        }],
-                        selected: 1,
-//                        allButtonsEnabled: true
-                    },
+//                    rangeSelector: {
+//                        buttons: [{
+//                            type: 'day',
+//                            count: 3,
+//                            text: '3d'
+//                        }, {
+//                            type: 'week',
+//                            count: 1,
+//                            text: '1w'
+//                        }, {
+//                            type: 'month',
+//                            count: 1,
+//                            text: '1m'
+//                        }, {
+//                            type: 'month',
+//                            count: 6,
+//                            text: '6m'
+//                        }, {
+//                            type: 'year',
+//                            count: 1,
+//                            text: '1y'
+//                        }, {
+//                            type: 'all',
+//                            text: 'all'
+//                        }],
+//                        selected: 1,
+////                        allButtonsEnabled: true
+//                    },
                     xAxis: {
                         breaks: [],
                         title: '时间'
@@ -156,7 +155,7 @@
                     series: [{
                         type: 'line',
                         name: '数据',
-                        gapSize: 20,
+                        gapSize: 10,
 //                        marker: {
 //                            enabled: false,
 //                            radius: 0,
@@ -173,15 +172,13 @@
         },
         methods: {
             selectDate(){
-                if (this.validateDevice() && this.validateDate()) {
-                    console.log(this.SelectDate);
+                if (this.validateDevice()) {
                     let data = {
                         deviceId: this.CurrentDevice,
-                        beginTime: this.SelectDate[0],
-                        endTime: this.SelectDate[1]
+                        time: new Date(this.SelectDate).valueOf()
                     };
-                    this.$store.dispatch('GetBetweenAllHistory', data).then((result) => {
-                        let OfflineInfo = result.data.offline;
+                    this.$store.dispatch('GetDayHistory', data).then((result) => {
+//                        let OfflineInfo = result.data.offline;
 //                        for (let i = 0, len = OfflineInfo.length; i < len; i++) {
 //                            if (OfflineInfo[i].endTime != null) {
 //                                let info = {
@@ -192,15 +189,15 @@
 //                                this.ChartOptions.xAxis.breaks.push(info);
 //                            }
 //                        }
-                        let AllHistory = result.data.history;
-                        let ShowData = [];
-                        for (let j = 0, len = AllHistory.length; j < len; j++) {
-                            let item = [Number(AllHistory[j].deviceDate),
-                                AllHistory[j].deviceData
-                            ];
-                            ShowData.push(item);
-                        }
-                        this.ChartOptions.series[0].data = ShowData;
+//                        let AllHistory = result.data.history;
+//                        let ShowData = [];
+//                        for (let j = 0, len = AllHistory.length; j < len; j++) {
+//                            let item = [Number(AllHistory[j].deviceDate),
+//                                AllHistory[j].deviceData
+//                            ];
+//                            ShowData.push(item);
+//                        }
+                        this.ChartOptions.series[0].data = result.data;
 
                     }).catch((err) => {
                         this.$Message.error("获取历史出现错误");
@@ -225,13 +222,6 @@
             validateDevice(){
                 if (this.CurrentDevice < 1) {
                     this.$Message.error('请选择设备');
-                    return false;
-                }
-                return true;
-            },
-            validateDate(){
-                if (this.SelectDate.length != 2) {
-                    this.$Message.error("选择的时间有问题");
                     return false;
                 }
                 return true;
@@ -266,10 +256,7 @@
             }
         },
         created(){
-            let date = new Date();
-//            设置默认是1天
-            this.SelectDate.push(date.setDate(date.getDate() - 1));
-            this.SelectDate.push(new Date());
+            this.SelectDate = new Date();
             this.selectDate();
             this.getDeviceInfo();
         }

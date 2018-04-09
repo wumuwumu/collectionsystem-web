@@ -7,13 +7,13 @@
             </p>
             <Form ref="menuRef" :model="FormItem" :label-width="80">
                 <FormItem label="账号">
-                    <Input v-model="FormItem.account" placeholder="用户账号"></Input>
+                    <Input v-model="FormItem.account" placeholder="用户账号(长度不能小于6位)"></Input>
                 </FormItem>
                 <FormItem label="名字">
                     <Input v-model="FormItem.username" placeholder="用户名字"></Input>
                 </FormItem>
                 <FormItem label="密码">
-                    <Input v-model="FormItem.password" placeholder="密码（不能少于6位）"></Input>
+                    <Input v-model="FormItem.password" placeholder="密码（不能少于6位）" type="password"></Input>
                 </FormItem>
                 <FormItem label="手机号">
                     <Input v-model="FormItem.mobile" placeholder="手机号"></Input>
@@ -54,7 +54,8 @@
         data: function () {
             return {
                 FormItem: {
-                    id: null
+                    id: null,
+                    status: "1"
                 },
                 spinShow: false,
             }

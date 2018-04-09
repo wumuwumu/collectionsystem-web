@@ -6,7 +6,7 @@
         <Card>
             <Form ref="menuRef" :model="FormItem" :label-width="80">
                 <FormItem label="区域">
-                    <Select style="width:400px" @on-change="AreaChange">
+                    <Select style="width:400px" v-model="areaId" @on-change="AreaChange">
                         <Option v-for="item in AreaList" :value="item.id" :key="item.id">
                             {{ item.areaName }}
                         </Option>
@@ -58,31 +58,31 @@
             return {
                 weekList: [
                     {
-                        id: 1,
+                        id: '1',
                         label: '星期一'
                     },
                     {
-                        id: 2,
+                        id: '2',
                         label: '星期二'
                     },
                     {
-                        id: 3,
+                        id: '3',
                         label: '星期三',
                     },
                     {
-                        id: 4,
+                        id: '4',
                         label: '星期四',
                     },
                     {
-                        id: 5,
+                        id: '5',
                         label: '星期五',
                     },
                     {
-                        id: 6,
+                        id: '6',
                         label: '星期六',
                     },
                     {
-                        id: 7,
+                        id: '7',
                         labe: '星期天'
                     }
                 ],
@@ -111,12 +111,20 @@
 
                 }
                 if (this.timerId > 0) {
-                    this.getDeviceTrigger();
+                    this.getTimerInfo();
                 }
             },
             getTimerInfo(){
                 this.$store.dispatch('GetTimerInfo', this.timerId).then((result) => {
                     this.FormItem = result.data;
+                    this.startTime = DateUtil.transSec2Date(this.FormItem.startTime);
+                    this.loop = this.FormItem.loop.split(',');
+                    console.log(this.loop);
+                    if (this.FormItem.work > 0) {
+                        this.work = true;
+                    } else {
+                        this.work = false;
+                    }
                     this.getDeviceInfo(this.FormItem.switchId)
                     if (this.FormItem.work > 0) {
                         this.work = true;
@@ -138,8 +146,8 @@
             getDeviceInfo: function (id) {
                 this.$store.dispatch('GetSwitchInfo', id).then((result) => {
                     if (result.code == 1) {
-                        this.areaId = result.data.area;
-                        this.getDevice(this.AreaId);
+                        this.areaId = result.data.areaId;
+                        this.getDevice(this.areaId);
                     }
                 }).catch((err) => {
                     this.$Message.error("获取设备信息出现错误");
@@ -166,7 +174,7 @@
                         if (result.code == 1) {
                             this.$Message.info("更新成功");
                             this.$store.commit('closeOneTag', this);
-                            this.$router.push({path: "/switch-timer/switch-timer-list"});
+                            this.$router.back();
                         } else {
                             this.$Message.warning("添加成功");
                         }

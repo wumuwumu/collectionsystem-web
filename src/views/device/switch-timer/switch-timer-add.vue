@@ -114,7 +114,7 @@
                 });
             },
             addTimer(){
-                if (this.FormItem.switchId > 0 && this.startTime != null && this.loop.length > 0 && this.FormItem.duration > 0) {
+                if (this.FormItem.switchId > 0 && this.startTime != null && this.loop.length > 0) {
                     this.FormItem.startTime = DateUtil.transDate2Sec(this.startTime);
                     this.FormItem.loop = this.loop.toString();
                     if (this.work) {

@@ -161,7 +161,7 @@
             },
             goHistory(device) {
                 this.$router.push({
-                    path: '/device-user/device_monitor/current-history',
+                    path: '/device-user/device-monitor/current-history',
                     query: {id: device.id}
                 });
             },

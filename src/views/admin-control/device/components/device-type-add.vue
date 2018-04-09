@@ -18,6 +18,15 @@
                 <FormItem label="单位">
                     <Input v-model="FormItem.showUnit" placeholder="计算单位"></Input>
                 </FormItem>
+                <FormItem label="最大值">
+                    <Input v-model="FormItem.maxValue" placeholder="计算单位"></Input>
+                </FormItem>
+                <FormItem label="适宜值">
+                    <Input v-model="FormItem.suitValue" placeholder="计算单位"></Input>
+                </FormItem>
+                <FormItem label="最小值">
+                    <Input v-model="FormItem.minValue" placeholder="计算单位"></Input>
+                </FormItem>
                 <FormItem label="图标">
                     <Sicon :type="FormItem.showIcon" v-model="FormItem.showIcon"></Sicon>
                     <Button type="text" @click="SelectIconModel=true">选择</Button>
@@ -91,7 +100,10 @@
                     collectionFormula: this.FormItem.collectionFormula,
                     showIcon: this.FormItem.showIcon,
                     showUnit: this.FormItem.showUnit,
-                    showIconcolor: this.FormItem.showIconcolor
+                    showIconcolor: this.FormItem.showIconcolor,
+                    maxValue: this.FormItem.maxValue,
+                    minValue: this.FormItem.minValue,
+                    suitValue: this.FormItem.suitValue
                 };
                 this.spinShow = true;
                 this.$store.dispatch('AddDeviceType', data).then((result) => {

@@ -76,7 +76,7 @@ const user = {
             const username = userInfo.username.trim();
             return new Promise((resolve, reject) => {
                 request.loginByUsername(username, userInfo.password).then((response) => {
-                    Cookies.set('token', response.data,{ expires: 7 });
+                    Cookies.set('token', response.data)
                     Cookies.set('user', username)
                     // // commit('SET_TOKEN', data);
                     // commit('SET_NAME', username);

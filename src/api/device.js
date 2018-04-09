@@ -4,6 +4,13 @@
 import fetch from '../utils/fetch'
 import { baseUrl } from '../utils/fetch'
 
+export function getUserCon () {
+    return fetch({
+        url: 'device/admin/con/user/current',
+        method: 'get'
+    })
+}
+
 export function unlock (password) {
     const data = {
         'password': password
@@ -105,30 +112,45 @@ export function getAreaSwitch (data) {
     })
 }
 
+export function getAreaSwitchPage (data) {
+    return fetch({
+        url: '/device/switch/area/page?areaId=' + data.areaId,
+        method: 'post',
+        data
+    })
+}
+
 export function getSwitchInfo (data) {
     return fetch({
-        url: '/device/switch?id=' + data,
+        url: '/device/switch/' + data,
         method: 'get'
+    })
+}
+
+export function addSwitch (data) {
+    return fetch({
+        url: '/device/switch/add',
+        method: 'post',
+        data
     })
 }
 
 export function deleteSwitch (data) {
     return fetch({
-        url: '/device/switch?id=' + data,
+        url: '/device/switch/' + data,
         method: 'delete'
     })
 }
 
 export function updateSwitch (data) {
     return fetch({
-        url: '/device/switch',
+        url: '/device/switch/update',
         method: 'put',
         data
     })
 }
 
 export function getDeviceHistory (data) {
-    console.log('getDeviceHistory' + data.deviceId)
     return fetch({
         url: '/device/history/simplelist',
         method: 'post',
@@ -183,14 +205,14 @@ export function updateDevice (data) {
 
 export function getDeviceOnlineLog () {
     return fetch({
-        url: '/device/onlinelog/user',
+        url: '/log/mStatus/user',
         method: 'get'
     })
 }
 
 export function readMessage (id) {
     return fetch({
-        url: 'device/onlinelog/read',
+        url: '/log/mStatus/read',
         method: 'post',
         params: id
     })
@@ -198,28 +220,28 @@ export function readMessage (id) {
 
 export function deleteReadMessage (id) {
     return fetch({
-        url: 'device/onlinelog/user/read',
+        url: '/log/mStatus/user/read',
         method: 'delete'
     })
 }
 
 export function deleteUnreadMessage (id) {
     return fetch({
-        url: 'device/onlinelog/user/unread',
+        url: '/log/mStatus/user/unread',
         method: 'delete'
     })
 }
 
 export function deleteUserAllMessage () {
     return fetch({
-        url: 'device/onlinelog/user',
+        url: '/log/mStatus/user',
         method: 'delete'
     })
 }
 
 export function deleteMessage (id) {
     return fetch({
-        url: 'device/onlinelog/delete',
+        url: '/log/mStatus/delete',
         method: 'post',
         params: id
     })
@@ -272,9 +294,17 @@ export function getBetweenAllHistory (data) {
     })
 }
 
+export function getDayHistory (data) {
+    return fetch({
+        url: '/device/mhistory/day',
+        method: 'get',
+        params: data
+    })
+}
+
 export function getOfflineInfoPage (data) {
     return fetch({
-            url: '/device/offlineLog/deviceIdPage',
+        url: '/log/mOffline/deviceIdPage',
             method: 'post',
             params: data
         }
@@ -283,9 +313,9 @@ export function getOfflineInfoPage (data) {
 
 export function getDeviceDayReport (data) {
     return fetch({
-        url: '/device/history/dayreport',
-        method: 'post',
-        data
+        url: '/device/mhistory/dayReport',
+        method: 'get',
+        params: data
     })
 }
 
@@ -323,27 +353,27 @@ export function getDeviceDayReport (data) {
 
 export function getDeviceDayExcel (data) {
     return fetch({
-        url: '/device/history/excel/dayexcel',
-        method: 'post',
+        url: '/excel/day',
+        method: 'get',
         responseType: 'blob',
-        data
+        params: data
     })
 }
 
 export function getDeviceMonthReport (data) {
     return fetch({
-        url: '/device/history/monthreport',
-        method: 'post',
-        data
+        url: '/device/mhistory/monthReport',
+        method: 'get',
+        params: data
     })
 }
 
 export function getDeviceMonthExcel (data) {
     return fetch({
-        url: '/device/history/excel/monthexcel',
-        method: 'post',
+        url: '/excel/month',
+        method: 'get',
         responseType: 'blob',
-        data
+        params: data
     })
 }
 
@@ -409,6 +439,13 @@ export function getTriggerInfo (id) {
 export function getTimerInfo (id) {
     return fetch({
         url: '/device/switchTimer/' + id,
+        method: 'get'
+    })
+}
+
+export function getSwitchTimer (id) {
+    return fetch({
+        url: '/device/switchTimer/switch/' + id,
         method: 'get'
     })
 }

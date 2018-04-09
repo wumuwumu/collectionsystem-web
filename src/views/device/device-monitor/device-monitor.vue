@@ -6,16 +6,16 @@
     <div>
 
         <!--<Card shadow>-->
-            <!--<i-button type="text" @click="hideArea">设备管理</i-button>-->
+        <!--<i-button type="text" @click="hideArea">设备管理</i-button>-->
         <!--</Card>-->
         <Modal
-            v-model="AddAreaModel"
-            title="添加区域"
-            @on-ok="addArea">
+                v-model="AddAreaModel"
+                title="添加区域"
+                @on-ok="addArea">
             <tr>
-                <td >区域名称:</td>
-                <td >
-                    <input type="text" class="margin-left-10" placeholder="区域名称" v-model="AddAreaName" >
+                <td>区域名称:</td>
+                <td>
+                    <input type="text" class="margin-left-10" placeholder="区域名称" v-model="AddAreaName">
                 </td>
             </tr>
         </Modal>
@@ -24,9 +24,9 @@
                 title="删除区域"
                 @on-ok="updateArea">
             <tr>
-                <td >区域名称:</td>
-                <td >
-                    <input type="text" class="margin-left-10" placeholder="区域名称" v-model="UpdateAreaName" >
+                <td>区域名称:</td>
+                <td>
+                    <input type="text" class="margin-left-10" placeholder="区域名称" v-model="UpdateAreaName">
                 </td>
             </tr>
         </Modal>
@@ -41,14 +41,14 @@
                 <!--<i-button class="margin-top-5" type="success" size="small" @click="updatePreArea()">更新区域</i-button>-->
                 <!--<i-button class="margin-top-5" type="error" size="small" @click="deleteArea()">删除区域</i-button>-->
                 <!--<i-button class="margin-top-5" size="small" @click="refreshArea()">刷新区域</i-button>-->
-                <p slot="title" >
+                <p slot="title">
                     <Icon type="android-remove"></Icon>
                     区域管理
                 </p>
-                <div class=" margin-top-8" >
+                <div class=" margin-top-8">
                     <!--<can-edit-table refs="table2" v-model="editInlineData"  :showHeader="false"-->
-                                    <!--:columns-list="editInlineColumns"></can-edit-table>-->
-                    <Table  :columns="editInlineColumns" height="auto" :show-header="false" :data="editInlineData"
+                    <!--:columns-list="editInlineColumns"></can-edit-table>-->
+                    <Table :columns="editInlineColumns" height="auto" :show-header="false" :data="editInlineData"
                            @on-current-change="selectArea"
                            highlight-row
                     ></Table>
@@ -104,19 +104,43 @@
             DeviceTableHistory,
             SwitchList,
 
-
         },
         data () {
             return {
                 editInlineData: [],
-                editInlineColumns: [],
-                currentArea:null,
-                AddAreaModel:false,
-                AddAreaName:null,
-                UpdateAreaName:null,
-                UpdateAreaModel:false,
-                AreaShow:true,
-                AreaId:0,
+                editInlineColumns: [
+                    {
+                        title: '区域',
+                        key: 'areaName'
+                    },
+                    {
+                        title: "地图",
+                        width: '50px',
+                        key: 'action',
+                        render: (h, params) => {
+                            return h('div', [
+                                h('Icon', {
+                                    props: {
+                                        type: 'map',
+                                        size: '40px'
+                                    },
+                                    nativeOn: {
+                                        click: () => {
+                                            this.goMap(params.row);
+                                        }
+                                    }
+                                }, '编辑')
+                            ]);
+                        }
+                    }
+                ],
+                currentArea: null,
+                AddAreaModel: false,
+                AddAreaName: null,
+                UpdateAreaName: null,
+                UpdateAreaModel: false,
+                AreaShow: true,
+                AreaId: 0,
                 DeviceWidth: {
                     sm: 24,
                     md: 18,
@@ -127,7 +151,6 @@
         },
         methods: {
             getData () {
-                this.editInlineColumns = tableData.editInlineColumns;
 //                this.editInlineData = tableData.editInlineData;
                 //从服务器获取区域数据
                 this.$store.dispatch('GetUserArea').then((result) => {
@@ -144,48 +167,48 @@
 
             },
             hideArea(){
-                    this.AreaShow =!this.AreaShow;
+                this.AreaShow = !this.AreaShow;
             },
-            selectArea(currentRow , oldCurrentRow){
-                this.AreaId=currentRow.id;
+            selectArea(currentRow, oldCurrentRow){
+                this.AreaId = currentRow.id;
                 this.currentArea = currentRow;
-                console.log("选中的区域id"+currentRow.id);
+                console.log("选中的区域id" + currentRow.id);
             },
             validateArea(area){
-              if(area == null){
-                  this.$Message.error("请选择区域");
-                  return false;
-              }
-              return true;
+                if (area == null) {
+                    this.$Message.error("请选择区域");
+                    return false;
+                }
+                return true;
             },
             addArea(){
-                if(this.AddAreaName != null && this.AddAreaName != ""){
+                if (this.AddAreaName != null && this.AddAreaName != "") {
                     var data = {
-                        "areaName":this.AddAreaName
+                        "areaName": this.AddAreaName
                     }
-                    this.$store.dispatch('AddArea',data).then((result) => {
-                        if(result.code == 1){
+                    this.$store.dispatch('AddArea', data).then((result) => {
+                        if (result.code == 1) {
                             this.getData();
-                        }else {
+                        } else {
                             this.$Message.error("添加失败");
                         }
                     }).catch((err) => {
                         console.log("添加区域出现错误");
                         this.$Message.error(err);
                     });
-                    this.AddAreaName ="";
+                    this.AddAreaName = "";
                 }
             },
             deleteArea(){
-                if(this.validateArea(this.currentArea)){
+                if (this.validateArea(this.currentArea)) {
                     this.$Modal.confirm({
                         title: '删除区域',
-                        content: '<p>确定删除区域'+this.currentArea.areaName+'</p>',
+                        content: '<p>确定删除区域' + this.currentArea.areaName + '</p>',
                         onOk: () => {
-                            this.$store.dispatch('DeleteArea',this.currentArea.id).then((result) => {
-                                if(result.code == 1){
+                            this.$store.dispatch('DeleteArea', this.currentArea.id).then((result) => {
+                                if (result.code == 1) {
                                     this.getData();
-                                }else {
+                                } else {
                                     this.$Message.error("删除失败");
                                 }
                             }).catch((err) => {
@@ -197,26 +220,26 @@
                 }
             },
             updatePreArea(){
-                if(this.validateArea(this.currentArea)){
+                if (this.validateArea(this.currentArea)) {
                     this.UpdateAreaName = this.currentArea.areaName;
                     this.UpdateAreaModel = true;
                 }
             },
             updateArea(){
-                if(this.UpdateAreaName != null && this.UpdateAreaName != ""){
+                if (this.UpdateAreaName != null && this.UpdateAreaName != "") {
                     var area = this.currentArea;
                     area.areaName = this.UpdateAreaName;
-                    this.$store.dispatch('UpdateArea',area).then((result) => {
-                        if(result.code == 1){
+                    this.$store.dispatch('UpdateArea', area).then((result) => {
+                        if (result.code == 1) {
                             this.getData();
-                        }else {
+                        } else {
                             this.$Message.error("删除失败");
                         }
                     }).catch((err) => {
                         console.log("删除区域出现错误");
                         this.$Message.error(err);
                     });
-                    this.UpdateAreaName= "";
+                    this.UpdateAreaName = "";
                 }
             },
             refreshArea(){
@@ -243,6 +266,12 @@
             },
             tabChange(name){
 
+            },
+            goMap(row){
+                this.$router.push({
+                    path: '/device-user/device-operate/device-control',
+                    query: {id: row.id, name: row.areaName}
+                });
             }
 
         },

@@ -13,7 +13,7 @@
             <Col :sm="24" :md="18" :lg="19" class="padding-left-10">
             <Card>
                 <Row>
-                    <DatePicker type="daterange" placement="right-start" placeholder="Select date"
+                    <DatePicker type="date" placement="right-start" placeholder="Select date"
                                 :options="DataPickerOption"
                                 @on-ok="selectDate"
                                 :value="SelectedDate"
@@ -58,76 +58,15 @@
                 TreeData: [],
                 CurrentDevice: 0,
                 CurrentName: null,
-                DataPickerOption: {
-                    shortcuts: [
-                        {
-                            text: '一天内',
-                            value () {
-                                const end = new Date();
-                                const start = new Date();
-                                start.setTime(start.getTime() - 3600 * 1000 * 24);
-                                return [start, end];
-                            }
-                        },
-                        {
-                            text: '一星期内',
-                            value () {
-                                const end = new Date();
-                                const start = new Date();
-                                start.setTime(start.getTime() - 3600 * 1000 * 24 * 7);
-                                return [start, end];
-                            }
-                        },
-                        {
-                            text: '一个月内',
-                            value () {
-                                const end = new Date();
-                                const start = new Date();
-                                start.setTime(start.getTime() - 3600 * 1000 * 24 * 30);
-                                return [start, end];
-                            }
-                        },
-                        {
-                            text: '三个月内',
-                            value () {
-                                const end = new Date();
-                                const start = new Date();
-                                start.setTime(start.getTime() - 3600 * 1000 * 24 * 90);
-                                return [start, end];
-                            }
-                        },
-                        {
-                            text: '一年内',
-                            value () {
-                                const end = new Date();
-                                const start = new Date();
-                                start.setTime(start.getTime() - 3600 * 1000 * 24 * 365);
-                                return [start, end];
-                            }
-                        }
-                    ]
-                },
-                SelectedDate: [],
+                SelectedDate: new Date(),
                 DeviceReportColumn: [
-                    {
-                        title: '设备名称',
-                        key: 'deviceName'
-                    },
-                    {
-                        title: '集中器',
-                        key: 'concentrator'
-                    },
-                    {
-                        title: "节点ip",
-                        key: 'node',
-                    },
                     {
                         title: "平均值",
                         key: 'data'
                     },
                     {
-                        title: '日期',
-                        key: 'date'
+                        title: '小时',
+                        key: 'time'
                     }
                 ],
                 ReportData: [],
@@ -174,19 +113,16 @@
 //                this.SelectedDate = value;
             },
             selectDate(){
-                if (this.validateDevice() && this.validateDate()) {
+                if (this.validateDevice()) {
                     let data = {
                         deviceId: this.CurrentDevice,
-                        beginTime: this.SelectedDate[0],
-                        endTime: this.SelectedDate[1],
-                        page: this.page,
-                        row: this.row
+                        time: new Date(this.SelectedDate).valueOf()
                     };
                     this.$store.dispatch('GetDeviceDayReport', data).then((result) => {
-                        this.ReportData = result.data;
-                        this.DeviceReportMax = result.other.max;
-                        this.DeviceReportMin = result.other.min;
-                        this.DeviceReportAvg = result.other.avg;
+                        this.ReportData = result.data.list;
+                        this.DeviceReportMax = result.data.max;
+                        this.DeviceReportMin = result.data.min;
+                        this.DeviceReportAvg = result.data.avg;
                     }).catch((err) => {
                         this.$Message.error("获取历史出现错误");
                     });
@@ -199,21 +135,11 @@
                 }
                 return true;
             },
-            validateDate(){
-                if (this.SelectedDate.length != 2) {
-                    this.$Message.error("选择的时间有问题");
-                    return false;
-                }
-                return true;
-            },
             exportHistoryExcel(){
-                if (this.validateDevice() && this.validateDate()) {
+                if (this.validateDevice()) {
                     let data = {
                         deviceId: this.CurrentDevice,
-                        beginTime: this.SelectedDate[0],
-                        endTime: this.SelectedDate[1],
-                        page: 1,
-                        row: 1000000
+                        time: new Date(this.SelectedDate).valueOf()
                     };
                     this.$store.dispatch('GetDeviceDayExcel', data).then((result) => {
                         const content = result;
@@ -232,10 +158,7 @@
             },
         },
         created(){
-            let date = new Date();
-            date.setDate(date.getDate() - 30);
-            this.SelectedDate.push(date);
-            this.SelectedDate.push(new Date());
+            this.SelectedDate = new Date();
         },
         mounted: function () {
             this.getTreeDate();

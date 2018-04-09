@@ -164,12 +164,23 @@
                         this.DeviceTrigger = result.data;
                         this.TriggerType = this.DeviceTrigger.type;
                         this.Accepter = this.DeviceTrigger.accepter;
+                        this.setThreshold();
                         this.getDeviceInfo(result.data.deviceId);
                     } else {
                     }
                 }).catch((err) => {
                     this.$Message.error("获取设备触发器出错");
                 });
+            },
+            setThreshold(){
+                let threshold = this.DeviceTrigger.threshold.split("#");
+                if (threshold.length == 1) {
+                    this.AValue = threshold[0]
+                }
+                if (threshold.length == 2) {
+                    this.AValue = threshold[0];
+                    this.BValue = threshold[1]
+                }
             },
             updateTrigger(){
                 if (this.DeviceTrigger.deviceId > 0 && this.DeviceTrigger.accepter != "" && this.DeviceTrigger.name != "") {
